@@ -1,0 +1,85 @@
+@import "tailwindcss";
+@import url('//fastly.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css');
+
+:root {
+  --font-pretendard: 'Pretendard', sans-serif;
+}
+
+@theme {
+  --*: initial;
+
+  --color-black-100: #F9F9F9;
+  --color-black-200: #6B6B6B;
+  --color-black-300: #5E5E5E;
+  --color-black-400: #525252;
+  --color-black-500: #454545;
+  --color-black-600: #373737;
+  --color-black-700: #2B2B2B;
+  --color-black-800: #1F1F1F;
+  --color-black-900: #121212;
+  --color-black-950: #050505;
+
+  --color-blue-100: #FFFFFF;
+  --color-blue-200: #ECEFF4;
+  --color-blue-300: #CBD3E1;
+  --color-blue-400: #ABB8CE;
+  --color-blue-500: #8B9DBC;
+  --color-blue-600: #6A82A9;
+  --color-blue-700: #52698E;
+  --color-blue-800: #40516E;
+  --color-blue-900: #2D394E;
+  --color-blue-9500: #1A212D;
+
+  --color-bg-100: #F5F7FA;
+  --color-state-error: #FF6577;
+
+  --color-gray-100: #DEDEDE;
+  --color-gray-200: #C4C4C4;
+  --color-gray-300: #ABABAB;
+  --color-gray-400: #919191;
+
+  --color-line-100: #F2F2F2;
+  --color-line-200: #CFDBEA;
+
+  --color-yellow: #FBC85B;
+  --color-green: #48BB98;
+  --color-purple: #8E80E3;
+  --color-blue: #5195EE;
+  --color-red: #E46E80;
+  --color-brown: #9A695E;
+
+  --color-sub-yellow: #E8AA26;
+  --color-sub-blue-1: #3E3E3E;
+  --color-sub-blue-2: #3E414D;
+  --color-sub-blue-3: #494D59;
+  --color-sub-gray-1: #C7D1E0;
+  --color-sub-gray-2: #E3E9F1;
+  --color-sub-gray-3: #EFF3F8;
+
+
+  --text-3xl: 32px;
+  --text-3xl--line-height: 42px;
+  --text-2xl: 24px;
+  --text-2xl--line-height: 32px;
+  --text-xl: 20px;
+  --text-xl--line-height: 32x;
+  --text-2lg: 18px;
+  --text-2lg--line-height: 26px;
+  --text-lg: 16px;
+  --text-lg--line-height: 26px;
+  --text-md: 14px;
+  --text-md--line-height: 24px;
+  --text-sm: 13px;
+  --text-sm--line-height: 22px;
+  --text-xs: 12px;
+  --text-xs--line-height: 20px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --breakpoint-pc: 1200px;
+  --breakpoint-tablet:767px;
+  --breakpoint-mobile:0px;
+}

@@ -1,0 +1,50 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["react-app", "eslint:recommended", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+    "no-var": "error",
+    "no-multiple-empty-lines": "error",
+    "eqeqeq": "error",
+    "dot-notation": "error",
+    "no-unused-vars": "error",
+    "import/extenstions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [["@components", "./src/components"]],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
+}
+
+
+
+//no-var: var 키워드로 변수를 선언하는 것을 금지하고 let 또는 const를 사용
+//no-multiple-empty-lines: 여러 줄의 빈 줄을 허용하지 않음
+//eqeqeq: == 연산자를 사용하지 않고 === 연산자를 사용
+//dot-notation: 객체의 속성에 접근할 때 대괄호 표기법 대신 점 표기법을 사용
+//no-unused-vars: 사용하지 않는 변수를 선언하지 않도록 함
+//좀 더 많은 규칙은 https://eslint.org/docs/latest/rules/ 참고
