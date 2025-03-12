@@ -1,9 +1,11 @@
+import LandingHeader from '@/components/LandingHeader';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Home() {
   return (
     <div className="flex h-[1000px] flex-col bg-blue-200">
+      <LandingHeader />
       <section>
         <div className="border-line-100 relative z-1 flex h-[672px] w-full items-center justify-center border-b-[1px] bg-blue-100 bg-[repeating-linear-gradient(0deg,#ffffff_0px,#ffffff_24px,#F2F2F2_24px,#F2F2F2_25px)]">
           <div className="flex flex-col items-center justify-center gap-[24px]">

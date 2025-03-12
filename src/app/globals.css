@@ -1,5 +1,6 @@
 @import url('//fastly.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css');
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -9,6 +10,7 @@
 @theme {
   --font-iropke: "Iropke Batang", sans-serif; 
   --font-pretendard: 'Pretendard', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
 
   --color-black-100: #F9F9F9;
   --color-black-200: #6B6B6B;
