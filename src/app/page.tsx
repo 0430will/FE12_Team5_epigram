@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 const ScrollInMotion = {
-  hidden: { opacity: 0, y: 80 },
+  hidden: { opacity: 0, y: 70 },
   visible: { opacity: 1, y: 0 },
-  transition: { duration: 0.7 },
+  transition: { duration: 1.5 },
 };
 
 const DampingMotion = {
@@ -58,13 +58,15 @@ export default function Home() {
                 alt="날마다 에피그램"
               />
             </motion.div>
-            <motion.div {...DampingMotion}>
-              <Link
-                href={'/epigrams'}
-                className="pc:text-pre-xl pc:px-[108px] pc:py-[16px] bg-black-500 text-pre-lg rounded-[12px] px-[28px] py-[11px] font-semibold text-blue-100"
-              >
-                시작하기
-              </Link>
+            <motion.div initial="hidden" whileInView="visible" variants={ScrollInMotion} viewport={{ once: true }}>
+              <motion.div {...DampingMotion}>
+                <Link
+                  href={'/epigrams'}
+                  className="pc:text-pre-xl pc:px-[108px] pc:py-[16px] bg-black-500 text-pre-lg rounded-[12px] px-[28px] py-[11px] font-semibold text-blue-100"
+                >
+                  시작하기
+                </Link>
+              </motion.div>
             </motion.div>
           </div>
         </div>
