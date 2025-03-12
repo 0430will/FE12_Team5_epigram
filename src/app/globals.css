@@ -95,6 +95,23 @@
   --text-iro-xs: 12px;
   --text-iro-xs--line-height: 18px;
 
+  --text-mon-4xl: 34px;
+  --text-mon-4xl--line-height: 52px;
+  --text-mon-3xl: 32px;
+  --text-mon-3xl--line-height: 48px;
+  --text-mon-2xl: 30px;
+  --text-mon-2xl--line-height: 40px;
+  --text-mon-xl: 28px;
+  --text-mon-xl--line-height: 28px;
+  --text-mon-lg: 26px;
+  --text-mon-lg--line-height: 26px;
+  --text-mon-md: 24px;
+  --text-mon-md--line-height: 24px;
+  --text-mon-sm: 20px;
+  --text-mon-sm--line-height: 20px;
+  --text-mon-xs: 18px;
+  --text-mon-xs--line-height: 18px;
+
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;

@@ -7,9 +7,9 @@ export default function LandingHeader() {
       <Link href="/search">
         <Image className="pc:h-[36px] pc:w-[36px]" src="/assets/icons/search.svg" alt="돋보기" width={20} height={20} />
       </Link>
-      <Link href="/" className="color-blue-100 font-iropke flex h-[36px] w-full items-center justify-center">
+      <Link href="/" className="color-blue-100 flex h-[36px] w-full items-center justify-center">
         <Image className="pc:w-[48px] pc:h-[48px]" src="/assets/images/logo.png" alt="책" width={36} height={36} />
-        <h1 className="text-pre-2lg font-montserrat pc:text-iro-lg--line-height ml-[2px] font-extrabold">Epigram</h1>
+        <h1 className="text-pre-2lg font-montserrat pc:text-mon-lg ml-[2px] font-extrabold">Epigram</h1>
       </Link>
       <Link href="/mypage">
         <Image className="pc:h-[36px] pc:w-[36px]" src="assets/icons/user.svg" alt="사람" width={20} height={20} />
