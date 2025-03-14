@@ -28,7 +28,7 @@ export default function Home() {
                   나만 갖고 있기엔
                   <br /> 아까운 글이 있지 않나요?
                 </h1>
-                <p className="text-black-300 font-iropke text-iro-md tablet:text-iro-xl text-center font-normal">
+                <p className="text-black-300 font-iropke text-iro-tablet tablet:text-iro-xl text-center font-normal">
                   다른 사람들과 감정을 공유해 보세요.
                 </p>
               </div>
@@ -55,16 +55,16 @@ export default function Home() {
         </div>
         <div className="h-[15px] w-full bg-[url('/assets/images/pattern.png')] bg-repeat drop-shadow-xl"></div>
       </section>
-      <section className="bg-[#F5F7FA]">
-        <div className="min-h-screen w-full max-w-[1316px] px-[24px] mx-auto flex flex-col items-center justify-center md:gap-[380px] mt-[131px] mb-[210px] md:mt-[254px] pt-[124px]">
-          {/* 첫 번째 섹션 */}
-          <div className="flex flex-col md:flex-row items-center justify-center ml-[68px] m-[24px] min-w-[312px] max-w-[1400px] h-auto gap-10 md:gap-20">
+      <section className="bg-bg-100">
+        <div className="min-h-screen w-full max-w-[1316px] px-[24px] mx-auto flex flex-col items-center justify-center tablet:gap-[380px] mt-[131px] mb-[210px] tablet:mt-[254px] pt-[124px]">
+
+          <div className="flex flex-col tablet:flex-row items-center justify-center ml-[68px] m-[24px] min-w-[312px] max-w-[1400px] h-auto tablet:gap-[80px]">
             <img
-              src="/assets/images/rending/img_Desktop_landing03.png"
-              alt="img_Desktop_landing03"
-              className="w-full md:min-w-[480px] h-auto object-contain md:mt-[50px]"
+              src="/assets/images/rending/img_Desktop_landing01.png"
+              alt="명언, 글귀 등 공유글 예시 이미지"
+              className="w-full tablet:min-w-[480px] h-auto object-contain tablet:mt-[50px]"
             />
-            <div className="w-full min-w-[429px] md:w-1/2 font-[Pretendard] font-bold text-[#050505] text-left flex flex-col justify-center gap-[24px] md:mt-[224px]">
+            <div className="w-full min-w-[429px] tablet:w-1/2 font-pretendard font-bold text-black-950 text-left flex flex-col justify-center gap-[24px] mt-auto">
               <h5 className="text-[clamp(20px,2vw,32px)] leading-[clamp(24px,2.5vw,40px)]">
                 명언이나 글귀,
                 <br />토막 상식들을 공유해 보세요.
@@ -76,14 +76,13 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 두 번째 섹션 */}
-          <div className="flex flex-col md:flex-row-reverse items-center justify-center m-[24px] min-w-[312px] max-w-[1400px] h-auto p-0 gap-10 md:gap-20">
+          <div className="flex flex-col tablet:flex-row-reverse items-center justify-center m-[24px] min-w-[312px] max-w-[1400px] h-auto tablet:gap-[80px]">
             <img
               src="/assets/images/rending/img_Desktop_landing02.png"
-              alt="img_Desktop_landing02"
-              className="w-full max-w-full md:min-w-[480px] h-auto object-contain overflow-hidden md:mt-[50px]"
+              alt="감정 상태 선택 예시 이미지"
+              className="w-full max-w-full tablet:min-w-[480px] h-auto object-contain overflow-hidden tablet:mt-[50px]"
             />
-            <div className="w-full min-w-[438px] md:w-1/2 font-[Pretendard] font-bold text-[#050505] text-right flex flex-col justify-center gap-[24px] md:mt-[224px]">
+            <div className="w-full min-w-[438px] tablet:w-1/2 font-pretendard font-bold text-black-950 text-right flex flex-col justify-center gap-[24px] mt-auto">
               <h5 className="text-[clamp(20px,2vw,32px)] leading-[clamp(24px,2.5vw,40px)]">
                 감정 상태에 따라,
                 <br />알맞은 위로를 받을 수 있어요.
@@ -94,14 +93,13 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 세 번째 섹션 */}
-          <div className="flex flex-col md:flex-row items-center justify-center ml-[68px] m-[24px] min-w-[312px] max-w-[1400px] h-auto p-0 gap-10 md:gap-20">
+          <div className="flex flex-col tablet:flex-row items-center justify-center ml-[68px] m-[24px] min-w-[312px] max-w-[1400px] h-auto tablet:gap-[80px]">
             <img
               src="/assets/images/rending/img_Desktop_landing03.png"
-              alt="img_Desktop_landing03"
-              className="w-full max-w-full md:min-w-[480px] h-auto object-contain overflow-hidden md:mt-[50px]"
+              alt="감정 상태 통계 예시 이미지"
+              className="w-full max-w-full tablet:min-w-[480px] h-auto object-contain overflow-hidden tablet:mt-[50px]"
             />
-            <div className="w-full min-w-[429px] font-[Pretendard] font-bold text-[#050505] text-left flex flex-col justify-center gap-[24px] md:mt-[224px]">
+            <div className="w-full min-w-[429px] font-pretendard font-bold text-black-950 text-left flex flex-col justify-center gap-[24px] mt-auto">
               <h5 className="text-[clamp(20px,2vw,32px)] leading-[clamp(24px,2.5vw,40px)]">
                 내가 요즘 어떤 감정 상태인지
                 <br />통계로 한눈에 볼 수 있어요.
