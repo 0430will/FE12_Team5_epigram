@@ -58,7 +58,7 @@ export default function Home() {
         <div className="h-[15px] w-full bg-[url('/assets/images/pattern.png')] bg-repeat drop-shadow-xl"></div>
       </section>
       {/* 세번째 세션 */}
-      <section className="% bg-blue-200">
+      <section className="bg-blue-200">
         <div className="pc:mx-[33%] pc:w-[640px] tablet:w-[384px] tablet:mx-[33%] pc:mt-[270px] tablet:mt-[191px] pc:h-[1056px] mx-[24px] mt-[80px] flex h-[680px] w-[full] flex-col gap-[40px] text-center">
           <h1 className="text-black-950 text-pre-2xl font-bold">
             사용자들이 직접
