@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import LandingHeader from '@/components/LandingHeader';
 
 const ScrollInMotion = {
   hidden: { opacity: 0, y: 70 },
@@ -19,6 +20,7 @@ const DampingMotion = {
 export default function Home() {
   return (
     <div className="flex flex-col bg-blue-200">
+      <LandingHeader />
       <section>
         <div className="border-line-100 relative z-1 flex h-[672px] w-full items-center justify-center border-b-[1px] bg-blue-100 bg-[repeating-linear-gradient(0deg,#ffffff_0px,#ffffff_24px,#F2F2F2_24px,#F2F2F2_25px)]">
           <div className="tablet:gap-[32px] pc:gap-[48px] flex flex-col items-center justify-center gap-[24px]">
@@ -28,7 +30,7 @@ export default function Home() {
                   나만 갖고 있기엔
                   <br /> 아까운 글이 있지 않나요?
                 </h1>
-                <p className="text-black-300 font-iropke text-iro-tablet tablet:text-iro-xl text-center font-normal">
+                <p className="text-black-300 font-iropke text-iro-md tablet:text-iro-xl text-center font-normal">
                   다른 사람들과 감정을 공유해 보세요.
                 </p>
               </div>
@@ -56,55 +58,58 @@ export default function Home() {
         <div className="h-[15px] w-full bg-[url('/assets/images/pattern.png')] bg-repeat drop-shadow-xl"></div>
       </section>
       <section className="bg-bg-100">
-        <div className="min-h-screen w-full max-w-[1316px] px-[24px] mx-auto flex flex-col items-center justify-center tablet:gap-[380px] mt-[131px] mb-[210px] tablet:mt-[254px] pt-[124px]">
-
-          <div className="flex flex-col tablet:flex-row items-center justify-center ml-[68px] m-[24px] min-w-[312px] max-w-[1400px] h-auto tablet:gap-[80px]">
+        <div className="tablet:gap-[380px] tablet:mt-[254px] mx-auto mt-[131px] mb-[210px] flex min-h-screen w-full max-w-[1316px] flex-col items-center justify-center px-[24px] pt-[124px]">
+          <div className="tablet:flex-row tablet:gap-[80px] m-[24px] ml-[68px] flex h-auto max-w-[1400px] min-w-[312px] flex-col items-center justify-center">
             <img
               src="/assets/images/rending/img_Desktop_landing01.png"
               alt="명언, 글귀 등 공유글 예시 이미지"
-              className="w-full tablet:min-w-[480px] h-auto object-contain tablet:mt-[50px]"
+              className="tablet:min-w-[480px] tablet:mt-[50px] h-auto w-full object-contain"
             />
-            <div className="w-full min-w-[429px] tablet:w-1/2 font-pretendard font-bold text-black-950 text-left flex flex-col justify-center gap-[24px] mt-auto">
+            <div className="tablet:w-1/2 font-pretendard text-black-950 mt-auto flex w-full min-w-[429px] flex-col justify-center gap-[24px] text-left font-bold">
               <h5 className="text-[clamp(20px,2vw,32px)] leading-[clamp(24px,2.5vw,40px)]">
                 명언이나 글귀,
-                <br />토막 상식들을 공유해 보세요.
+                <br />
+                토막 상식들을 공유해 보세요.
               </h5>
-              <p className="font-medium text-[clamp(12px,1.2vw,24px)] text-blue-600">
+              <p className="text-[clamp(12px,1.2vw,24px)] font-medium text-blue-600">
                 나만 알던 소중한 글들을
-                <br />다른 사람들에게 전파하세요.
+                <br />
+                다른 사람들에게 전파하세요.
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col tablet:flex-row-reverse items-center justify-center m-[24px] min-w-[312px] max-w-[1400px] h-auto tablet:gap-[80px]">
+          <div className="tablet:flex-row-reverse tablet:gap-[80px] m-[24px] flex h-auto max-w-[1400px] min-w-[312px] flex-col items-center justify-center">
             <img
               src="/assets/images/rending/img_Desktop_landing02.png"
               alt="감정 상태 선택 예시 이미지"
-              className="w-full max-w-full tablet:min-w-[480px] h-auto object-contain overflow-hidden tablet:mt-[50px]"
+              className="tablet:min-w-[480px] tablet:mt-[50px] h-auto w-full max-w-full overflow-hidden object-contain"
             />
-            <div className="w-full min-w-[438px] tablet:w-1/2 font-pretendard font-bold text-black-950 text-right flex flex-col justify-center gap-[24px] mt-auto">
+            <div className="tablet:w-1/2 font-pretendard text-black-950 mt-auto flex w-full min-w-[438px] flex-col justify-center gap-[24px] text-right font-bold">
               <h5 className="text-[clamp(20px,2vw,32px)] leading-[clamp(24px,2.5vw,40px)]">
                 감정 상태에 따라,
-                <br />알맞은 위로를 받을 수 있어요.
+                <br />
+                알맞은 위로를 받을 수 있어요.
               </h5>
-              <p className="font-medium text-[clamp(12px,1.2vw,24px)] text-blue-600">
+              <p className="text-[clamp(12px,1.2vw,24px)] font-medium text-blue-600">
                 태그를 통해 글을 모아 볼 수 있어요.
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col tablet:flex-row items-center justify-center ml-[68px] m-[24px] min-w-[312px] max-w-[1400px] h-auto tablet:gap-[80px]">
+          <div className="tablet:flex-row tablet:gap-[80px] m-[24px] ml-[68px] flex h-auto max-w-[1400px] min-w-[312px] flex-col items-center justify-center">
             <img
               src="/assets/images/rending/img_Desktop_landing03.png"
               alt="감정 상태 통계 예시 이미지"
-              className="w-full max-w-full tablet:min-w-[480px] h-auto object-contain overflow-hidden tablet:mt-[50px]"
+              className="tablet:min-w-[480px] tablet:mt-[50px] h-auto w-full max-w-full overflow-hidden object-contain"
             />
-            <div className="w-full min-w-[429px] font-pretendard font-bold text-black-950 text-left flex flex-col justify-center gap-[24px] mt-auto">
+            <div className="font-pretendard text-black-950 mt-auto flex w-full min-w-[429px] flex-col justify-center gap-[24px] text-left font-bold">
               <h5 className="text-[clamp(20px,2vw,32px)] leading-[clamp(24px,2.5vw,40px)]">
                 내가 요즘 어떤 감정 상태인지
-                <br />통계로 한눈에 볼 수 있어요.
+                <br />
+                통계로 한눈에 볼 수 있어요.
               </h5>
-              <p className="font-medium text-[clamp(12px,1.2vw,24px)] text-blue-600">
+              <p className="text-[clamp(12px,1.2vw,24px)] font-medium text-blue-600">
                 감정 달력으로
                 <br />내 마음에 담긴 감정을 확인해보세요.
               </p>
@@ -112,8 +117,82 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* 세번째 세션 */}
+      <section className="bg-blue-200">
+        <div className="pc:mx-[33%] pc:w-[640px] tablet:w-[384px] tablet:mx-[33%] pc:mt-[270px] tablet:mt-[191px] pc:h-[1056px] mx-[24px] mt-[80px] flex h-[680px] w-[full] flex-col gap-[40px] text-center">
+          <h1 className="text-black-950 text-pre-2xl font-bold">
+            사용자들이 직접
+            <br />
+            인용한 에피그램들
+          </h1>
+          <div className="pc:gap-[60px] tablet:gap-[20px] flex h-[full] w-[full] flex-col gap-[16px]">
+            <div className="flex flex-col gap-[8px]">
+              <div className="pc:h-[148px] h-[120px] rounded-[16px] bg-[repeating-linear-gradient(0deg,#ffffff_0px,#ffffff_23px,#F2F2F2_23px,#F2F2F2_24px)]">
+                <div>
+                  <div className="tablet:gap-[20px] mx-[24px] my-[24px] flex flex-col">
+                    <h2 className="font-iropke text-black-600 text-iro-md tablet:text-iro-lg pc:text-iro-2xl pc:leading-[40px] font-regular text-left leading-[24px]">
+                      오랫동안 꿈을 그리는 사람은 마침내 그 꿈을 닮아 간다.
+                    </h2>
+                    <h3 className="font-iropke text-iro-md tablet:text-iro-lg pc:text-iro-2xl pc:leading-[40px] font-regular text-right text-blue-400">
+                      -앙드레 말로-
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div className="font-regular text-iro-md tablet:text-iro-lg pc:text-iro-2xl pc:leading-[40px] flex justify-end gap-[8px] text-blue-400">
+                <h3>#나아가야할때</h3>
+                <h3>#꿈을이루고싶을때</h3>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-[8px]">
+              <div className="pc:h-[228px] h-[166px] rounded-[16px] bg-[repeating-linear-gradient(0deg,#ffffff_0px,#ffffff_23px,#F2F2F2_23px,#F2F2F2_24px)]">
+                <div>
+                  <div className="tablet:gap-[20px] mx-[24px] my-[24px] flex flex-col">
+                    <h2 className="font-iropke text-black-600 text-iro-md tablet:text-iro-lg pc:text-iro-2xl pc:leading-[40px] font-regular text-left leading-[24px]">
+                      이 세상에는 위대한 진실이 하나 있어. 무언가를 온 마음을 다해 원한다면, 반드시 그렇게 된다는거야.
+                      무언가를 바라는 마음은 곧 우주의 마음으로부터 비롯된 것이기 때문이지.
+                    </h2>
+                    <h3 className="font-iropke text-iro-md tablet:text-iro-lg pc:text-iro-2xl pc:leading-[40px] font-regular text-right text-blue-400">
+                      -파울로 코엘료-
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div className="font-regular text-iro-md tablet:text-iro-lg pc:text-iro-2xl pc:leading-[40px] flex justify-end gap-[8px] text-blue-400">
+                <h3 className="">#나아가야할때</h3>
+                <h3>#꿈을이루고싶을때</h3>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-[8px]">
+              <div className="pc:h-[148px] h-[120px] rounded-[16px] bg-[repeating-linear-gradient(0deg,#ffffff_0px,#ffffff_23px,#F2F2F2_23px,#F2F2F2_24px)]">
+                <div>
+                  <div className="tablet:gap-[20px] mx-[24px] my-[24px] flex flex-col">
+                    <h2 className="font-iropke text-black-600 text-iro-md tablet:text-iro-lg pc:text-iro-2xl pc:leading-[40px] font-regular text-left leading-[24px]">
+                      오랫동안 꿈을 그리는 사람은 마침내 그 꿈을 닮아 간다.
+                    </h2>
+                    <h3 className="font-iropke text-iro-md tablet:text-iro-lg pc:text-iro-2xl pc:leading-[40px] font-regular text-right text-blue-400">
+                      -앙드레 말로-
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div className="font-regular text-iro-md tablet:text-iro-lg pc:text-iro-2xl pc:leading-[40px] flex justify-end gap-[8px] text-blue-400">
+                <h3>#나아가야할때</h3>
+                <h3>#꿈을이루고싶을때</h3>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <Image src="/assets/icons/kebab.svg" alt="케밥 아이콘" width={24} height={24} />
+            </div>
+          </div>
+        </div>
+        <div className="mt-[24px] h-[15px] w-full rotate-180 bg-[url('/assets/images/pattern.png')] bg-repeat drop-shadow-xl"></div>
+      </section>
+
+      {/*네번째 파트*/}
       <section>
-        <div className="h-[15px] w-full scale-y-[-1] bg-[url('/assets/images/pattern.png')] bg-repeat drop-shadow-xl"></div>
         <div className="border-line-100 relative z-1 flex h-[672px] w-full items-center justify-center border-b-[1px] bg-blue-100 bg-[repeating-linear-gradient(0deg,#ffffff_0px,#ffffff_24px,#F2F2F2_24px,#F2F2F2_25px)]">
           <div className="pc:gap-[48px] flex flex-col items-center justify-center gap-[32px]">
             <motion.div initial="hidden" whileInView="visible" variants={ScrollInMotion} viewport={{ once: true }}>
