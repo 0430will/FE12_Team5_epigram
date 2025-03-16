@@ -1,7 +1,7 @@
 //로그인
 export async function PostSignIn(formData: FormData) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/signIn`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signIn`, {
       method: 'POST',
       body: formData,
     });
@@ -27,7 +27,7 @@ export async function PostSignIn(formData: FormData) {
 //회원가입
 export async function PostSignUp(formData: FormData) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/signUp`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signUp`, {
       method: 'POST',
       body: formData,
     });
