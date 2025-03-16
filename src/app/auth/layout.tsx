@@ -8,10 +8,10 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <main className="bg-bg-100 flex h-screen w-screen items-center justify-center">
-      <div className="box-border flex w-full max-w-[660px] flex-col items-center px-[20px]">
-        <Link href="/" className="pc:pb-[80px] pb-[50px]">
-          <Image src="/assets/images/logo-text.svg" width={174} height={48} alt="로고 이미지" />
+    <main className="bg-bg-100 tablet:py-[80px] flex min-h-screen w-full items-center justify-center py-[58px]">
+      <div className="tablet:gap-[80px] box-border flex w-full max-w-[680px] flex-col items-center gap-[50px] px-[20px]">
+        <Link href="/" className="pc:pb-[80px] relative h-[48px] w-[174px] pb-[50px]">
+          <Image className="object-contain" src="/assets/images/logo-text.svg" fill alt="로고 이미지" priority />
         </Link>
         {children}
       </div>
