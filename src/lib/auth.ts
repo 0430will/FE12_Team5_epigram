@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { SignInSchema, SignUpCredential } from '@/lib/validation';
+import { signinSchema, signupSchema } from '@/lib/validation/auth';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   session: {
@@ -20,7 +20,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         //로그인부분
-        const loginParse = SignInSchema.safeParse(credentials); //zod스키마를 활용한 유효성 검사 적용.
+        const loginParse = signinSchema.safeParse(credentials); //zod스키마를 활용한 유효성 검사 적용.
         if (loginParse.success) {
           const { email, password } = loginParse.data;
           //유효성 검사 성공 시
@@ -55,16 +55,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           }
         }
         //회원가입부분
-        const signUpParse = SignUpCredential.safeParse(credentials); //zod스키마를 통한 유효성 검사
+        const signUpParse = signupSchema.safeParse(credentials); //zod스키마를 통한 유효성 검사
         if (signUpParse.success) {
           //스키마 검사 성공했을 시
-          const { email, password, passwordConfirmation, nickname } = signUpParse.data;
+          const { email, password, confirmPassword, nickname } = signUpParse.data;
           try {
             const formData = new FormData();
             formData.append('email', email);
             formData.append('password', password);
             formData.append('nickname', nickname);
-            formData.append('confirm', passwordConfirmation);
+            formData.append('confirm', confirmPassword);
 
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signUp`, {
               method: 'POST',

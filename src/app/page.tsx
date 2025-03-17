@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import LandingHeader from '@/components/LandingHeader';
+import React from 'react';
 
 const ScrollInMotion = {
   hidden: { opacity: 0, y: 70 },
