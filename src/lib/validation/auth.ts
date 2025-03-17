@@ -19,12 +19,12 @@ export const signupSchema = z
   .object({
     email: emailSchema,
     password: passwordSchema(8),
-    confirmPassword: z.string().min(1, '비밀번호 확인을 입력해주세요.'),
+    passwordConfirmation: z.string().min(1, '비밀번호 확인을 입력해주세요.'),
     nickname: nicknameSchema,
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.password === data.passwordConfirmation, {
     message: '비밀번호가 일치하지 않습니다.',
-    path: ['confirmPassword'],
+    path: ['passwordConfirmation'],
   });
 
 // 로그인 스키마
