@@ -1,6 +1,6 @@
 export interface User {
   id: number;
-  eamil: string;
+  email: string;
   nickname: string;
   teamId: string;
   updateAt: string;
@@ -25,4 +25,15 @@ export interface ScialLogin {
   state: string;
   redirectUri: string;
   token: string;
+}
+
+export interface Session {
+  user: {
+    id: string;
+    email: string;
+    name?: string | null;
+    image?: string | null;
+  };
+  accessToken: string;
+  refreshToken: string;
 }
