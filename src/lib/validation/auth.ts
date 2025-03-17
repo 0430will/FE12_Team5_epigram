@@ -35,4 +35,4 @@ export const signinSchema = z.object({
 
 // 타입 추출
 export type SignupInput = z.infer<typeof signupSchema>;
-export type LoginInput = z.infer<typeof signinSchema>;
+export type SigninInput = z.infer<typeof signinSchema>;
