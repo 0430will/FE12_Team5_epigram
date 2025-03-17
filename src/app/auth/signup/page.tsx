@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-export default function Page() {
-  return <div>signUp page</div>;
-=======
 'use client';
 
 import Image from 'next/image';
@@ -165,5 +161,4 @@ export default function Page() {
       <SocialLogins authType={'SIGNUP'} />
     </div>
   );
->>>>>>> develop
 }
