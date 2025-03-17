@@ -34,7 +34,7 @@ interface PostSignInResponse {
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
   const router = useRouter();
 
   const {
@@ -59,11 +59,8 @@ export default function LoginPage() {
       } else {
         setError('이메일 혹은 비밀번호를 확인해주세요.');
       }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message);
-        setError('로그인에 실패하였습니다.');
-      }
+    } catch {
+      setError('로그인에 실패하였습니다.');
     }
   };
 
@@ -133,6 +130,7 @@ export default function LoginPage() {
           >
             로그인
           </button>
+          {error && <p className="text-sm text-red-500">{error}</p>}
         </form>
         <div className="h-[10px]" />
         <p className="font-pretendard flex w-full justify-end gap-2 text-[14px] leading-[24px] font-medium text-[#ABB8CE] md:text-[16px] md:leading-[26px] md:font-normal lg:text-[20px] lg:leading-[32px] lg:font-medium">
