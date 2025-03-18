@@ -6,7 +6,7 @@ export default function Page() {
     <>
       <MainHeader />
       <div>메인페이지</div>
-      <TodayEmotion />
+      <TodayEmotion emotionType="main" />
     </>
   );
 }

@@ -29,17 +29,22 @@ const EmotionData = {
 
 type EmotionKey = keyof typeof EmotionData;
 
+interface TodayEmotionProps {
+  emotionType: 'main' | 'mypage';
+}
+
 interface EmotionProps {
   emotion: EmotionKey;
   isSelected: boolean;
   onClick: () => void;
+  emotionType: string;
 }
 
-function Emotion({ emotion, isSelected, onClick }: EmotionProps) {
+function Emotion({ emotion, isSelected, onClick, emotionType }: EmotionProps) {
   return (
     <div className="flex cursor-pointer flex-col items-center gap-[8px]" onClick={onClick}>
       <div
-        className={`tablet:h-[64px] tablet:w-[64px] pc:w-[96px] pc:h-[96px] flex h-[56px] w-[56px] items-center justify-center rounded-[16px] ${isSelected ? `relative` : `bg-bg-100`}`}
+        className={`tablet:h-[64px] tablet:w-[64px] pc:w-[96px] pc:h-[96px] flex h-[56px] w-[56px] items-center justify-center rounded-[16px] ${isSelected ? `relative` : `bg-[#AFBACD]/15`}`}
       >
         <div className="pc:h-[48px] pc:w-[48px] relative h-[32px] w-[32px] object-contain">
           <Image
@@ -51,7 +56,9 @@ function Emotion({ emotion, isSelected, onClick }: EmotionProps) {
           />
         </div>
         {isSelected && (
-          <div className="border-green pc:border-[4px] absolute top-0 right-0 bottom-0 left-0 rounded-[16px] border-[3px]"></div>
+          <div
+            className={`${emotionType === 'main' ? 'border-yellow' : 'border-green'} pc:border-[4px] absolute top-0 right-0 bottom-0 left-0 rounded-[16px] border-[3px]`}
+          ></div>
         )}
       </div>
       <span
@@ -63,7 +70,7 @@ function Emotion({ emotion, isSelected, onClick }: EmotionProps) {
   );
 }
 
-export default function TodayEmotion() {
+export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey | null>(null);
 
   const OnClickEmotion = async (emotion: EmotionKey) => {
@@ -82,6 +89,7 @@ export default function TodayEmotion() {
         <Emotion
           key={emotion}
           emotion={emotion as EmotionKey}
+          emotionType={emotionType}
           isSelected={selectedEmotion === emotion}
           onClick={() => OnClickEmotion(emotion as EmotionKey)}
         />
