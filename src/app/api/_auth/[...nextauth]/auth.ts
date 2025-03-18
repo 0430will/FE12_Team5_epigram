@@ -68,11 +68,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (signUpParse.success) {
           //스키마 검사 성공했을 때
           try {
-            const { email, password, confirmPassword, nickname } = signUpParse.data;
+            const { email, password, passwordConfirmation, nickname } = signUpParse.data;
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signUp`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email, password, confirm: confirmPassword, nickname }),
+              body: JSON.stringify({ email, password, confirm: passwordConfirmation, nickname }),
             });
 
             if (res.status >= 400 && res.status < 500) {
