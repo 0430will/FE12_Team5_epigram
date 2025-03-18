@@ -1,17 +1,24 @@
+"use client";
+
 import Gyeong from './_components/Gyeong';
 import Jin from './_components/Jin';
 import Seop from './_components/Seop';
 import Sol from './_components/Sol';
 import Su from './_components/Su';
-import Uk from './_components/Uk';
+import InfiniteList from './_components/UK/InfiniteList';
+import EpigramList from './_components/UK/EpigramList';
 
-export default function page() {
+interface Item {
+  id: number;
+}
+
+export default function Page() {
   return (
     <main className="mx-auto max-w-[1000px] p-10">
       <h1 className="mb-10 text-3xl font-bold">Epigram 공용 컴포넌트 샘플</h1>
       <section className="mb-10 border border-gray-200 p-5">
         <h2 className="mb-5 text-xl font-bold">동욱 컴포넌트 </h2>
-        <Uk />
+        <EpigramList />
       </section>
 
       <section className="mb-10 border border-gray-200 p-5">
