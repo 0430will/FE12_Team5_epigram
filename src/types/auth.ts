@@ -1,6 +1,7 @@
+//오타수정 eamil > email
 export interface User {
   id: number;
-  eamil: string;
+  email: string;
   nickname: string;
   teamId: string;
   updateAt: string;
@@ -20,8 +21,8 @@ export interface RefreshToken {
   accessToken: string;
 }
 
-//간편 로그인 응답 타입
-export interface ScialLogin {
+//간편 로그인 응답 타입 (오타수정: ScialLogin > SocialLogin)
+export interface SocialLogin {
   state: string;
   redirectUri: string;
   token: string;

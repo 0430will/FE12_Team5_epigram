@@ -9,7 +9,6 @@ export default function page() {
   return (
     <main className="mx-auto max-w-[1000px] p-10">
       <h1 className="mb-10 text-3xl font-bold">Epigram 공용 컴포넌트 샘플</h1>
-
       <section className="mb-10 border border-gray-200 p-5">
         <h2 className="mb-5 text-xl font-bold">동욱 컴포넌트 </h2>
         <Uk />
