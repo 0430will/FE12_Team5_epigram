@@ -1,6 +1,6 @@
 'use client';
 
-import { PostTodayEmotion } from '@/lib/auth';
+import { PostTodayEmotion } from '@/lib/Emotionlog';
 import Image from 'next/image';
 import { useState } from 'react';
 
