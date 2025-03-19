@@ -27,3 +27,14 @@ export interface SocialLogin {
   redirectUri: string;
   token: string;
 }
+
+export interface Session {
+  user: {
+    id: string;
+    email: string;
+    name?: string | null;
+    image?: string | null;
+  };
+  accessToken: string;
+  refreshToken: string;
+}
