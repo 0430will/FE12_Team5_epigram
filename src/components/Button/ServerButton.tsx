@@ -27,7 +27,7 @@ export default function ServerButton({
         </Link>
       ) : (
         <span
-          className={`text-pre-lg pc:text-pre-xl inline-block max-w-[640px] justify-center ${isRounded ? 'rounded-[100px]' : 'rounded-[12px]'} bg-blue-300 px-[16px] py-[9px] font-semibold text-blue-100 ${className}`}
+          className={`text-pre-lg pc:text-pre-xl inline-block max-w-[640px] ${isRounded ? 'rounded-[100px]' : 'rounded-[12px]'} bg-blue-300 px-[28px] py-[11px] font-semibold text-blue-100 ${className}`}
         >
           {children}
         </span>
