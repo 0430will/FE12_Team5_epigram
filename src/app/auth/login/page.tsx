@@ -40,10 +40,10 @@ export default function LoginPage() {
       redirect: false, // 자동 리다이렉트 방지
     });
 
-    console.log('signIn 응답:', res); // 추가 로그
+    console.log('signIn 응답:', res); // 응답 로그 확인
 
     if (res?.error) {
-      setError(res.error || '이메일 혹은 비밀번호를 확인해주세요.');
+      setError(res.error); // NextAuth에서 받은 에러 메시지를 그대로 사용
       return;
     }
 
