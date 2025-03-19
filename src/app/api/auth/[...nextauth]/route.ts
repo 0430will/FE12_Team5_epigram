@@ -1,4 +1,2 @@
-import { auth } from './auth';
-
-export const GET = auth;
-export const POST = auth;
+import { auth } from '@/lib/next-auth/auth';
+export { auth as GET, auth as POST };
