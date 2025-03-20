@@ -9,7 +9,7 @@ const passwordSchema = (minLength: number) =>
   z
     .string()
     .min(minLength, `비밀번호는 최소 ${minLength}자 이상입니다.`)
-    .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=[!@#$%^&*]).+$/, '비밀번호는 숫자, 영문, 특수문자로만 가능합니다.');
+    .regex(/^[A-Za-z\d!@#$%^&*]+$/, '비밀번호는 숫자, 영문, 특수문자로만 가능합니다.');
 
 // 닉네임 검증 스키마 (공용)
 const nicknameSchema = z.string().min(1, '닉네임은 필수 입력입니다.').max(20, '닉네임은 최대 20자까지 가능합니다.');
