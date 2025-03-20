@@ -142,7 +142,6 @@ export default function LoginPage() {
           </a>
         </p>
 
-        <div className="h-[50px] md:h-[60px] lg:h-[60px]" />
         <SocialLogins authType="LOGIN" />
       </div>
     </>
