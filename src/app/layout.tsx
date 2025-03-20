@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { AuthProvider } from '@/lib/next-auth/auth_provider';
 
 export const metadata: Metadata = {
-  title: 'Cowokers',
-  description: '함께 만들어가는 투두 리스트 - Coworkes',
+  title: 'Epigram',
+  description: '날마다 에피그램 - Epigram',
 };
 
 export default function RootLayout({
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

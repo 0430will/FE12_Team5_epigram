@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { PostSignIn } from '@/lib/auth';
+import { signIn, useSession } from 'next-auth/react';
 import SocialLogins from '../_component/SocialLogins';
 
 const loginSchema = z.object({
@@ -15,23 +15,8 @@ const loginSchema = z.object({
 
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
-interface User {
-  id: number;
-  email: string;
-  nickname: string;
-  teamId: string;
-  createdAt: string;
-  updatedAt: string;
-  image: string | null;
-}
-
-interface PostSignInResponse {
-  accessToken: string;
-  refreshToken: string;
-  user: User;
-}
-
 export default function LoginPage() {
+  const { data: session, status } = useSession(); // 현재 로그인된 세션 정보 가져오기
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string>('');
   const router = useRouter();
@@ -46,33 +31,28 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormInputs) => {
-    try {
-      const formData = new FormData();
-      formData.append('email', data.email);
-      formData.append('password', data.password);
+    setError(''); // 기존 에러 초기화
 
-      const response: PostSignInResponse = await PostSignIn(formData);
+    const res = await signIn('credentials', {
+      email: data.email,
+      password: data.password,
+      redirect: false, // 자동 리다이렉트 방지
+    }); // 응답 로그 확인
 
-      if (response?.accessToken) {
-        router.push('/');
-      } else {
-        setError('이메일 혹은 비밀번호를 확인해주세요.');
-      }
-    } catch {
-      setError('로그인에 실패하였습니다.');
+    if (res?.error) {
+      setError(res.error); // NextAuth에서 받은 에러 메시지를 그대로 사용
+      return;
     }
+
+    router.push('/');
   };
 
   useEffect(() => {
-    const checkSession = async () => {
-      const res = await fetch('/api/auth/session');
-      const session = await res.json();
-      if (session?.user) {
-        router.push('/');
-      }
-    };
-    checkSession();
-  }, [router]);
+    if (status === 'loading') return; // 로딩 중이면 아무 작업 안 함
+    if (session?.user) {
+      router.push('/');
+    }
+  }, [session, status, router]);
 
   return (
     <>
