@@ -21,7 +21,6 @@ export default function LoginPage() {
   const [error, setError] = useState<string>('');
   const router = useRouter();
 
-  console.log('세션', session);
   const {
     register,
     handleSubmit,
@@ -38,9 +37,7 @@ export default function LoginPage() {
       email: data.email,
       password: data.password,
       redirect: false, // 자동 리다이렉트 방지
-    });
-
-    console.log('signIn 응답:', res); // 응답 로그 확인
+    }); // 응답 로그 확인
 
     if (res?.error) {
       setError(res.error); // NextAuth에서 받은 에러 메시지를 그대로 사용

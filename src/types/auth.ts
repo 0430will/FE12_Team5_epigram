@@ -17,7 +17,7 @@ export interface Auth {
 }
 
 //토큰 갱신 타입
-export interface RefreshToken {
+export interface accessToken {
   accessToken: string;
 }
 

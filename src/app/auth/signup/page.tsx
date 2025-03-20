@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import SocialLogins from '../_component/SocialLogins';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface SignUp {
   email: string;
@@ -15,7 +17,8 @@ interface SignUp {
 export default function Page() {
   const [isPwVisible, setIsPwVisible] = useState(false);
   const [isPwConfirmVisible, setIsPwConfirmVisible] = useState(false);
-
+  const [error, setError] = useState('');
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -33,8 +36,38 @@ export default function Page() {
 
   const { password } = watch();
 
-  const SubmitForm = () => {
-    console.log('폼 제출');
+  const SubmitForm = async (data: SignUp) => {
+    setError('');
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signUp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.error || '회원가입에 실패하셨습니다.');
+        return;
+      }
+      // 회원가입 후 바로 로그인 처리
+      const signInResponse = await signIn('credentials', {
+        redirect: false, // 페이지 이동을 방지
+        email: data.email,
+        password: data.password,
+      });
+
+      if (signInResponse?.error) {
+        throw new Error(signInResponse.error);
+      }
+
+      // 로그인 성공 시 홈으로 이동
+      router.push('/');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -157,6 +190,7 @@ export default function Page() {
         >
           가입하기
         </button>
+        {error && <p className="text-sm text-red-500">{error}</p>}
       </form>
       <SocialLogins authType={'SIGNUP'} />
     </div>
