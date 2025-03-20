@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_BASE_URL = "https://fe-project-epigram-api.vercel.app/12-5";
 
-interface Epigram {
+export interface Epigram {
   id: number;
   author: string;
   content: string;

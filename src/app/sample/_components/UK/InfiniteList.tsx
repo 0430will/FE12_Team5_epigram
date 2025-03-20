@@ -4,25 +4,28 @@ import React, { useEffect, useState, JSX } from "react";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 // 📌 데이터를 가져올 때 필요한 기본 형태
+// 각자 페이지에서 자신의 데이터 타입을 정의할 때 사용해주세요.
+/*
 interface FetchResult<T> {
   list: T[]; // 데이터를 배열로 가져옴
   hasMore: boolean; // 다음 데이터가 더 있는지 여부
 }
+*/
 
 // 📌 무한스크롤 리스트의 기본 타입
 interface InfiniteListProps<T> {
-  fetchItems: (page: number, limit: number) => Promise<FetchResult<T>>; // 데이터를 가져오는 함수
-  renderItem: (item: T) => JSX.Element; // 화면에 표시할 방법
-  limit?: number; // 한 번에 몇 개의 데이터를 불러올지 (기본값: 4)
-  buttonText?: string; // ✅ 버튼 문구 변경을 위한 추가 props
+  fetchItems: (page: number, limit: number) => Promise<{ list: T[]; hasMore: boolean }>;
+  renderItem: (item: T) => JSX.Element;
+  limit?: number;
+  buttonText?: string;
 }
 
 // 📌 무한스크롤 공통 컴포넌트
 export default function InfiniteList<T>({
   fetchItems,
   renderItem,
-  limit = 3, // 기본 limit 설정
-  buttonText = "+ 에피그램 더보기", // ✅ 기본값 설정
+  limit = 4,
+  buttonText = "+ 에피그램 더보기",
 }: InfiniteListProps<T>) {
   const [items, setItems] = useState<T[]>([]);
   const [page, setPage] = useState(1);
@@ -31,12 +34,12 @@ export default function InfiniteList<T>({
 
   // ✅ 데이터를 불러오는 함수
   const loadMore = async () => {
-    if (loading || !hasMore) return; // 중복 요청 방지 & 데이터가 더 없으면 종료
+    if (loading || !hasMore) return;
     setLoading(true);
 
-    const data = await fetchItems(page, page === 1 ? 3 : 4); // ✅ 첫 페이지는 3개, 이후에는 4개씩 로드
-    setItems((prev) => [...prev, ...data.list]); // 기존 데이터에 추가
-    setHasMore(data.hasMore); // 다음 데이터가 있는지 확인
+    const data = await fetchItems(page, limit);
+    setItems((prev) => [...prev, ...data.list]);
+    setHasMore(data.hasMore);
     setPage((prev) => prev + 1);
     setLoading(false);
   };

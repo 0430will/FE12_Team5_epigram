@@ -5,12 +5,11 @@ import Jin from './_components/Jin';
 import Seop from './_components/Seop';
 import Sol from './_components/Sol';
 import Su from './_components/Su';
-import InfiniteList from './_components/UK/InfiniteList';
 import EpigramList from './_components/UK/EpigramList';
-
-interface Item {
-  id: number;
-}
+// 📌 build 오류제거와 공통컴포넌트 사용을 위해 주석 처리해놓았습니다!
+// InfiniteList와 Item은 각자가 페이지에서 컴포넌트 만들 때 참고해주세요.
+// import InfiniteList from './_components/UK/InfiniteList';
+// import { Item } from '@/types/common';
 
 export default function Page() {
   return (
