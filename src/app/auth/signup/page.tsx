@@ -6,13 +6,8 @@ import { useForm } from 'react-hook-form';
 import SocialLogins from '../_component/SocialLogins';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-
-interface SignUp {
-  email: string;
-  password: string;
-  passwordConfirmation: string;
-  nickname: string;
-}
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signupSchema, SignupInput } from '@/lib/validation/auth';
 
 export default function Page() {
   const [isPwVisible, setIsPwVisible] = useState(false);
@@ -23,9 +18,9 @@ export default function Page() {
     register,
     handleSubmit,
     formState: { errors, isValid },
-    watch,
-  } = useForm<SignUp>({
+  } = useForm<SignupInput>({
     mode: 'onChange',
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -34,9 +29,7 @@ export default function Page() {
     },
   });
 
-  const { password } = watch();
-
-  const SubmitForm = async (data: SignUp) => {
+  const SubmitForm = async (data: SignupInput) => {
     setError('');
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signUp`, {
@@ -86,13 +79,7 @@ export default function Page() {
               placeholder="이메일"
               type="email"
               id="email"
-              {...register('email', {
-                required: '이메일을 입력해주세요.',
-                pattern: {
-                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                  message: '이메일 형식에 맞지 않습니다.',
-                },
-              })}
+              {...register('email')}
             />
             {errors?.email && (
               <p className="text-state-error text-pre-xs font-regular tablet:text-pre-md pc:text-pre-lg tablet:bottom-[-26px] pc:bottom-[-28px] absolute bottom-[-22px]">
@@ -114,13 +101,7 @@ export default function Page() {
                   placeholder="비밀번호"
                   type={isPwVisible ? 'text' : 'password'}
                   id="password"
-                  {...register('password', {
-                    required: '비밀번호를 입력해주세요.',
-                    pattern: {
-                      value: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,}$/,
-                      message: '숫자, 영어, 특수문자를 포함하여 12자 이상 입력해주세요.',
-                    },
-                  })}
+                  {...register('password')}
                 />
                 <Image
                   className="absolute top-1/2 right-[16px] -translate-y-1/2 cursor-pointer"
@@ -137,10 +118,7 @@ export default function Page() {
                   placeholder="비밀번호 확인"
                   type={isPwConfirmVisible ? 'text' : 'password'}
                   id="passwordConfirmation"
-                  {...register('passwordConfirmation', {
-                    required: '비밀번호 확인을 입력해주세요.',
-                    validate: (value) => value === password || '비밀번호가 일치하지 않습니다.',
-                  })}
+                  {...register('passwordConfirmation')}
                 />
                 <Image
                   className="absolute top-1/2 right-[16px] -translate-y-1/2 cursor-pointer"
@@ -174,7 +152,7 @@ export default function Page() {
               placeholder="닉네임"
               type="text"
               id="nickname"
-              {...register('nickname', { required: '닉네임을 입력해주세요.' })}
+              {...register('nickname')}
             />
             {errors?.nickname && (
               <p className="text-state-error text-pre-xs font-regular tablet:text-pre-md pc:text-pre-lg tablet:bottom-[-26px] pc:bottom-[-28px] absolute bottom-[-22px]">
@@ -190,7 +168,11 @@ export default function Page() {
         >
           가입하기
         </button>
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {error && (
+          <p className="text-state-error text-pre-xs font-regular tablet:text-pre-md pc:text-pre-lg tablet:bottom-[-26px] pc:bottom-[-28px] absolute bottom-[-22px]">
+            {error}
+          </p>
+        )}
       </form>
       <SocialLogins authType={'SIGNUP'} />
     </div>
