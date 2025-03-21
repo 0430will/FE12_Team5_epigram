@@ -17,7 +17,7 @@ export interface Auth {
 }
 
 //토큰 갱신 타입
-export interface RefreshToken {
+export interface accessToken {
   accessToken: string;
 }
 
@@ -26,4 +26,15 @@ export interface SocialLogin {
   state: string;
   redirectUri: string;
   token: string;
+}
+
+export interface Session {
+  user: {
+    id: string;
+    email: string;
+    name?: string | null;
+    image?: string | null;
+  };
+  accessToken: string;
+  refreshToken: string;
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import MainHeader from '@/components/MainHeader';
+import MainHeader from '@/components/header/MainHeader';
 
 interface Tag {
   name: string;
@@ -67,7 +67,7 @@ export default function SearchPage() {
     saveSearchTerm(term);
     
     try {
-      const response = await fetch(`https://fe-project-epigram-api.vercel.app/12-5/epigrams?limit=20`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams?limit=20`);
       const data: ApiResponse = await response.json();
       
       // 검색어로 필터링
@@ -96,7 +96,7 @@ export default function SearchPage() {
   return (
     <div className="min-h-screen bg-blue-100">
       <MainHeader />
-      <div className="container max-w-[630px] mx-auto px-[16px] py-[32px]">
+      <div className="container max-w-[630px] mx-auto pl-[26px] pr-[16px] py-[32px]">
         {/* 검색창 */}
         <div className="mb-[32px] relative">
           <input
