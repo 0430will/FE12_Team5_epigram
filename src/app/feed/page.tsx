@@ -7,26 +7,36 @@ import { useEffect, useState } from 'react';
 import { getEpigramsList } from '@/lib/Epigram';
 import EmptyState from '@/components/EmptyState';
 import { Epigram } from '@/types/Epigram';
+import SkeletonFeedCard from '@/components/skeletons/SkeletonFeedCard';
 
 export default function Page() {
+  const [loadingState, setLoadingState] = useState({
+    isLoading: true,
+    epigrams: [] as Epigram[],
+    totalCount: 0,
+  });
   const [isGridView, setIsGridView] = useState(true);
-  const [epigrams, setEpigrams] = useState<Epigram[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
 
   const gridStyle = isGridView ? 'grid grid-cols-2' : 'grid grid-cols-1';
 
   useEffect(() => {
     const fetchEpigrams = async () => {
+      setLoadingState((prev) => ({ ...prev, isLoading: true }));
       const data = await getEpigramsList(6);
-      if (!data) return;
-      setEpigrams(data.list);
-      setTotalCount(data.totalCount);
+      if (data) {
+        setLoadingState({
+          isLoading: false,
+          epigrams: data.list,
+          totalCount: data.totalCount,
+        });
+      } else {
+        setLoadingState((prev) => ({ ...prev, isLoading: false }));
+      }
     };
     fetchEpigrams();
   }, []);
 
-  console.log(epigrams);
-  console.log(totalCount);
+  const { isLoading, epigrams, totalCount } = loadingState;
 
   return (
     <>
@@ -36,26 +46,24 @@ export default function Page() {
           <div className="pc:mb-[40px] mb-[24px] flex content-center justify-between">
             <h1 className="pc:text-pre-2xl text-pre-lg font-semibold">피드</h1>
             <div>
-              {!isGridView && (
-                <button onClick={() => setIsGridView(true)} className="tablet:hidden cursor-pointer">
-                  <Image src="/assets/icons/feed.svg" width={24} height={24} alt="피드 아이콘" />
-                </button>
-              )}
-              {isGridView && (
-                <button className="tablet:hidden cursor-pointer">
-                  <Image
-                    onClick={() => setIsGridView(false)}
-                    src="/assets/icons/list.svg"
-                    width={24}
-                    height={24}
-                    alt="리스트 아이콘"
-                  />
-                </button>
-              )}
+              <button onClick={() => setIsGridView((prev) => !prev)} className="tablet:hidden cursor-pointer">
+                <Image
+                  src={isGridView ? '/assets/icons/list.svg' : '/assets/icons/feed.svg'}
+                  width={24}
+                  height={24}
+                  alt={isGridView ? '리스트 아이콘' : '피드 아이콘'}
+                />
+              </button>
             </div>
           </div>
-          {totalCount === 0 ? (
-            <EmptyState message={`아직 작성한 에피그램이 없어요!<br/>에피그램을 적성하고 검정을 공유해보세요.`} />
+          {isLoading ? (
+            <div
+              className={`${gridStyle} pc:gap-x-[30px] pc:gap-y-[40px] tablet:gap-x-[12px] tablet:gap-y-[24px] gap-x-[8px] gap-y-[16px] md:grid-cols-2`}
+            >
+              <SkeletonFeedCard count={6} />
+            </div>
+          ) : totalCount === 0 ? (
+            <EmptyState message={`아직 작성한 에피그램이 없어요!<br/>에피그램을 작성하고 감정을 공유해보세요.`} />
           ) : (
             <div
               className={`${gridStyle} pc:gap-x-[30px] pc:gap-y-[40px] tablet:gap-x-[12px] tablet:gap-y-[24px] gap-x-[8px] gap-y-[16px] md:grid-cols-2`}
