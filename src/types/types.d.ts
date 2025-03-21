@@ -14,15 +14,15 @@ declare module 'next-auth' {
     id: string;
     email: string;
     accessToken: string;
-    refreshToken: string;
+    refreshToken: string | undefined;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    id: number;
+    id: string | number;
     email: string | null | undefined;
     accessToken: string;
-    refreshToken: string;
+    refreshToken: string | undefined;
   }
 }

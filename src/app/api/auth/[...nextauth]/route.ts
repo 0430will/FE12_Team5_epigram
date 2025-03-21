@@ -1,3 +1,3 @@
-import { handlers } from '@/lib/next-auth/auth'; // ✅ auth.ts에서 가져오기
+import { handlers } from '@/lib/next-auth/auth';
 
-export const { GET, POST } = handlers; // ✅ NextAuth의 API 핸들러 등록
+export const { GET, POST } = handlers;
