@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, JSX } from "react";
 import { Waypoint } from "react-waypoint";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 // 데이터를 가져올 때 필요한 기본 형태
 // 각자 페이지에서 자신의 데이터 타입을 정의할 때 사용해주세요.
@@ -39,7 +39,6 @@ export default function InfiniteList<T>({
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const router = useRouter();
   const pathname = usePathname();
 
   // 데이터를 불러오는 함수
@@ -60,7 +59,7 @@ export default function InfiniteList<T>({
       // 중복 데이터 체크 및 필터링
       const newItems = data.list.filter(newItem => 
         !items.some(existingItem => 
-          (existingItem as any).id === (newItem as any).id
+          (existingItem as { id: number }).id === (newItem as { id: number }).id
         )
       );
 
