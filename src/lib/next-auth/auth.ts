@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { signinSchema, signupSchema } from '@/lib/validation/auth';
 
-export const { auth, handlers, signIn, signUp } = NextAuth({
+export const { auth, handlers, signIn, signOut } = NextAuth({
   session: {
     strategy: 'jwt', //jwt 기반 인증
   },
