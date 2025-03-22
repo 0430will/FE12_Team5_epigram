@@ -5,7 +5,7 @@ export async function PostTodayEmotion(emotionName: string) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer 토큰`,
+        Authorization: `Bearer accessToken`,
       },
       body: JSON.stringify({
         emotion: emotionName,

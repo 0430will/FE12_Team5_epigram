@@ -1,8 +1,9 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { signinSchema, signupSchema } from '@/lib/validation/auth';
+import GoogleProvider from 'next-auth/providers/google';
 
-export const auth = NextAuth({
+export const { auth, handlers, signIn, signOut } = NextAuth({
   session: {
     strategy: 'jwt', //jwt 기반 인증
   },
@@ -11,6 +12,11 @@ export const auth = NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
+    GoogleProvider({
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+      authorization: { params: { access_type: 'offline', prompt: 'consent' } },
+    }),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -94,13 +100,25 @@ export const auth = NextAuth({
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      // Google 로그인 시, OAuth 제공자에서 받은 토큰을 user 객체에 저장
+      if (account?.provider === 'google') {
+        const googleToken = account.id_token ?? account.access_token;
+        if (googleToken) {
+          user.accessToken = googleToken;
+          user.refreshToken = account.refresh_token;
+        }
+      }
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.id = Number(user.id);
-        token.email = user.email;
+        token.id = user.id ? String(user.id) : token.id;
+        token.email = user.email ?? token.email;
       }
+
       return token;
     },
     async session({ session, token }) {
@@ -108,6 +126,10 @@ export const auth = NextAuth({
       session.user.email = token.email ?? '';
       session.accessToken = token.accessToken;
       return session;
+    },
+    async redirect({ baseUrl }) {
+      // 로그인 성공 후 리다이렉트할 기본 경로 설정 (예: /epigrams)
+      return baseUrl + '/epigrams';
     },
   },
 });
