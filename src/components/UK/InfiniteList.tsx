@@ -31,7 +31,7 @@ interface InfiniteListProps<T> {
 export default function InfiniteList<T>({
   fetchItems,
   renderItem,
-  limit = 4,
+  limit = 5,
   buttonText = "+ 에피그램 더보기",
 }: InfiniteListProps<T>) {
   const [items, setItems] = useState<T[]>([]);
@@ -124,35 +124,38 @@ export default function InfiniteList<T>({
   }, [pathname]);
 
   return (
-    <div className="max-w-lg mx-auto p-4">
-      {/* 데이터가 없고, 로딩 중이 아닐 때 "데이터가 없습니다" 메시지 표시 */}
-      {items.length === 0 && !loading && <p className="text-center text-gray-500">데이터가 없습니다.</p>}
+    <div>
+      <div className="max-w-lg mx-auto p-4">
+        {/* 데이터가 없고, 로딩 중이 아닐 때 "데이터가 없습니다" 메시지 표시 */}
+        {items.length === 0 && !loading && <p className="text-center text-gray-500">데이터가 없습니다.</p>}
 
-      <ul className="space-y-4">
-        {items.map((item, index) => renderItem(item, index))}
-      </ul>
+        <ul className="space-y-4">
+          {items.map((item, index) => renderItem(item, index))}
+        </ul>
 
-      {/* Waypoint를 사용한 무한 스크롤 */}
-      {hasMore && (
-        <Waypoint
-          onEnter={loadMore}
-          bottomOffset="200px"
-        >
-          <div className="h-10 flex justify-center items-center">
-            {loading && <span className="text-gray-500">Loading...</span>}
-          </div>
-        </Waypoint>
-      )}
-
-      {/* 더보기 버튼 */}
-      {!loading && hasMore && (
-        <button
-          onClick={loadMore}
-          className="w-[238px] h-[56px] flex justify-center items-center px-[40px] py-[12px] gap-[8px] bg-100 border border-line-200 rounded-full text-blue-500"
-        >
-          {buttonText}
-        </button>
-      )}
+        {/* Waypoint를 사용한 무한 스크롤 */}
+        {hasMore && (
+          <Waypoint
+            onEnter={loadMore}
+            bottomOffset="200px"
+          >
+            <div className="h-10 flex justify-center items-center">
+              {loading && <span className="text-gray-500">Loading...</span>}
+            </div>
+          </Waypoint>
+        )}
+      </div>
+      <div className="max-w-lg mx-auto p-[140px]">
+        {/* 더보기 버튼 */}
+        {!loading && hasMore && (
+          <button
+            onClick={loadMore}
+            className="w-[238px] h-[56px] px-[40px] py-[12px] gap-[8px] bg-100 border border-line-200 rounded-full text-blue-500"
+          >
+            {buttonText}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
