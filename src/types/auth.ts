@@ -30,10 +30,10 @@ export interface SocialLogin {
 
 export interface Session {
   user: {
-    id: string;
+    id: number;
     email: string;
-    name?: string | null;
-    image?: string | null;
+    name?: string | null | undefined;
+    image?: string | null | undefined;
   };
   accessToken: string;
   refreshToken: string;
