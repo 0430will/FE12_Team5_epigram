@@ -1,6 +1,7 @@
 import { AddEpigram } from '@/app/addepigram/page';
+import { EpigramList } from '@/types/Epigram';
 
-// 에피그램 API
+// 에피그램 post
 export async function PostEpigram(epigrams: AddEpigram) {
   const { tags, referenceUrl, referenceTitle, author, content } = epigrams;
 
@@ -37,7 +38,6 @@ export async function PostEpigram(epigrams: AddEpigram) {
     }
   }
 }
-import { EpigramList } from '@/types/Epigram';
 
 // 에피그램 목록 조회
 export async function getEpigramsList(

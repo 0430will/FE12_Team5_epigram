@@ -1,30 +1,30 @@
 'use client';
 
-import { useState } from 'react';
 import { EpigramTag } from '@/types/Epigram';
 import { TagsInput } from './TagsInput';
 import { Tags } from './Tags';
 
-export function TagsInputWithList() {
-  const [tags, setTags] = useState<EpigramTag[]>([]); // 초기값 없이 빈배열로 시작
-
+export function TagsInputWithList({ tags, setTags }: { tags: EpigramTag[]; setTags: (tags: EpigramTag[]) => void }) {
   const handleAddTag = (newTag: EpigramTag) => {
-    // 중복 태그 체크
-    const isDuplicate = tags.some((tag) => tag.name === newTag.name);
-    if (isDuplicate) {
+    if (tags.some((tag) => tag.name === newTag.name)) {
       alert('이 태그는 이미 추가되어 있습니다.');
-      return; // 중복이 있을 경우 추가하지 않음
+      return;
     }
-
-    setTags([...tags, newTag]); // 새로운 태그 추가
+    if (tags.length >= 3) {
+      alert('태그는 최대 3개까지 가능합니다.');
+      return;
+    }
+    const updatedTags = [...tags, newTag];
+    setTags(updatedTags); // react-hook-form 상태 업데이트
   };
 
   const handleRemoveTag = (tag: EpigramTag) => {
-    setTags(tags.filter((t) => t.id !== tag.id)); // 태그 삭제
+    const updatedTags = tags.filter((t) => t.id !== tag.id);
+    setTags(updatedTags); // react-hook-form 상태 업데이트
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-[15px]">
       <TagsInput onAddTag={handleAddTag} tags={tags} />
       <Tags tags={tags} onRemoveTag={handleRemoveTag} />
     </div>
