@@ -12,7 +12,9 @@ export function TagsInput({ onAddTag, tags }: TagsInputProps) {
   const [inputValue, setInputValue] = useState<string>('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    if (e.target.value.length <= 10) {
+      setInputValue(e.target.value);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -39,7 +41,7 @@ export function TagsInput({ onAddTag, tags }: TagsInputProps) {
       value={inputValue}
       onChange={handleInputChange}
       onKeyDown={handleKeyPress}
-      className="text-pre-lg font-regular text-black-950 pc:text-pre-xl h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
+      className="text-pre-lg font-regular text-black-950 pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
       placeholder="입력하여 태그 작성 (최대 10자)"
     />
   );

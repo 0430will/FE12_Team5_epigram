@@ -5,5 +5,5 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  return <div className="p-[24px]">{children}</div>;
+  return <div className="tablet:py-[32px] pc:py-[56px] flex w-full justify-center p-[24px]">{children}</div>;
 }

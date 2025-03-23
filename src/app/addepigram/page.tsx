@@ -15,6 +15,17 @@ export interface AddEpigram {
   authorSelected: string;
 }
 
+// const initialValue = {
+//   tags: [
+//     { id: 1, name: '꿈을이루고싶을때' },
+//     { id: 2, name: '나아가야할때' },
+//   ],
+//   referenceUrl: 'https://www.naver.com',
+//   referenceTitle: '나무위키',
+//   author: '앙드레 말로',
+//   content: '오랫동안 꿈을 그리는 사람은 마침내 그 꿈을 닮아 간다.',
+// };
+
 export default function Page() {
   const {
     register,
@@ -50,7 +61,7 @@ export default function Page() {
     const allValues = watch();
     const response = await PostEpigram(allValues);
     if (!response) return;
-    console.log('폼 제출');
+    alert('폼 제출 완료');
   };
 
   useEffect(() => {
@@ -62,36 +73,44 @@ export default function Page() {
   }, [selectedOption, setValue]);
 
   return (
-    <div className="flex flex-col gap-[24px]">
-      <h1 className="text-pre-lg text-black-700 font-semibold">에피그램 만들기</h1>
-      <form onSubmit={handleSubmit(SubmitForm)} className="flex flex-col gap-[24px]">
-        <div className="flex flex-col gap-[40px]">
-          <div className="flex flex-col gap-[8px]">
+    <div className="tablet:max-w-[384px] pc:max-w-[640px] tablet:gap-[32px] pc:gap-[40px] flex w-full flex-col gap-[24px]">
+      <h1 className="text-pre-lg text-black-700 tablet:text-pre-xl pc:text-pre-2xl font-semibold">에피그램 만들기</h1>
+      <form onSubmit={handleSubmit(SubmitForm)} className="pc:gap-[40px] flex flex-col gap-[24px]">
+        <div className="pc:gap-[54px] flex flex-col gap-[40px]">
+          <div className="pc:gap-[24px] flex flex-col gap-[8px]">
             <div className="flex justify-between">
               <div className="flex gap-[4px]">
-                <label htmlFor="content" className="text-pre-md text-black-600 font-semibold">
+                <label
+                  htmlFor="content"
+                  className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
+                >
                   내용
                 </label>
                 <div className="relative">
-                  <span className="text-pre-lg text-state-error absolute top-[2px] font-medium">*</span>
+                  <span className="text-pre-lg text-state-error tablet:text-pre-lg pc:text-pre-xl absolute top-[2px] font-medium">
+                    *
+                  </span>
                 </div>
               </div>
-              <span className="text-pre-md font-semibold text-blue-400">
+              <span className="text-pre-md tablet:text-pre-lg font-regular flex items-center text-blue-400">
                 {content.length} / {maxLength}자
               </span>
             </div>
             <textarea
               id="content"
-              className="text-pre-lg font-regular text-black-950 pc:text-pre-xl custom-scrollbar h-[132px] w-full resize-none rounded-[12px] border border-blue-300 px-[16px] py-[10px] placeholder:text-blue-400 focus:outline-blue-600"
+              className="text-pre-lg font-regular text-black-950 pc:text-pre-xl custom-scrollbar pc:h-[148px] h-[132px] w-full resize-none rounded-[12px] border border-blue-300 px-[16px] py-[10px] placeholder:text-blue-400 focus:outline-blue-600"
               placeholder="500자 이내로 입력해주세요."
               {...register('content', { required: '내용을 입력해주세요' })}
               value={content}
               onChange={handleInputChange}
             />
           </div>
-          <div className="flex flex-col gap-[8px]">
+          <div className="pc:gap-[16px] flex flex-col gap-[8px]">
             <div className="flex gap-[4px]">
-              <label htmlFor="author" className="text-pre-md text-black-600 font-semibold">
+              <label
+                htmlFor="author"
+                className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
+              >
                 저자
               </label>
               <div className="relative">
@@ -109,8 +128,8 @@ export default function Page() {
                     {...register('authorSelected')}
                     defaultChecked
                   />
-                  <div className="h-5 w-5 rounded-full border-2 border-blue-300 bg-transparent peer-checked:border-4 peer-checked:border-blue-100 peer-checked:bg-blue-800 peer-checked:shadow-[0_0_0_2px_#CBD3E1]"></div>
-                  <span className="text-pre-lg text-black-600 font-medium">직접 입력</span>
+                  <div className="pc:h-[24px] pc:w-[24px] pc:peer-checked:border-5 h-5 w-5 rounded-full border-2 border-blue-300 bg-transparent peer-checked:border-4 peer-checked:border-blue-100 peer-checked:bg-blue-800 peer-checked:shadow-[0_0_0_2px_#CBD3E1]"></div>
+                  <span className="text-pre-lg text-black-600 pc:text-pre-xl font-medium">직접 입력</span>
                 </label>
                 <label htmlFor="알 수 없음" className="relative flex cursor-pointer items-center gap-[8px]">
                   <input
@@ -120,18 +139,18 @@ export default function Page() {
                     className="peer hidden"
                     {...register('authorSelected')}
                   />
-                  <div className="h-5 w-5 rounded-full border-2 border-blue-300 bg-transparent peer-checked:border-4 peer-checked:border-blue-100 peer-checked:bg-blue-800 peer-checked:shadow-[0_0_0_2px_#CBD3E1]"></div>
-                  <span className="text-pre-lg text-black-600 font-medium">알 수 없음</span>
+                  <div className="pc:h-[24px] pc:w-[24px] pc:peer-checked:border-5 h-5 w-5 rounded-full border-2 border-blue-300 bg-transparent peer-checked:border-4 peer-checked:border-blue-100 peer-checked:bg-blue-800 peer-checked:shadow-[0_0_0_2px_#CBD3E1]"></div>
+                  <span className="text-pre-lg text-black-600 pc:text-pre-xl font-medium">알 수 없음</span>
                 </label>
                 <label htmlFor="본인" className="relative flex cursor-pointer items-center gap-[8px]">
                   <input id="본인" type="radio" value="본인" className="peer hidden" {...register('authorSelected')} />
-                  <div className="h-5 w-5 rounded-full border-2 border-blue-300 bg-transparent peer-checked:border-4 peer-checked:border-blue-100 peer-checked:bg-blue-800 peer-checked:shadow-[0_0_0_2px_#CBD3E1]"></div>
-                  <span className="text-pre-lg text-black-600 font-medium">본인</span>
+                  <div className="pc:h-[24px] pc:w-[24px] pc:peer-checked:border-5 h-5 w-5 rounded-full border-2 border-blue-300 bg-transparent peer-checked:border-4 peer-checked:border-blue-100 peer-checked:bg-blue-800 peer-checked:shadow-[0_0_0_2px_#CBD3E1]"></div>
+                  <span className="text-pre-lg text-black-600 pc:text-pre-xl font-medium">본인</span>
                 </label>
               </div>
               <input
                 id="author"
-                className="text-pre-lg font-regular text-black-950 pc:text-pre-xl h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
+                className={`text-pre-lg font-regular pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600 ${selectedOption !== '직접 입력' ? 'bg-blue-200 text-blue-400' : 'text-black-950'}`}
                 placeholder="저자 이름 입력"
                 value={author}
                 disabled={selectedOption !== '직접 입력'}
@@ -139,25 +158,31 @@ export default function Page() {
               />
             </div>
           </div>
-          <div className="flex flex-col gap-[8px]">
-            <label htmlFor="referenceTitle" className="text-pre-md text-black-600 font-semibold">
+          <div className="pc:gap-[16px] flex flex-col gap-[8px]">
+            <label
+              htmlFor="referenceTitle"
+              className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
+            >
               출처
             </label>
             <input
               id="referenceTitle"
-              className="text-pre-lg font-regular text-black-950 pc:text-pre-xl h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
+              className="text-pre-lg font-regular text-black-950 pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
               placeholder="출저 제목 입력"
               {...register('referenceTitle')}
             />
             <input
               id="referenceUrl"
-              className="text-pre-lg font-regular text-black-950 pc:text-pre-xl h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
+              className="text-pre-lg font-regular text-black-950 pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
               placeholder="URL (ex. https://www.website.com)"
               {...register('referenceUrl')}
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <label htmlFor="tags" className="text-pre-md text-black-600 font-semibold">
+            <label
+              htmlFor="tags"
+              className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
+            >
               태그
             </label>
             <TagsInputWithList tags={watch('tags')} setTags={(newTags) => setValue('tags', newTags)} />

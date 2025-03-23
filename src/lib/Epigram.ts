@@ -5,15 +5,17 @@ import { EpigramList } from '@/types/Epigram';
 export async function PostEpigram(epigrams: AddEpigram) {
   const { tags, referenceUrl, referenceTitle, author, content } = epigrams;
 
+  const tagslist = tags.map((item) => item.name);
+
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/emotionLogs/today`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer 토큰`,
       },
       body: JSON.stringify({
-        tags: tags,
+        tags: tagslist,
         referenceUrl: referenceUrl,
         referenceTitle: referenceTitle,
         author: author,
