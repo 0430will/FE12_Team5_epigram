@@ -1,161 +1,167 @@
 "use client";
 
 import React, { useEffect, useState, JSX } from "react";
-import { Waypoint } from "react-waypoint";
-import { usePathname } from "next/navigation";
 
-// 데이터를 가져올 때 필요한 기본 형태
-// 각자 페이지에서 자신의 데이터 타입을 정의할 때 사용해주세요.
-/*
-interface FetchResult<T> {
-  list: T[]; // 데이터를 배열로 가져옴
-  hasMore: boolean; // 다음 데이터가 더 있는지 여부
-}
-*/
-
-// 데이터를 가져올 때 필요한 기본 형태
 interface FetchResult<T> {
   list: T[];
+  nextCursor: number | null;
   hasMore: boolean;
 }
 
-// 무한스크롤 리스트의 기본 타입
 interface InfiniteListProps<T> {
-  fetchItems: (page: number, limit: number) => Promise<FetchResult<T>>;
+  fetchItems: (cursor: number | null, limit: number) => Promise<FetchResult<T>>;
   renderItem: (item: T, index: number) => JSX.Element;
   limit?: number;
   buttonText?: string;
+  storageKey?: string;
 }
 
-// 무한스크롤 공통 컴포넌트
 export default function InfiniteList<T>({
   fetchItems,
   renderItem,
   limit = 5,
-  buttonText = "+ 에피그램 더보기",
+  buttonText = "+ 더보기",
+  storageKey = "infinite_list",
 }: InfiniteListProps<T>) {
   const [items, setItems] = useState<T[]>([]);
-  const [page, setPage] = useState(1);
+  const [cursor, setCursor] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const pathname = usePathname();
+  const [shouldAutoLoad, setShouldAutoLoad] = useState(false);
 
-  // 데이터를 불러오는 함수
+  // 새로고침 여부 감지
+  const isRefresh = (() => {
+    if (typeof window === "undefined") return false;
+    const nav = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+    return nav?.type === "reload";
+  })();
+  
+  // 로컬스토리지 초기화 (새로고침 시에만)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (isRefresh) {
+        localStorage.removeItem(`${storageKey}_items`);
+        localStorage.removeItem(`${storageKey}_cursor`);
+        localStorage.removeItem(`${storageKey}_hasMore`);
+      }
+    }
+  }, []);
+
+  // 복원
+  useEffect(() => {
+    const restore = () => {
+      const savedItems = localStorage.getItem(`${storageKey}_items`);
+      const savedCursor = localStorage.getItem(`${storageKey}_cursor`);
+      const savedHasMore = localStorage.getItem(`${storageKey}_hasMore`);
+
+      if (savedItems) {
+        const parsed = JSON.parse(savedItems);
+        const unique = Array.from(
+          new Map((parsed as T[]).map((item) => [(item as any).id, item])).values()
+        ) as T[];
+        setItems(unique);
+      }
+
+      if (savedCursor) setCursor(JSON.parse(savedCursor));
+      if (savedHasMore) setHasMore(JSON.parse(savedHasMore));
+
+      const shouldLoad = !savedItems || JSON.parse(savedItems).length === 0;
+      setShouldAutoLoad(shouldLoad);
+    };
+
+    if (typeof window !== "undefined") {
+      restore();
+    }
+  }, []);
+
+  // 복원 후 loadMore 실행
+  useEffect(() => {
+    if (shouldAutoLoad && !loading) {
+      loadMore();
+    }
+  }, [shouldAutoLoad]);
+
+  // 로컬스토리지 저장
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(`${storageKey}_items`, JSON.stringify(items));
+      localStorage.setItem(`${storageKey}_cursor`, JSON.stringify(cursor));
+      localStorage.setItem(`${storageKey}_hasMore`, JSON.stringify(hasMore));
+    }
+  }, [items, cursor, hasMore]);
+
+  // 스크롤 복원 (데이터 렌더링 후)
+  useEffect(() => {
+    const state = window.history.state;
+    const savedScroll = state?.scrollPosition;
+
+    if (savedScroll && items.length > 0) {
+      setTimeout(() => {
+        window.scrollTo(0, savedScroll);
+      }, 50); // 렌더 후 실행
+    }
+  }, [items]);
+
+  // 스크롤 위치 저장
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const scrollPosition = window.scrollY;
+      window.history.replaceState({ scrollPosition }, '', window.location.pathname);
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, []);
+
   const loadMore = async () => {
     if (loading || !hasMore) return;
-    setLoading(true);
 
+    setLoading(true);
     try {
-      const data = await fetchItems(page, limit);
-      
-      // 새로운 데이터가 없는 경우
-      if (!data.list || data.list.length === 0) {
+      const data = await fetchItems(cursor, limit);
+
+      if (data.list.length === 0) {
         setHasMore(false);
-        setLoading(false);
         return;
       }
 
-      // 중복 데이터 체크 및 필터링
-      const newItems = data.list.filter(newItem => 
-        !items.some(existingItem => 
-          (existingItem as { id: number }).id === (newItem as { id: number }).id
-        )
+      const newItems = data.list.filter(
+        (item) => !items.some((existing) => (existing as any).id === (item as any).id)
       );
 
-      // 새로운 데이터가 없는 경우
-      if (newItems.length === 0) {
-        setHasMore(false);
-        setLoading(false);
-        return;
-      }
-
-      setItems(prev => [...prev, ...newItems]);
+      setItems((prev) => [...prev, ...newItems]);
+      setCursor(data.nextCursor);
       setHasMore(data.hasMore);
-      setPage(prev => prev + 1);
     } catch (error) {
-      console.error('Error loading more items:', error);
+      console.error("데이터 로딩 실패:", error);
       setHasMore(false);
     } finally {
       setLoading(false);
     }
   };
 
-  // 스크롤 위치 저장
-  const saveScrollPosition = () => {
-    if (typeof window !== 'undefined') {
-      const scrollPosition = window.scrollY;
-      window.history.replaceState(
-        { scrollPosition },
-        '',
-        pathname
-      );
-    }
-  };
-
-  // 스크롤 위치 복원
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const state = window.history.state;
-      if (state?.scrollPosition) {
-        window.scrollTo(0, state.scrollPosition);
-      }
-    }
-  }, [pathname]);
-
-  // 초기 데이터 로드
-  useEffect(() => {
-    if (isInitialLoad && items.length === 0 && !loading) {
-      loadMore();
-      setIsInitialLoad(false);
-    }
-  }, [isInitialLoad]);
-
-  // 페이지 이동 시 스크롤 위치 저장
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      saveScrollPosition();
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [pathname]);
-
   return (
     <div>
-      <div className="max-w-lg mx-auto p-4">
-        {/* 데이터가 없고, 로딩 중이 아닐 때 "데이터가 없습니다" 메시지 표시 */}
-        {items.length === 0 && !loading && <p className="text-center text-gray-500">데이터가 없습니다.</p>}
-
-        <ul className="space-y-4">
-          {items.map((item, index) => renderItem(item, index))}
-        </ul>
-
-        {/* Waypoint를 사용한 무한 스크롤 */}
-        {hasMore && (
-          <Waypoint
-            onEnter={loadMore}
-            bottomOffset="200px"
-          >
-            <div className="h-10 flex justify-center items-center">
-              {loading && <span className="text-gray-500">Loading...</span>}
-            </div>
-          </Waypoint>
+      <ul className="space-y-4">
+        {items.map((item, index) =>
+          React.cloneElement(renderItem(item, index), {
+            key: `${(item as any).id}_${index}`,
+          })
         )}
-      </div>
-      <div className="max-w-lg mx-auto p-[140px]">
-        {/* 더보기 버튼 */}
-        {!loading && hasMore && (
+      </ul>
+
+      {loading && <p className="text-center text-gray-500 mt-4">로딩 중...</p>}
+
+      {!loading && hasMore && (
+        <div className="text-center mt-6">
           <button
             onClick={loadMore}
-            className="w-[238px] h-[56px] px-[40px] py-[12px] gap-[8px] bg-100 border border-line-200 rounded-full text-blue-500"
+            className="px-6 py-3 bg-blue-100 rounded-full text-blue-600 border border-blue-300 hover:bg-blue-200 transition"
           >
             {buttonText}
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
