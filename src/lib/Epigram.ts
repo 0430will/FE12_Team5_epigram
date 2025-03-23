@@ -26,7 +26,7 @@ export async function getEpigramsList(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.accessToken}`,
       },
     });
 
