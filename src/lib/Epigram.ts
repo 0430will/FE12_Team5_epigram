@@ -1,3 +1,42 @@
+import { AddEpigram } from '@/app/addepigram/page';
+
+// 에피그램 API
+export async function PostEpigram(epigrams: AddEpigram) {
+  const { tags, referenceUrl, referenceTitle, author, content } = epigrams;
+
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/emotionLogs/today`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer 토큰`,
+      },
+      body: JSON.stringify({
+        tags: tags,
+        referenceUrl: referenceUrl,
+        referenceTitle: referenceTitle,
+        author: author,
+        content: content,
+      }),
+    });
+
+    if (response.status === 401) {
+      throw new Error('로그인이 만료되었습니다.');
+    }
+
+    if (!response.ok || response === null) {
+      throw new Error('서버 오류가 발생하였습니다.');
+    }
+    const data = response.json();
+    return data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(`${error.message}`);
+    } else {
+      console.error('에피그램을 등록하는데 실패했습니다.');
+    }
+  }
+}
 import { EpigramList } from '@/types/Epigram';
 
 // 에피그램 목록 조회
