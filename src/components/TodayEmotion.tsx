@@ -2,7 +2,7 @@
 
 import { PostTodayEmotion } from '@/lib/Emotionlog';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const EmotionData = {
   감동: {
@@ -36,6 +36,7 @@ interface TodayEmotionProps {
 interface EmotionProps {
   emotion: EmotionKey;
   isSelected: boolean;
+  isDisabled: boolean;
   onClick: () => void;
   emotionType: string;
 }
@@ -72,15 +73,35 @@ function Emotion({ emotion, isSelected, onClick, emotionType }: EmotionProps) {
 
 export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey | null>(null);
+  const [isEmotionLogged, setIsEmotionLogged] = useState(false);
+
+  const getTodayDate = () => new Date().toISOString().split('T')[0];
+
+  useEffect(() => {
+    const savedEmotion = localStorage.getItem('todayEmtion');
+
+    if (savedEmotion) {
+      const { date, emotion } = JSON.parse(savedEmotion);
+      if (date === getTodayDate()) {
+        setSelectedEmotion(emotion);
+        setIsEmotionLogged(true);
+      } else {
+        localStorage.removeItem('todayEmotion');
+      }
+    }
+  }, []);
 
   const OnClickEmotion = async (emotion: EmotionKey) => {
-    if (selectedEmotion === emotion) return;
+    if (isEmotionLogged) return;
 
     const response = await PostTodayEmotion(EmotionData[emotion].name);
     if (!response) return;
 
     console.log(`오늘의 감정 등록 완료: ${emotion}`);
     setSelectedEmotion(emotion);
+    setIsEmotionLogged(true);
+
+    localStorage.setItem('todayEmotion', JSON.stringify({ data: getTodayDate(), emotion }));
   };
 
   return (
@@ -91,6 +112,7 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
           emotion={emotion as EmotionKey}
           emotionType={emotionType}
           isSelected={selectedEmotion === emotion}
+          isDisabled={isEmotionLogged}
           onClick={() => OnClickEmotion(emotion as EmotionKey)}
         />
       ))}

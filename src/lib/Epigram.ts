@@ -62,13 +62,12 @@ export async function GetTodayEpigram() {
     if (!response.ok || response === null) {
       throw new Error('서버 오류가 발생하였습니다.');
     }
-    const data = response.json();
+
+    const data = await response.json();
     return data;
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(`${error.message}`);
-    } else {
-      console.error('감정을 등록하는데 실패했습니다.');
     }
   }
 }

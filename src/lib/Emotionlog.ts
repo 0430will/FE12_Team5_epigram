@@ -1,12 +1,11 @@
 //오늘의 감정
-// import { auth } from '@/lib/next-auth/auth';
+import { auth } from '@/lib/next-auth/auth';
 
 export async function PostTodayEmotion(emotionName: string) {
   try {
-    // const session = await auth();
-    // const token = session?.accessToken;
-    const token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTM0NSwidGVhbUlkIjoiMTItNSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzQyNjU0MzE5LCJleHAiOjE3NDI2NTYxMTksImlzcyI6InNwLWVwaWdyYW0ifQ.aPUXXXw4FsoD68yPSCgxImb60oW_AV_af4UIvSWHxaE';
+    const session = await auth();
+    const token = session?.accessToken;
+
     if (!token) {
       throw new Error('토큰이 없습니다. 로그인이 필요합니다.');
     }
