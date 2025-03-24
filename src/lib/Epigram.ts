@@ -1,6 +1,5 @@
 import { AddEpigram } from '@/app/addepigram/page';
 import { Epigram } from '@/types/Epigram';
-import { auth } from '@/lib/next-auth/auth';
 
 // 에피그램 post
 export async function PostEpigram(epigrams: AddEpigram) {
@@ -44,6 +43,7 @@ export async function PostEpigram(epigrams: AddEpigram) {
 
 // 에피그램 목록 조회
 export async function getEpigramsList(
+  token: string | undefined,
   limit: number = 6,
   cursor?: number,
   keyword?: string,
@@ -57,10 +57,6 @@ export async function getEpigramsList(
       ...(writerId !== undefined && { writerId: String(writerId) }),
     });
 
-    // TODO: auth 완료된 후 getSession으로 변경
-    const session = await auth();
-    const token = session?.accessToken;
-
     if (!token) {
       throw new Error('토큰이 없습니다. 로그인해주세요.');
     }
@@ -68,7 +64,7 @@ export async function getEpigramsList(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 

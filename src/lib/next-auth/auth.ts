@@ -4,6 +4,7 @@ import { signinSchema, signupSchema } from '@/lib/validation/auth';
 import GoogleProvider from 'next-auth/providers/google';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  debug: true,
   session: {
     strategy: 'jwt', //jwt 기반 인증
   },
@@ -11,6 +12,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     signIn: '/login', // 인증이 필요하면 login로 이동
   },
   secret: process.env.NEXTAUTH_SECRET,
+  trustHost: true,
   providers: [
     GoogleProvider({
       clientId: process.env.AUTH_GOOGLE_ID!,
@@ -42,6 +44,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             },
             body: JSON.stringify(loginData),
           });
+
           //비밀번호나 이메일이 틀릴시 401응답을 보내는게 정상
           if (res.status >= 400 && res.status < 500) {
             // 서버에서 400에러로 응답시..
@@ -55,11 +58,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           const user = await res.json();
 
           return {
-            //user데이터를 받아오는 것이라서 user.user로 해야한다.
-            id: user.user.id,
-            email: user.user.email,
-            accessToken: user.user.accessToken,
-            refreshToken: user.user.refreshToken,
+            id: user.id,
+            email: user.email,
+            accessToken: user.accessToken,
+            refreshToken: user.refreshToken,
           };
         }
         // 회원가입부분
@@ -85,10 +87,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             const user = await res.json();
 
             return {
-              id: user.user.id,
-              email: user.user.email,
-              accessToken: user.user.accessToken,
-              refreshToken: user.user.refreshToken,
+              id: user.id,
+              email: user.email,
+              accessToken: user.accessToken,
+              refreshToken: user.refreshToken,
             };
           } catch (error: unknown) {
             if (error instanceof Error) throw new Error('알 수 없는 오류가 발생하였습니다.');
@@ -118,7 +120,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         token.id = user.id ? String(user.id) : token.id;
         token.email = user.email ?? token.email;
       }
-
       return token;
     },
     async session({ session, token }) {

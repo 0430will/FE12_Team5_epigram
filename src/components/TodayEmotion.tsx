@@ -3,6 +3,7 @@
 import { PostTodayEmotion } from '@/lib/Emotionlog';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 const EmotionData = {
   감동: {
@@ -72,6 +73,7 @@ function Emotion({ emotion, isSelected, onClick, emotionType }: EmotionProps) {
 }
 
 export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
+  const { data: session } = useSession();
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey | null>(null);
   const [isEmotionLogged, setIsEmotionLogged] = useState(false);
 
@@ -93,8 +95,12 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
 
   const OnClickEmotion = async (emotion: EmotionKey) => {
     if (isEmotionLogged) return;
+    if (!session?.accessToken) {
+      console.error('Access token is undefined');
+      return;
+    }
 
-    const response = await PostTodayEmotion(EmotionData[emotion].name);
+    const response = await PostTodayEmotion(EmotionData[emotion].name, session.accessToken);
     if (!response) return;
 
     console.log(`오늘의 감정 등록 완료: ${emotion}`);
