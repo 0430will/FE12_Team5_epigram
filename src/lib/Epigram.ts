@@ -1,6 +1,6 @@
 import { AddEpigram } from '@/app/addepigram/page';
 import { Epigram } from '@/types/Epigram';
-// import { auth } from '@/lib/next-auth/auth';
+import { auth } from '@/lib/next-auth/auth';
 
 // 에피그램 post
 export async function PostEpigram(epigrams: AddEpigram) {
@@ -58,12 +58,8 @@ export async function getEpigramsList(
     });
 
     // TODO: auth 완료된 후 getSession으로 변경
-    // const session = await auth();
-    // const token = session?.accessToken;
-
-    // 한솔: auth 오류가 발생해서 작업을 위해 임시로 토큰값을 넣어 놓았습니다.
-    const token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQ5NiwidGVhbUlkIjoiMTItNSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzQyNzk4ODU0LCJleHAiOjE3NDI4MDA2NTQsImlzcyI6InNwLWVwaWdyYW0ifQ.zZh_osYb908aLbIwnGj74AUFNQUeOyddcVZMR25vyQM';
+    const session = await auth();
+    const token = session?.accessToken;
 
     if (!token) {
       throw new Error('토큰이 없습니다. 로그인해주세요.');
@@ -72,8 +68,7 @@ export async function getEpigramsList(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // Authorization: `Bearer ${session.accessToken}`,
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.accessToken}`,
       },
     });
 
