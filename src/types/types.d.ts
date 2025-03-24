@@ -23,7 +23,7 @@ declare module 'next-auth' {
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    id: string | number;
+    id: string;
     email: string | null | undefined;
     accessToken: string;
     refreshToken: string | undefined;

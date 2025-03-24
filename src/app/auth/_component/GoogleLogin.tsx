@@ -1,14 +1,13 @@
 'use client';
 import Image from 'next/image';
-import { signIn } from 'next-auth/react';
 
 export default function GoogleLogin() {
   function doGoogleLogin() {
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-    const redirectUri = encodeURIComponent('http://localhost:3000/oauth/google-callback');
-    const scope = encodeURIComponent('email profile openid');
+    const redirectUri = process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI;
+    const scope = 'email profile openid';
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
-
+    console.log(`authUrl : ${authUrl}`);
     window.location.href = authUrl;
   }
   return (
