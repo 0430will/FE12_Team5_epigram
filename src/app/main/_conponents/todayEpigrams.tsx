@@ -23,11 +23,8 @@ export default function TodayEpirams() {
   }
 
   return (
-    <section className="mt-[24px] h-full w-full px-[16px]">
-      <h2 className="text-pre-lg font-weight-semibold txt-color-black-900 pc:text-iro-2xl mb-[24px]">
-        {' '}
-        오늘의 에피그램
-      </h2>
+    <section className="pc:gap-[40px] mt-[24px] grid h-full w-full gap-[24px]">
+      <h2 className="text-pre-lg font-weight-semibold txt-color-black-900 pc:text-iro-2xl">오늘의 에피그램</h2>
       <div className="bg-color-blue-100 tablet:h-[146px] pc:h-[148px] h-[152px] w-full rounded-[16px] border border-white">
         <FeedCard data={todayEpigram} />
       </div>

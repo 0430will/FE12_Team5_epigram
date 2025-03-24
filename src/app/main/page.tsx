@@ -12,11 +12,13 @@ export default function Page() {
           <div className="pc:mb-[140px] mb-[56px]">
             <TodayEpirams />
           </div>
-          <div className="pc:mb-[140px] text-pre-lg pc:text-iro-2xl mb-[56px]">
-            <p>오늘의 감정은 어떤가요?</p>
-          </div>
-          <div className="pc:mb-[140px] mb-[56px]">
-            <TodayEmotion emotionType="main" />
+          <div className="pc:gap-[40px] mb-[56px] grid gap-[24px]">
+            <div className="text-pre-lg pc:text-iro-2xl">
+              <p>오늘의 감정은 어떤가요?</p>
+            </div>
+            <div>
+              <TodayEmotion emotionType="main" />
+            </div>
           </div>
           <div className="pc:mb-[140px] mb-[56px]">
             <LatestEpigrams />
