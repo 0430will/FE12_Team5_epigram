@@ -1,6 +1,7 @@
 import MainHeader from '@/components/header/MainHeader';
 import TodayEmotion from '@/components/TodayEmotion';
 import TodayEpirams from './_conponents/todayEpigrams';
+import LatestEpigrams from './_conponents/LatestEpigrams';
 
 export default function Page() {
   return (
@@ -18,6 +19,9 @@ export default function Page() {
             <div>
               <TodayEmotion emotionType="main" />
             </div>
+          </div>
+          <div className="pc:mb-[140px] mb-[56px]">
+            <LatestEpigrams />
           </div>
         </div>
       </div>
