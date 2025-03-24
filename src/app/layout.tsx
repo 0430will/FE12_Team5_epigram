@@ -3,7 +3,6 @@ import './globals.css';
 import { AuthProvider } from '@/lib/next-auth/auth_provider';
 import PageBackground from '@/components/PageBackground';
 import ClientHeader from '@/components/header/ClientHeader';
-import { SessionProvider } from 'next-auth/react';
 
 export const metadata: Metadata = {
   title: 'Epigram',
@@ -16,15 +15,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SessionProvider>
-      <html lang="ko">
-        <body>
-          <PageBackground>
-            <ClientHeader />
-            <AuthProvider>{children}</AuthProvider>
-          </PageBackground>
-        </body>
-      </html>
-    </SessionProvider>
+    <html lang="ko">
+      <body>
+        <PageBackground>
+          <ClientHeader />
+          <AuthProvider>{children}</AuthProvider>
+        </PageBackground>
+      </body>
+    </html>
   );
 }
