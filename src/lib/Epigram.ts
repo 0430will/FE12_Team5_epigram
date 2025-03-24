@@ -1,5 +1,5 @@
 import { AddEpigram } from '@/app/addepigram/page';
-import { EpigramList } from '@/types/Epigram';
+import { Epigram } from '@/types/Epigram';
 import { auth } from '@/lib/next-auth/auth';
 
 // 에피그램 post
@@ -79,7 +79,7 @@ export async function getEpigramsList(
     const data = await response.json();
     return {
       list: data.list || [],
-      totalCount: data.totalCount || 0
+      totalCount: data.totalCount || 0,
     };
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -89,7 +89,7 @@ export async function getEpigramsList(
     }
     return {
       list: [],
-      totalCount: 0
+      totalCount: 0,
     };
   }
 }
