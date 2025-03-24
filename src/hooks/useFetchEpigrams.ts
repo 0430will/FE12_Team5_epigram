@@ -6,7 +6,7 @@ import { getEpigramsList } from '@/lib/Epigram';
 import { Epigram } from '@/types/Epigram';
 
 export default function useFetchEpigrams(limit: number, writerId?: number) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const token = session?.accessToken;
 
   const [epigramData, setEpigramData] = useState<{
@@ -20,6 +20,8 @@ export default function useFetchEpigrams(limit: number, writerId?: number) {
   });
 
   useEffect(() => {
+    if (status === 'loading' || !token) return;
+
     const fetchEpigrams = async () => {
       setEpigramData((prev) => ({ ...prev, isLoading: true }));
 
@@ -36,6 +38,6 @@ export default function useFetchEpigrams(limit: number, writerId?: number) {
       }
     };
     fetchEpigrams();
-  }, [limit, token, writerId]);
+  }, [limit, token, writerId, status]);
   return epigramData;
 }
