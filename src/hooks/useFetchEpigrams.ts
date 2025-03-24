@@ -6,9 +6,9 @@ import { getEpigramsList } from '@/lib/Epigram';
 import { Epigram } from '@/types/Epigram';
 
 export default function useFetchEpigrams(limit: number, writerId?: number) {
-
   const { data: session } = useSession();
   const token = session?.accessToken;
+
   const [epigramData, setEpigramData] = useState<{
     isLoading: boolean;
     epigrams: Epigram[];
