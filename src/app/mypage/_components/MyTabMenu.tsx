@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { TabMenu, TabPanel } from '@/components/TabMenu';
+import MyEpigrams from './MyEpigrams';
 
 export default function MyTabMenu() {
   const [currentTab, setCurrentTab] = useState(0);
 
   const menuArr = [
-    { name: '내 에피그램', content: 'Content for Tab 1 on Page 1' },
-    { name: '내 댓글', content: 'Content for Tab 2 on Page 1' },
+    { name: '내 에피그램', content: <MyEpigrams /> },
+    { name: '내 댓글', content: '내 댓글 컴포넌트' },
   ];
 
   return (

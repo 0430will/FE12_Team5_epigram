@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { getEpigramsList } from '@/lib/Epigram';
 import { Epigram } from '@/types/Epigram';
 
-export default function useFetchEpigrams(limit: number) {
+export default function useFetchEpigrams(limit: number, writerId?: number) {
   const [epigramData, setEpigramData] = useState<{
     isLoading: boolean;
     epigrams: Epigram[];
@@ -18,7 +18,7 @@ export default function useFetchEpigrams(limit: number) {
   useEffect(() => {
     const fetchEpigrams = async () => {
       setEpigramData((prev) => ({ ...prev, isLoading: true }));
-      const data = await getEpigramsList(limit);
+      const data = await getEpigramsList(limit, undefined, undefined, writerId);
       if (data) {
         setEpigramData({
           isLoading: false,
@@ -30,7 +30,7 @@ export default function useFetchEpigrams(limit: number) {
       }
     };
     fetchEpigrams();
-  }, [limit]);
+  }, [limit, writerId]);
 
   return epigramData;
 }

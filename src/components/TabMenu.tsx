@@ -3,12 +3,12 @@ export function TabMenu({
   currentTab,
   selectMenuHandler,
 }: {
-  menuArr: { name: string; content: string }[];
+  menuArr: { name: string; content: React.ReactNode }[];
   currentTab: number;
   selectMenuHandler: (index: number) => void;
 }) {
   return (
-    <ul className="tablet:pb-[48px] tablet:pb-[32px] flex gap-[16px] pb-[24px]">
+    <ul className="pc:pb-[48px] tablet:pb-[32px] flex gap-[16px] pb-[24px]">
       {menuArr.map((el, index) => (
         <li
           key={index}
@@ -24,6 +24,6 @@ export function TabMenu({
   );
 }
 
-export function TabPanel({ content }: { content: string }) {
+export function TabPanel({ content }: { content: React.ReactNode }) {
   return <div>{content}</div>;
 }
