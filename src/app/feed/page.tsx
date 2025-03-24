@@ -2,7 +2,6 @@
 'use client';
 
 import FeedCard from '@/components/FeedCard';
-import MainHeader from '@/components/header/MainHeader';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { getEpigramsList } from '@/lib/Epigram';
@@ -44,8 +43,7 @@ export default function Page() {
 
   return (
     <>
-      <MainHeader />
-      <main className="bg-bg-100">
+      <main>
         <div className="pc:pt-[120px] tablet:pb-[114px] m-auto max-w-[1240px] px-[24px] pt-[32px] pb-[56px]">
           <div className="pc:mb-[40px] mb-[24px] flex content-center justify-between">
             <h1 className="pc:text-pre-2xl text-pre-lg font-semibold">피드</h1>

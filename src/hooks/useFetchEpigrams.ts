@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { getEpigramsList } from '@/lib/Epigram';
 import { Epigram } from '@/types/Epigram';
 
-export default function useFetchEpigrams(limit: number) {
+export default function useFetchEpigrams(limit: number, writerId?: number) {
   const { data: session } = useSession();
   const token = session?.accessToken;
 
@@ -22,7 +22,7 @@ export default function useFetchEpigrams(limit: number) {
   useEffect(() => {
     const fetchEpigrams = async () => {
       setEpigramData((prev) => ({ ...prev, isLoading: true }));
-      const data = await getEpigramsList(token, limit);
+      const data = await getEpigramsList(token, limit, undefined, undefined, writerId);
       if (data) {
         setEpigramData({
           isLoading: false,
@@ -34,7 +34,7 @@ export default function useFetchEpigrams(limit: number) {
       }
     };
     fetchEpigrams();
-  }, [limit, token]);
+  }, [limit, token, writerId]);
 
   return epigramData;
 }
