@@ -1,4 +1,5 @@
 import { EpigramTag } from '@/types/Epigram';
+import Image from 'next/image';
 
 interface TagsProps {
   tags: EpigramTag[];
@@ -16,8 +17,12 @@ export function Tags({ tags, onRemoveTag }: TagsProps) {
           <span className="mobile:text-[16px] mobile:leading-[26px] tablet:text-[20px] tablet:leading-[32px] pc:text-[24px] pc:leading-[32px] text-black-300 text-[16px] leading-[26px] font-normal">
             {tag.name}
           </span>
-          <button type="button" onClick={() => onRemoveTag(tag)} className="hover:text-blue-9500 text-blue-500">
-            x
+          <button
+            type="button"
+            onClick={() => onRemoveTag(tag)}
+            className="hover:text-blue-9500 cursor-pointer text-blue-500"
+          >
+            <Image src="/assets/icons/x_gray.svg" width={20} height={20} alt="닫기 아이콘" />
           </button>
         </div>
       ))}
