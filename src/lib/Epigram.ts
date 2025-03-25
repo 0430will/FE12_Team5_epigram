@@ -167,7 +167,7 @@ export async function GetEpigram(id: number) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTM0OSwidGVhbUlkIjoiMTItNSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzQyOTIwODYyLCJleHAiOjE3NDI5MjI2NjIsImlzcyI6InNwLWVwaWdyYW0ifQ.KwqpWLpvFM-l-xfetPLgKKbMg5ps9GQtUo6zx1CUXjQ`,
+      Authorization: `Bearer 토큰`,
     },
   });
   if (!response.ok) {
