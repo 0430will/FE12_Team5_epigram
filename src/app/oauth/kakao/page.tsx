@@ -9,6 +9,7 @@ export default function KakaoRedirection() {
   const router = useRouter();
 
   useEffect(() => {
+    //카카오톡 로그인시 redirect uri에서 ?뒤에있는 인가코드를 받아옴
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const codeFromUrl = params.get('code');
@@ -28,9 +29,10 @@ export default function KakaoRedirection() {
 
   // 액세스 토큰 요청 함수
   const fetchAccessToken = async (code: string) => {
-    const redirectUri = 'http://localhost:3000/oauth/kakao'; // 리디렉션 URI
-    const provider = 'KAKAO'; // 카카오 제공자 설정
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 환경 변수에서 API URL 불러오기
+    const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
+    console.log(redirectUri);
+    const provider = 'KAKAO';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const url = `${apiUrl}/auth/signIn/${provider}`;
 
     try {
@@ -61,10 +63,10 @@ export default function KakaoRedirection() {
       localStorage.setItem('nickname', nickname);
       console.log('Redirecting to /epigrams');
 
-      router.push('/epigrams'); // 토큰을 받았다면 /epigrams 페이지로 리디렉션
+      router.push('/epigrams');
     } catch (error) {
       console.error('액세스 토큰 요청 중 에러 발생:', error);
-      router.push('/auth/login?error=AccessTokenRequestFailed'); // 실패 시 로그인 페이지로 리디렉션
+      router.push('/auth/login?error=AccessTokenRequestFailed');
     }
   };
 
