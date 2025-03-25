@@ -1,11 +1,7 @@
 import { Epigram } from '@/types/Epigram';
-<<<<<<< HEAD
-=======
-import { auth } from '@/lib/next-auth/auth';
 import { AddEpigram } from '@/components/EpigramForm';
 // @ts-expect-error : 타입스크립트가 notFound를 오류로 인식합니다. 작동은 잘 됩니다.
 import { notFound } from 'next/navigation';
->>>>>>> 7ca279f (Feat: 수정하기 initial값 연결)
 
 // 에피그램 post
 export async function PostEpigram(epigrams: AddEpigram) {
@@ -47,14 +43,14 @@ export async function PostEpigram(epigrams: AddEpigram) {
   }
 }
 
-export async function PatchEpigram(epigrams: AddEpigram, id: number) {
+export async function PatchEpigram(epigrams: AddEpigram) {
   const { tags, referenceUrl, referenceTitle, author, content } = epigrams;
 
   const tagslist = tags.map((item) => item.name);
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
-      method: 'PATCH',
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer 토큰`,
@@ -163,28 +159,19 @@ export async function GetTodayEpigram() {
 }
 
 export async function GetEpigram(id: number) {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer 토큰`,
-      },
-    });
-
-    if (!response.ok) {
-      if (response.status == 404) {
-        notFound();
-      }
-      return null;
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(`${error.message}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTM0OSwidGVhbUlkIjoiMTItNSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzQyOTIwODYyLCJleHAiOjE3NDI5MjI2NjIsImlzcyI6InNwLWVwaWdyYW0ifQ.KwqpWLpvFM-l-xfetPLgKKbMg5ps9GQtUo6zx1CUXjQ`,
+    },
+  });
+  if (!response.ok) {
+    if (response.status == 404) {
+      notFound();
     }
     return null;
   }
+  const data = await response.json();
+  return data;
 }
