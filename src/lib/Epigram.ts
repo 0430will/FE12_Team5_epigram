@@ -47,14 +47,14 @@ export async function PostEpigram(epigrams: AddEpigram) {
   }
 }
 
-export async function PatchEpigram(epigrams: AddEpigram) {
+export async function PatchEpigram(epigrams: AddEpigram, id: number) {
   const { tags, referenceUrl, referenceTitle, author, content } = epigrams;
 
   const tagslist = tags.map((item) => item.name);
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams`, {
-      method: 'POST',
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer 토큰`,
@@ -163,19 +163,28 @@ export async function GetTodayEpigram() {
 }
 
 export async function GetEpigram(id: number) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer 토큰`,
-    },
-  });
-  if (!response.ok) {
-    if (response.status == 404) {
-      notFound();
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer 토큰`,
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status == 404) {
+        notFound();
+      }
+      return null;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(`${error.message}`);
     }
     return null;
   }
-  const data = await response.json();
-  return data;
 }

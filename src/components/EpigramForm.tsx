@@ -15,11 +15,15 @@ export interface AddEpigram {
   authorSelected: string;
 }
 
+interface EpigramData extends AddEpigram {
+  id: number;
+}
+
 export default function EpigramForm({
   initialValue,
   submitType,
 }: {
-  initialValue?: AddEpigram;
+  initialValue?: EpigramData;
   submitType: '작성하기' | '수정하기';
 }) {
   const {
@@ -52,6 +56,12 @@ export default function EpigramForm({
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  };
+
   const SubmitPostForm = async () => {
     const allValues = watch();
     const response = await PostEpigram(allValues);
@@ -60,8 +70,9 @@ export default function EpigramForm({
   };
 
   const SubmitPatchForm = async () => {
+    if (!initialValue?.id) return;
     const allValues = watch();
-    const response = await PatchEpigram(allValues);
+    const response = await PatchEpigram(allValues, initialValue.id);
     if (!response) return;
     alert('폼 수정 완료');
   };
@@ -81,7 +92,11 @@ export default function EpigramForm({
       <h1 className="text-pre-lg text-black-700 tablet:text-pre-xl pc:text-pre-2xl font-semibold">
         에피그램 {submitType === '작성하기' ? '만들기' : '수정'}
       </h1>
-      <form onSubmit={handleSubmit(SelectForm)} className="pc:gap-[40px] flex flex-col gap-[24px]">
+      <form
+        onSubmit={handleSubmit(SelectForm)}
+        onKeyDown={handleKeyDown}
+        className="pc:gap-[40px] flex flex-col gap-[24px]"
+      >
         <div className="pc:gap-[54px] flex flex-col gap-[40px]">
           <div className="pc:gap-[24px] flex flex-col gap-[8px]">
             <div className="flex justify-between">
