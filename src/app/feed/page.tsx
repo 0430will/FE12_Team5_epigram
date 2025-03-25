@@ -1,45 +1,18 @@
-// /app/page.tsx
 'use client';
 
 import FeedCard from '@/components/FeedCard';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { getEpigramsList } from '@/lib/Epigram';
+import { useState } from 'react';
 import EmptyState from '@/components/EmptyState';
-import { Epigram } from '@/types/Epigram';
 import SkeletonFeedCard from '@/components/skeletons/SkeletonFeedCard';
-import { useSession } from 'next-auth/react';
+import useFetchEpigrams from '@/hooks/useFetchEpigrams';
 
 export default function Page() {
-  const { data: session } = useSession();
-  const token = session?.accessToken;
-  const [loadingState, setLoadingState] = useState({
-    isLoading: true,
-    epigrams: [] as Epigram[],
-    totalCount: 0,
-  });
   const [isGridView, setIsGridView] = useState(true);
 
   const gridStyle = isGridView ? 'grid grid-cols-2' : 'grid grid-cols-1';
 
-  useEffect(() => {
-    const fetchEpigrams = async () => {
-      setLoadingState((prev) => ({ ...prev, isLoading: true }));
-      const data = await getEpigramsList(token, 6);
-      if (data) {
-        setLoadingState({
-          isLoading: false,
-          epigrams: data.list,
-          totalCount: data.totalCount,
-        });
-      } else {
-        setLoadingState((prev) => ({ ...prev, isLoading: false }));
-      }
-    };
-    fetchEpigrams();
-  }, []);
-
-  const { isLoading, epigrams, totalCount } = loadingState;
+  const { isLoading, epigrams, totalCount } = useFetchEpigrams(6);
 
   return (
     <>
@@ -76,7 +49,6 @@ export default function Page() {
             </div>
           )}
         </div>
-        <button>더보기</button>
       </main>
     </>
   );

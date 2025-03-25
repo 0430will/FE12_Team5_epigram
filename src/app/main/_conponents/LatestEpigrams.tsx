@@ -1,4 +1,5 @@
 'use client';
+
 import FeedCard from '@/components/FeedCard';
 import useFetchEpigrams from '@/hooks/useFetchEpigrams';
 import SkeletonFeedCard from '@/components/skeletons/SkeletonFeedCard';

@@ -60,6 +60,7 @@ export async function getEpigramsList(
     if (!token) {
       throw new Error('토큰이 없습니다. 로그인해주세요.');
     }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams?${query}`, {
       method: 'GET',
       headers: {
