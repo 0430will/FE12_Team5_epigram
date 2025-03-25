@@ -14,8 +14,8 @@ export default function Jin() {
           <LatestCommentSection />
           <br></br>
           <EpigramCommentSection
-            epigramId="1067"
-            token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTU0NywidGVhbUlkIjoiMTItNSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzQyODA1ODEzLCJleHAiOjE3NDI4MDc2MTMsImlzcyI6InNwLWVwaWdyYW0ifQ.LqxJtnn_zuqnPTu-INBDLr9yY6vODBKuX2DLg4HZCU0"
+            epigramId={1096}
+            token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTU3NywidGVhbUlkIjoiMTItNSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzQyOTM2ODUwLCJleHAiOjE3NDI5Mzg2NTAsImlzcyI6InNwLWVwaWdyYW0ifQ.s0BjZDNdS5K_8VTwBYWrzhTG7G2vK2prfaiXbPlMAuI"
           />
         </div>
       </div>

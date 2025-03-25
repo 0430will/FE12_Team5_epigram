@@ -13,6 +13,23 @@ body {
   font-family: "Pretendard Variable", Pretendard, sans-serif;
 }
 
+@layer components {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 16px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+
+    margin-right: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #ABB8CE;
+    background-clip: padding-box;
+    border-right: 14px solid transparent;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+  }
+}
+
 @theme {
   --font-iropke: "Iropke Batang", sans-serif; 
   --font-pretendard: 'Pretendard', sans-serif;

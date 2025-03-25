@@ -4,16 +4,18 @@ import { CommentItem } from '@/components/Comment/CommentItem';
 import type { Comment } from '@/types/Comment';
 
 interface EpigramCommentListProps {
-  epigramId: string;
+  epigramId: number;
   token: string;
   comments: Comment[];
   setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
 }
 
 export default function EpigramCommentList({ epigramId, token, comments, setComments }: EpigramCommentListProps) {
+  const filteredComments = comments.filter((comment) => comment.epigramId === epigramId);
+
   return (
     <div>
-      {comments.map((comment) => (
+      {filteredComments.map((comment) => (
         <CommentItem
           key={comment.id}
           comment={comment}

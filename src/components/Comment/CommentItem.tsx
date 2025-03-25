@@ -71,7 +71,12 @@ export function CommentItem({ comment, token, onDelete, onSave }: Props) {
             </span>
 
             {comment.isPrivate && (
-              <img src="/assets/icons/lock.png" alt="비공개" className="ml-1 h-3 w-3 opacity-60" title="비공개 댓글" />
+              <img
+                src="/assets/icons/lock.svg"
+                alt="비공개"
+                className="tablet:h-4 tablet:w-4 pc:h-5 pc:w-5 ml-1 h-3 w-3 opacity-60"
+                title="비공개 댓글"
+              />
             )}
           </div>
           {!isEditing && (

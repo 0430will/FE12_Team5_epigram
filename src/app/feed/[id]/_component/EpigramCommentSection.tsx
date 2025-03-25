@@ -8,7 +8,7 @@ import CommentCount from './CommentCount';
 import CommentInput from './CommentInput';
 
 interface Props {
-  epigramId: string;
+  epigramId: number;
   token: string;
   userImage?: string;
 }
@@ -19,7 +19,7 @@ export default function EpigramCommentSection({ epigramId, token, userImage }: P
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await getComments(token, 50, 0, epigramId);
+        const res = await getComments(token, 50, 0, epigramId.toString());
         setComments(res.list);
       } catch (err) {
         console.error('댓글 불러오기 실패', err);
@@ -31,7 +31,8 @@ export default function EpigramCommentSection({ epigramId, token, userImage }: P
 
   const handleCreate = async (content: string, isPrivate: boolean) => {
     try {
-      const response = await createComment(token, parseInt(epigramId), content, isPrivate);
+      const response = await createComment(token, epigramId, content, isPrivate);
+
       setComments((prev) => [response, ...prev]); // 새 댓글 맨 위에 추가
     } catch (err) {
       console.error('댓글 작성 실패', err);
