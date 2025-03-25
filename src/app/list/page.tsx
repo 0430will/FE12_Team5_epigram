@@ -81,10 +81,11 @@ export default function Page() {
               <div className="mt-8 flex justify-center">
                 <button
                   onClick={loadMore}
-                  className="rounded-md bg-gray-900 px-6 py-3 text-white transition hover:bg-gray-700"
+                  className="rounded-md px-6 py-3 text-white transition hover:bg-gray-700"
                   disabled={loading}
                 >
-                  {loading ? '불러오는 중...' : '더 보기'}
+                  <Image src="/assets/icons/plus.svg" alt="플러스 아이콘" width={12} height={12} />
+                  {loading ? '불러오는 중...' : '에피그램 더보기'}
                 </button>
               </div>
             )}
