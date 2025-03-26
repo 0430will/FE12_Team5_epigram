@@ -1,42 +1,31 @@
 'use client';
 
-import React, { useEffect, useCallback, useState } from 'react';
+import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import FeedCard from '@/components/FeedCard';
 import Image from 'next/image';
-import EmptyState from '@/components/EmptyState';
+import FeedCard from '@/components/FeedCard';
 import SkeletonFeedCard from '@/components/skeletons/SkeletonFeedCard';
+import EmptyState from '@/components/EmptyState';
 import { getEpigramsList } from '@/lib/Epigram';
-import { useEpigramFeedStore } from '@/stores/epigramFeedStore';
+import { useFeedStore } from '@/stores/pageStores';
+import { usePaginatedList } from '@/hooks/usePaginatedList';
+import { Epigram } from '@/types/Epigram';
 
-export default function Page() {
-  const { epigrams, hasMore, isGridView, cursor, setState } = useEpigramFeedStore();
+export default function FeedPage() {
+  const { items: epigrams, hasMore, isGridView, setState } = useFeedStore();
 
-  const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(epigrams.length === 0);
   const { data: session, status } = useSession();
   const token = session?.accessToken;
 
-  const loadMore = useCallback(async () => {
-    if (!token || loading || !hasMore) return;
+  const fetchEpigrams = async (cursor?: number) => {
+    if (!token) return { list: [], totalCount: 0 };
+    return await getEpigramsList(token, 6, cursor);
+  };
 
-    setLoading(true);
-    const { list, totalCount } = await getEpigramsList(token, 6, cursor);
-
-    if (list.length === 0 || epigrams.length + list.length >= totalCount) {
-      setState({ hasMore: false });
-    }
-
-    if (list.length > 0) {
-      setState({
-        epigrams: [...epigrams, ...list],
-        cursor: list[list.length - 1].id,
-      });
-    }
-
-    setLoading(false);
-    setInitialLoading(false);
-  }, [token, loading, hasMore, epigrams, cursor, setState]);
+  const { loadMore, loading, initialLoading } = usePaginatedList<Epigram>({
+    store: useFeedStore.getState(),
+    fetchFn: fetchEpigrams,
+  });
 
   useEffect(() => {
     if (status === 'authenticated' && token && epigrams.length === 0) {
