@@ -56,11 +56,13 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           }
 
           const user = await res.json();
+          console.log('user 정보:', user);
 
           return {
             id: user.id,
-            email: user.email,
             image: user.image,
+            email: user.email,
+            nickname: user.nickname,
             accessToken: user.accessToken,
             refreshToken: user.refreshToken,
           };
@@ -88,7 +90,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             const user = await res.json();
 
             return {
-              id: user.user.id,
+              id: user.id,
               email: user.email,
               accessToken: user.accessToken,
               refreshToken: user.refreshToken,
@@ -109,7 +111,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         const googleToken = account.id_token ?? account.access_token;
         if (googleToken) {
           user.accessToken = googleToken;
-          user.refreshToken = account.refresh_token;
+          user.refreshToken = account.refresh_token ?? '';
         }
       }
       return true;
@@ -118,16 +120,18 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (user) {
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.iamge = user.image;
-        token.id = String(user.id);
+        token.id = user.id ? String(user.id) : token.id;
         token.email = user.email ?? token.email;
       }
+      console.log('JWT 저장소:', token);
       return token;
     },
     async session({ session, token }) {
       session.user.id = String(token.id);
       session.user.email = token.email ?? '';
       session.accessToken = token.accessToken;
+
+      console.log('ssesion저장소:', session);
       return session;
     },
     async redirect({ baseUrl }) {

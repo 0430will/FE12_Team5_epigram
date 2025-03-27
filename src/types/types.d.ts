@@ -7,22 +7,28 @@ declare module 'next-auth' {
     user: {
       id: string;
       email: string;
+      nickname?: string;
+      image?: string;
+      accessToken?: string;
+      refreshToken?: string;
     };
   }
 
   interface User {
-    id: string;
+    id: number;
     email: string;
     accessToken: string;
-    refreshToken: string | undefined;
+    refreshToken: string;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    id: string | number;
-    email: string | null | undefined;
+    id: string;
+    email: string;
+    nickname: string;
+    image: string;
     accessToken: string;
-    refreshToken: string | undefined;
+    refreshToken: string;
   }
 }
