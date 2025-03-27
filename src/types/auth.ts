@@ -1,6 +1,7 @@
 //오타수정 eamil > email
 export interface User {
   id: number;
+  userId: number;
   email: string;
   nickname: string;
   teamId: string;

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
 import Gyeong from './_components/Gyeong';
 import Jin from './_components/Jin';
-import Seop from './_components/Seop';
 import Sol from './_components/Sol';
+import Seop from './_components/Seop';
 import Su from './_components/Su';
 import EpigramList from '@/components/UK/EpigramList';
 // build 오류제거와 공통컴포넌트 사용을 위해 주석 처리해놓았습니다!
