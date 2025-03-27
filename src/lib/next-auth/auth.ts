@@ -60,6 +60,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           return {
             id: user.id,
             email: user.email,
+            image: user.image,
             accessToken: user.accessToken,
             refreshToken: user.refreshToken,
           };
@@ -87,7 +88,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             const user = await res.json();
 
             return {
-              id: user.id,
+              id: user.user.id,
               email: user.email,
               accessToken: user.accessToken,
               refreshToken: user.refreshToken,
@@ -117,7 +118,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (user) {
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.id = user.id ? String(user.id) : token.id;
+        token.iamge = user.image;
+        token.id = Number(user.id);
         token.email = user.email ?? token.email;
       }
       return token;
