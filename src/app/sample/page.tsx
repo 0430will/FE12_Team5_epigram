@@ -3,7 +3,7 @@
 import Gyeong from './_components/Gyeong';
 import Jin from './_components/Jin';
 import Sol from './_components/Sol';
-//import Seop from './_components/Seop';
+import Seop from './_components/Seop';
 import Su from './_components/Su';
 import EpigramList from '@/components/UK/EpigramList';
 // build 오류제거와 공통컴포넌트 사용을 위해 주석 처리해놓았습니다!
@@ -32,7 +32,7 @@ export default function Page() {
 
       <section className="mb-10 border border-gray-200 p-5">
         <h2 className="mb-5 text-xl font-bold">주섭 컴포넌트 </h2>
-        {/* <Seop /> */}
+        <Seop />
       </section>
 
       <section className="mb-10 border border-gray-200 p-5">
