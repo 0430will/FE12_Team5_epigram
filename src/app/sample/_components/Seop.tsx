@@ -7,7 +7,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6B6B'];
 
-export default function EmotionPieChart({ teamId }: { teamId: string }) {
+export default function EmotionPieChart() {
   const { data: session } = useSession();
   const [chartData, setChartData] = useState<{ name: string; value: number }[]>([]);
 
@@ -42,7 +42,7 @@ export default function EmotionPieChart({ teamId }: { teamId: string }) {
       }
     };
     fetchData();
-  }, [session, teamId]);
+  }, [session]);
 
   return (
     <div className="flex h-[300px] w-full flex-col items-center">

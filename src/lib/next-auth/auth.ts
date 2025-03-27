@@ -119,7 +119,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
         token.iamge = user.image;
-        token.id = Number(user.id);
+        token.id = String(user.id);
         token.email = user.email ?? token.email;
       }
       return token;
