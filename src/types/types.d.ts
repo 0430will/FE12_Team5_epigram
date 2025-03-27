@@ -13,6 +13,17 @@ declare module 'next-auth' {
       refreshToken?: string;
     };
   }
+  interface CustomUser {
+    id: string;
+    email: string;
+    nickname: string;
+    teamId: string;
+    createdAt: string;
+    updatedAt: string;
+    image: string | null;
+    accessToken: string;
+    refreshToken: string;
+  }
 
   interface User {
     id: number;
@@ -31,4 +42,8 @@ declare module 'next-auth/jwt' {
     accessToken: string;
     refreshToken: string;
   }
+}
+
+interface ExtendedAdapterUser extends AdapterUser {
+  teamId?: string; // teamId를 선택적 속성으로 추가
 }
