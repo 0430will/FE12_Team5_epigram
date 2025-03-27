@@ -43,7 +43,3 @@ declare module 'next-auth/jwt' {
     refreshToken: string;
   }
 }
-
-interface ExtendedAdapterUser extends AdapterUser {
-  teamId?: string; // teamId를 선택적 속성으로 추가
-}
