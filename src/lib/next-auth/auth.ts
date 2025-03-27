@@ -1,7 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { signinSchema, signupSchema } from '@/lib/validation/auth';
-import GoogleProvider from 'next-auth/providers/google';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   debug: true,
@@ -9,16 +8,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     strategy: 'jwt', //jwt 기반 인증
   },
   pages: {
-    signIn: '/login', // 인증이 필요하면 login로 이동
+    signIn: '/auth/login', // 인증이 필요하면 login로 이동
   },
   secret: process.env.NEXTAUTH_SECRET,
   trustHost: true,
   providers: [
-    GoogleProvider({
-      clientId: process.env.AUTH_GOOGLE_ID!,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
-      authorization: { params: { access_type: 'offline', prompt: 'consent' } },
-    }),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -54,7 +48,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (!res?.ok || res === null) {
             throw new Error('서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
           }
-
           const data = await res.json();
           console.log('Api응답 데이터:', data);
           const user = {
@@ -90,7 +83,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             const user = await res.json();
 
             return {
-              id: user.id,
+              id: user.user.id,
               email: user.email,
               accessToken: user.accessToken,
               refreshToken: user.refreshToken,
@@ -105,6 +98,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+
     async signIn({ user, account }) {
       // Google 로그인 시, OAuth 제공자에서 받은 토큰을 user 객체에 저장
       if (account?.provider === 'google') {
@@ -126,7 +120,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
       }
-
       console.log('JWT 토큰 저장 완료:', token);
       return token;
     },

@@ -1,9 +1,11 @@
 import { DefaultSession } from 'next-auth';
 import 'next-auth/jwt';
+import 'next-auth';
 
 declare module 'next-auth' {
   interface Session extends DefaultSession {
     accessToken?: string;
+    googleIdToken?: string | undefined | null;
     user: {
       id: string;
       email: string;
@@ -45,5 +47,5 @@ declare module 'next-auth/jwt' {
 }
 
 interface ExtendedAdapterUser extends AdapterUser {
-  teamId?: string; // teamId를 선택적 속성으로 추가
+  teamId?: string;
 }
