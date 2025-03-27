@@ -34,3 +34,25 @@ export async function PostTodayEmotion(emotionName: string, token: string) {
     }
   }
 }
+
+export async function GetMonthEmotion(userId: number, year: number, month: number) {
+  try {
+    const query = new URLSearchParams({
+      userId: userId.toString(),
+      year: year.toString(),
+      month: month.toString(),
+    });
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/emotionLogs/monthly?${query}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!response.ok) {
+      throw new Error('감정 데이터를 불러오는 중 오류 발생');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('감정 데이터 요청 실패:', error);
+    return [];
+  }
+}
