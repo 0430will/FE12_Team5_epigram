@@ -1,3 +1,5 @@
+'use client';
+
 import { GetMonthEmotion } from '@/lib/Emotionlog';
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
@@ -57,15 +59,14 @@ export default function EmotionList() {
   }, [session]);
 
   return (
-    <div className="w-40 rounded-lg border p-2">
+    <div className="flex h-full w-full flex-col gap-[8px] p-[22px]">
       {emotions.map((emotion, index) => {
         const mapped = emotionMapping[emotion.key];
         if (!mapped) return null;
-
         return (
-          <div key={index} className="my-1 flex items-center space-x-2">
-            <img src={mapped.image} alt={mapped.name} className="h-6 w-6" />
-            <span className="text-sm font-bold">{emotion.percentage}%</span>
+          <div key={index} className="flex items-center gap-2">
+            <img src={mapped.image} alt={mapped.name} className="h-[16px] w-[16px]" />
+            <span className="text-pre-xs font-weight-semibold">{emotion.percentage}%</span>
           </div>
         );
       })}
