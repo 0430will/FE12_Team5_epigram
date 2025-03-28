@@ -1,9 +1,11 @@
 import { DefaultSession } from 'next-auth';
 import 'next-auth/jwt';
+import 'next-auth';
 
 declare module 'next-auth' {
   interface Session extends DefaultSession {
     accessToken?: string;
+    googleIdToken?: string | undefined | null;
     user: {
       id: string;
       email: string;
@@ -42,4 +44,8 @@ declare module 'next-auth/jwt' {
     accessToken: string;
     refreshToken: string;
   }
+}
+
+interface ExtendedAdapterUser extends AdapterUser {
+  teamId?: string;
 }
