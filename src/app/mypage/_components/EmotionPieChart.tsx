@@ -4,12 +4,22 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { GetMonthEmotion } from '@/lib/Emotionlog'; // 경로 맞게 수정
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+// import Image from 'next/image';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6B6B'];
+
+const emotionMapping: Record<string, { image: string; name: string }> = {
+  MOVED: { image: '/assets/images/heartFace.png', name: '감동' },
+  HAPPY: { image: '/assets/images/smiling.png', name: '기쁨' },
+  WORRIED: { image: '/assets/images/thinking.png', name: '고민' },
+  SAD: { image: '/assets/images/sad.png', name: '슬픔' },
+  ANGRY: { image: '/assets/images/angry.png', name: '분노' },
+};
 
 export default function EmotionPieChart() {
   const { data: session } = useSession();
   const [chartData, setChartData] = useState<{ name: string; value: number }[]>([]);
+  const [topEmotion, setTopEmotion] = useState<{ image: string; name: string } | null>(null);
 
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -38,13 +48,18 @@ export default function EmotionPieChart() {
           value: emotionCount[emotion],
         }));
         setChartData(formattedData);
+        //퍼센트가 가장 높은 감정(chartData에서 value가 가장 높은 값)
+        const topEmotionKey = formattedData.reduce((prev, current) =>
+          prev.value > current.value ? prev : current,
+        ).name;
+        setTopEmotion(emotionMapping[topEmotionKey] || null);
       }
     };
     fetchData();
   }, [session]);
 
   return (
-    <div className="flex h-full w-full flex-col items-center p-[22px]">
+    <div className="pc:h-[180px] relative flex h-[120px] w-full flex-col items-center">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
@@ -63,6 +78,12 @@ export default function EmotionPieChart() {
           </Pie>
         </PieChart>
       </ResponsiveContainer>
+      {topEmotion && (
+        <div className="absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
+          <img src={topEmotion.image} alt={topEmotion.name} className="h-[24px] w-[24px]" />
+          <span className="text-pre-lg font-weight-bold">{topEmotion.name}</span>
+        </div>
+      )}
     </div>
   );
 }

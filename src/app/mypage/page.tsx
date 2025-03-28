@@ -14,9 +14,9 @@ export default function MyPage() {
             <span>프로필</span>
           </section>
         </div>
-        <div className="flex h-full w-full flex-col justify-center p-[24px] pb-[40px]">
-          <h1>감정 차트</h1>
-          <div className="flex h-full w-full items-center border">
+        <div className="pc:pb-[82px] tablet:pb-[56px] pc:gap-[48px] m-auto flex h-full w-full max-w-[680px] flex-col justify-center gap-[16px] px-[24px] pt-[58px] pb-[40px]">
+          <h1 className="pc:text-pre-2xl text-pre-lg font-weight-semibold">감정 차트</h1>
+          <div className="border-line-100 pc:h-[264px] flex h-full w-full items-center justify-between rounded-lg border p-[30px]">
             <EmotionPieChart />
             <EmotionRankList />
           </div>
