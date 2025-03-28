@@ -1,7 +1,6 @@
 //오타수정 eamil > email
 export interface User {
-  id: number;
-  userId: number;
+  id: string;
   email: string;
   nickname: string;
   teamId: string;
@@ -9,7 +8,6 @@ export interface User {
   createAt: string;
   image: string | null;
 }
-
 //로그인 & 회원가입 응답타입
 export interface Auth {
   accessToken: string;
@@ -31,11 +29,12 @@ export interface SocialLogin {
 
 export interface Session {
   user: {
-    id: number;
+    id: string;
     email: string;
-    name?: string | null | undefined;
-    image?: string | null | undefined;
+    nickname: string;
+    name: string;
+    image: string;
+    accessToken: string;
+    refreshToken: string;
   };
-  accessToken: string;
-  refreshToken: string;
 }
