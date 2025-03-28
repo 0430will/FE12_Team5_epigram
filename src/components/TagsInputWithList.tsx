@@ -2,7 +2,7 @@
 
 import { EpigramTag } from '@/types/Epigram';
 import { TagsInput } from './TagsInput';
-import { Tags } from './Tags';
+import { Tags } from './Tag/Tags';
 
 export function TagsInputWithList({ tags, setTags }: { tags: EpigramTag[]; setTags: (tags: EpigramTag[]) => void }) {
   const handleAddTag = (newTag: EpigramTag) => {

@@ -16,6 +16,7 @@
     "axios": "^1.8.3",
     "classnames": "^2.5.1",
     "cookie": "^1.0.2",
+    "date-fns": "^4.1.0",
     "framer-motion": "^12.5.0",
     "google-auth-library": "^9.15.1",
     "js-cookie": "^3.0.5",
