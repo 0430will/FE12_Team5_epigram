@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-export default function page() {
+export default function NotFoundPage() {
   return (
     <div className="flex h-[calc(100vh-78px)] flex-col items-center justify-center px-[24px] text-center">
       <Image
