@@ -1,3 +1,4 @@
+import MyCalender from '@/app/mypage/_components/MyCalender/MyCalender';
 import ClientButton from '@/components/Button/ClientButton';
 import ServerButton from '@/components/Button/ServerButton';
 import TodayEmotion from '@/components/TodayEmotion';
@@ -50,6 +51,7 @@ export default function Gyeong() {
           <ClientButton isValid={false} className="w-full">
             클라이언트
           </ClientButton>
+          <MyCalender />
         </div>
       </div>
     </>

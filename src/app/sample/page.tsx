@@ -1,4 +1,4 @@
-'use client';
+// 'use client';
 
 import Gyeong from './_components/Gyeong';
 import Jin from './_components/Jin';

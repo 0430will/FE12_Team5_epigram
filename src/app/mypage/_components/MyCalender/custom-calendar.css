@@ -1,0 +1,27 @@
+.react-calendar__month-view__weekdays__weekday {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #C4C4C4;
+  border-top:1px solid #ECEFF4;
+  border-bottom:1px solid #ECEFF4;
+  width: 44px;
+  height: 44px;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+.react-calendar__tile--now {
+  border: 3px solid #E46E80;
+  color: #E46E80;
+  border-radius: 3px;
+}
+
+.react-calendar__navigation {
+  display: none;
+}
+
+
+
