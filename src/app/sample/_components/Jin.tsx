@@ -1,6 +1,6 @@
 'use client';
 
-import LatestCommentSection from '@/app/epigrams/_component/LatestCommentSection';
+import LatestCommentSection from '@/app/main/_conponents/LatestCommentSection';
 import EpigramCommentSection from '@/app/feed/[id]/_component/EpigramCommentSection';
 import MyCommentList from '@/app/mypage/_components/MyCommentList';
 import { SessionProvider } from 'next-auth/react';

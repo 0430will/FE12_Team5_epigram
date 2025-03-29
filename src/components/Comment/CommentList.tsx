@@ -9,7 +9,7 @@ export default function CommentList() {
   const [comments, setComments] = useState<Comment[]>([]);
 
   const testToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTU0NywidGVhbUlkIjoiMTItNSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzQzMDI1OTk0LCJleHAiOjE3NDMwMjc3OTQsImlzcyI6InNwLWVwaWdyYW0ifQ.aUPn33DCvlJC_A49S04cSzQ5qprul93-ROjPJypgR18';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTU0NywidGVhbUlkIjoiMTItNSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzQzMjg1MDE1LCJleHAiOjE3NDMyODY4MTUsImlzcyI6InNwLWVwaWdyYW0ifQ.2NEpLQRb23IxQSNBpdI4RoSrJ8fRYKaGkEpx5X8NLEA';
 
   useEffect(() => {
     const fetchComments = async () => {
