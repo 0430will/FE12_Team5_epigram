@@ -1,4 +1,5 @@
 import MyTabMenu from './_components/MyTabMenu';
+import TodayEmotion from '@/components/TodayEmotion';
 import MyUserProfile from './_components/MyUserProfile';
 
 export default function MyPage() {
@@ -8,6 +9,7 @@ export default function MyPage() {
         <div className="relative top-[-53px] m-auto max-w-[680px] px-[24px]">
           <MyUserProfile />
         </div>
+        <TodayEmotion emotionType="mypage" />
       </div>
       <div className="pc:pt-[103px] m-auto max-w-[680px] px-[24px] pt-[56px] pb-[114px]">
         <MyTabMenu />
