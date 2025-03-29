@@ -119,6 +119,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
       }
+      console.log('JWT 토큰 저장 완료:', token);
       return token;
     },
     async session({ session, token }) {

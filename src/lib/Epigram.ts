@@ -1,5 +1,7 @@
-import { AddEpigram } from '@/app/addepigram/page';
 import { Epigram } from '@/types/Epigram';
+import { AddEpigram } from '@/components/EpigramForm';
+// @ts-expect-error : 타입스크립트가 notFound를 오류로 인식합니다. 작동은 잘 됩니다.
+import { notFound } from 'next/navigation';
 
 // 에피그램 post
 export async function PostEpigram(epigrams: AddEpigram) {
@@ -10,6 +12,45 @@ export async function PostEpigram(epigrams: AddEpigram) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer 토큰`,
+      },
+      body: JSON.stringify({
+        tags: tagslist,
+        referenceUrl: referenceUrl,
+        referenceTitle: referenceTitle,
+        author: author,
+        content: content,
+      }),
+    });
+
+    if (response.status === 401) {
+      throw new Error('로그인이 만료되었습니다.');
+    }
+
+    if (!response.ok || response === null) {
+      throw new Error('서버 오류가 발생하였습니다.');
+    }
+    const data = response.json();
+    return data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(`${error.message}`);
+    } else {
+      console.error('에피그램을 등록하는데 실패했습니다.');
+    }
+  }
+}
+
+export async function PatchEpigram(epigrams: AddEpigram, id: number) {
+  const { tags, referenceUrl, referenceTitle, author, content } = epigrams;
+
+  const tagslist = tags.map((item) => item.name);
+
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer 토큰`,
@@ -115,4 +156,22 @@ export async function GetTodayEpigram() {
       console.error(`${error.message}`);
     }
   }
+}
+
+export async function GetEpigram(id: number) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer 토큰`,
+    },
+  });
+  if (!response.ok) {
+    if (response.status == 404) {
+      notFound();
+    }
+    return null;
+  }
+  const data = await response.json();
+  return data;
 }
