@@ -6,22 +6,28 @@ import './custom-calendar.css';
 import moment from 'moment';
 import { JSX, useState } from 'react';
 import { EmotionLog } from '@/types/Emotionlog';
+import EmotionFilter, { EmotionKey } from './EmotionFilter';
 
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const EmotionData = {
-  MOVED: '/assets/images/heartFace.png',
-  HAPPY: '/assets/images/smiling.png',
-  WORRIED: '/assets/images/thinking.png',
-  SAD: '/assets/images/sad.png',
-  ANGRY: '/assets/images/angry.png',
+  MOVED: {
+    image: '/assets/images/heartFace.png',
+    name: '감동',
+  },
+  HAPPY: { image: '/assets/images/smiling.png', name: '기쁨' },
+  WORRIED: { image: '/assets/images/thinking.png', name: '걱정' },
+  SAD: { image: '/assets/images/sad.png', name: '슬픔' },
+  ANGRY: { image: '/assets/images/angry.png', name: '화남' },
 };
 
 export default function CustomCalender({ data }: { data: EmotionLog[] }) {
   const [value, onChange] = useState<Value>(new Date());
   const [displayMonth, setDisplayMonth] = useState<Date>(new Date());
+  const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
+  const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey | null>(null);
   const createdAtArray = data.map((item) => moment(item.createdAt).format('YYYY-MM-DD'));
 
   const goToNextMonth = () => {
@@ -34,12 +40,16 @@ export default function CustomCalender({ data }: { data: EmotionLog[] }) {
     setDisplayMonth(prevMonth);
   };
 
+  const toggleFilter = () => {
+    setIsFilterVisible((prev) => !prev);
+  };
+
   const addContent = ({ date }: { date: Date | string }) => {
     const contents: JSX.Element[] = [];
     data.map((day) => {
       if (moment(day.createdAt).format('YYYY-MM-DD') === moment(date).format('YYYY-MM-DD')) {
         contents.push(
-          <Image key={day.id} src={`${EmotionData[day.emotion]}`} width="24" height="24" alt="오늘의 감정" />,
+          <Image key={day.id} src={`${EmotionData[day.emotion].image}`} width="24" height="24" alt="오늘의 감정" />,
         );
       }
     });
@@ -48,12 +58,17 @@ export default function CustomCalender({ data }: { data: EmotionLog[] }) {
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-[22px]">
-      <div className="flex w-[312px] items-center justify-between">
+      <div className="relative flex w-[312px] items-center justify-between">
         <span className="text-pre-lg text-black-600 font-semibold">{moment(displayMonth).format('YYYY년 M월')}</span>
         <div className="flex gap-[16px]">
-          <div className="bg-bg-100 flex items-center justify-center gap-[4px] rounded-[8px] py-[5px] pr-[8px] pl-[12px]">
-            <span className="text-pre-xs font-semibold text-gray-200">필터: 없음</span>
-            <Image src="/assets/icons/down.svg" width={16} height={16} alt="토글" />
+          <div
+            onClick={toggleFilter}
+            className={`bg-bg-100 flex h-[30px] w-[88px] cursor-pointer items-center justify-center gap-[4px] rounded-[8px] py-[5px] ${selectedEmotion ? 'border-black-600 border-[3px] pr-[5px] pl-[9px]' : 'pr-[8px] pl-[12px]'}`}
+          >
+            <span className={`text-pre-xs font-semibold ${selectedEmotion ? 'text-black-600' : 'text-gray-200'}`}>
+              필터: {selectedEmotion ? `${EmotionData[selectedEmotion].name}` : '없음'}
+            </span>
+            <Image src={`/assets/icons/down${selectedEmotion ? '' : '_gray'}.svg`} width={16} height={16} alt="토글" />
           </div>
           <Image
             className="cursor-pointer"
@@ -72,6 +87,7 @@ export default function CustomCalender({ data }: { data: EmotionLog[] }) {
             alt="오른쪽 버튼"
           />
         </div>
+        {isFilterVisible && <EmotionFilter selectedEmotion={selectedEmotion} setSelectedEmotion={setSelectedEmotion} />}
       </div>
       <Calendar
         locale="ko"
