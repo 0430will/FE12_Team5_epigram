@@ -27,7 +27,7 @@ function Emotion({
   return (
     <div className="flex cursor-pointer flex-col items-center gap-[8px]" onClick={() => onClick(emotion)}>
       <div
-        className={`tablet:h-[64px] tablet:w-[64px] pc:w-[96px] pc:h-[96px] flex h-[48px] w-[48px] items-center justify-center rounded-[8px] ${isSelected ? `relative` : `bg-[#AFBACD]/15`}`}
+        className={`tablet:h-[56px] tablet:w-[56px] pc:w-[96px] pc:h-[96px] flex h-[48px] w-[48px] items-center justify-center rounded-[8px] ${isSelected ? `relative` : `bg-[#AFBACD]/15`}`}
       >
         <div className="pc:h-[48px] pc:w-[48px] relative h-[32px] w-[32px] object-contain">
           <Image
@@ -64,7 +64,7 @@ export default function EmotionFilter({ selectedEmotion, setSelectedEmotion }: E
 
   return (
     <div
-      className="pc:gap-[16px] absolute top-[36px] flex justify-center gap-[8px] rounded-[16px] bg-blue-100 p-[16px]"
+      className="pc:gap-[16px] absolute top-[36px] left-1/2 flex -translate-x-1/2 justify-center gap-[8px] rounded-[16px] bg-blue-100 p-[16px]"
       style={{ boxShadow: '0px 3px 16px rgba(0, 0, 0, 0.1)' }}
     >
       {Object.keys(EmotionData).map((key) => (

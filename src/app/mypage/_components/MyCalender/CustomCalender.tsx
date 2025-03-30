@@ -53,7 +53,14 @@ export default function CustomCalender({
     filteredData.map((day) => {
       if (moment(day.createdAt).format('YYYY-MM-DD') === moment(date).format('YYYY-MM-DD')) {
         contents.push(
-          <Image key={day.id} src={`${EmotionData[day.emotion].image}`} width="24" height="24" alt="오늘의 감정" />,
+          <div key={day.id} className="pc:w-[36px] pc:h-[36px] relative h-[24px] w-[24px]">
+            <Image
+              src={`${EmotionData[day.emotion].image}`}
+              fill
+              alt="오늘의 감정"
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 100px"
+            />
+          </div>,
         );
       }
     });
@@ -62,34 +69,42 @@ export default function CustomCalender({
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-[22px]">
-      <div className="relative flex w-[312px] items-center justify-between">
-        <span className="text-pre-lg text-black-600 font-semibold">{moment(displayMonth).format('YYYY년 M월')}</span>
-        <div className="flex gap-[16px]">
+      <div className="relative flex w-full items-center justify-between">
+        <span className="text-pre-lg text-black-600 pc:text-pre-2xl font-semibold">
+          {moment(displayMonth).format('YYYY년 M월')}
+        </span>
+        <div className="flex items-center justify-center gap-[16px]">
           <div
             onClick={toggleFilter}
-            className={`bg-bg-100 flex h-[30px] w-[88px] cursor-pointer items-center justify-center gap-[4px] rounded-[8px] py-[5px] ${selectedEmotion ? 'border-black-600 border-[3px] pr-[5px] pl-[9px]' : 'pr-[8px] pl-[12px]'}`}
+            className={`bg-bg-100 pc:h-[52px] pc:w-[144px] pc:rounded-[14px] flex h-[30px] w-[88px] cursor-pointer items-center justify-center gap-[4px] rounded-[8px] py-[5px] ${selectedEmotion ? 'border-black-600 border-[3px] pr-[5px] pl-[9px]' : 'pr-[8px] pl-[12px]'}`}
           >
-            <span className={`text-pre-xs font-semibold ${selectedEmotion ? 'text-black-600' : 'text-gray-200'}`}>
+            <span
+              className={`text-pre-xs pc:text-pre-xl font-semibold ${selectedEmotion ? 'text-black-600' : 'text-gray-200'}`}
+            >
               필터: {selectedEmotion ? `${EmotionData[selectedEmotion].name}` : '없음'}
             </span>
-            <Image src={`/assets/icons/down${selectedEmotion ? '' : '_gray'}.svg`} width={16} height={16} alt="토글" />
+            <div className="pc:w-[36px] pc:h-[36px] relative h-[16px] w-[16px]">
+              <Image src={`/assets/icons/down${selectedEmotion ? '' : '_gray'}.svg`} fill alt="토글" />
+            </div>
           </div>
-          <Image
-            className="cursor-pointer"
-            onClick={goToPrevMonth}
-            src="/assets/icons/left.svg"
-            width={20}
-            height={20}
-            alt="왼쪽 버튼"
-          />
-          <Image
-            className="cursor-pointer"
-            onClick={goToNextMonth}
-            src="/assets/icons/right.svg"
-            width={20}
-            height={20}
-            alt="오른쪽 버튼"
-          />
+          <div className="pc:w-[36px] pc:h-[36px] relative h-[20px] w-[20px]">
+            <Image
+              className="cursor-pointer"
+              onClick={goToPrevMonth}
+              src="/assets/icons/left.svg"
+              fill
+              alt="왼쪽 버튼"
+            />
+          </div>
+          <div className="pc:w-[36px] pc:h-[36px] relative h-[20px] w-[20px]">
+            <Image
+              className="cursor-pointer"
+              onClick={goToNextMonth}
+              src="/assets/icons/right.svg"
+              fill
+              alt="오른쪽 버튼"
+            />
+          </div>
         </div>
         {isFilterVisible && <EmotionFilter selectedEmotion={selectedEmotion} setSelectedEmotion={setSelectedEmotion} />}
       </div>
@@ -100,13 +115,13 @@ export default function CustomCalender({
         next2Label={null}
         prev2Label={null}
         tileContent={addContent}
-        className={`w-[312px] rounded-xl bg-white`}
+        className={`tablet:w-[379px] pc:w-[637px] w-[308px] rounded-xl bg-white`}
         tileClassName={({ date, view }) => {
           const dateString = moment(date).format('YYYY-MM-DD');
           const isSpecialDay = createdAtArray.includes(dateString);
 
           return view === 'month'
-            ? `font-semibold text-gray-200 w-[44px] h-[44px] flex flex-col justify-center items-center text-center border-b border-blue-200 ${isSpecialDay ? 'text-[8px]' : 'text-pre-lg'}`
+            ? `font-semibold text-gray-200 w-[44px] h-[44px] tablet:w-[54px] tablet:h-[54px] pc:w-[91px] pc:h-[91px] flex flex-col justify-center items-center text-center border-b border-blue-200 pc:text-pre-2xl ${isSpecialDay ? 'text-[8px] pc:text-[16px]' : 'text-pre-lg'}`
             : '';
         }}
         nextLabel={null}
