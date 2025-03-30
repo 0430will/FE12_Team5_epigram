@@ -1,19 +1,27 @@
+'use client';
+
 import { EmotionLog } from '@/types/Emotionlog';
 import CustomCalender from './CustomCalender';
+import { useEffect, useState } from 'react';
+import { GetMonthEmotion } from '@/lib/Emotionlog';
+import moment from 'moment';
 
-export default async function MyCalender() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/emotionLogs/monthly?userId=1349&year=2025&month=3`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+export default function MyCalender() {
+  const [data, setData] = useState<EmotionLog[]>();
+  const [displayMonth, setDisplayMonth] = useState<Date>(new Date());
 
-  const data: EmotionLog[] = await response.json();
+  const getData = async () => {
+    const response = await GetMonthEmotion(1349, moment(displayMonth).year(), moment(displayMonth).month() + 1);
+    if (!response) return;
 
-  return (
-    <div>
-      <CustomCalender data={data} />
-    </div>
-  );
+    setData(response);
+  };
+
+  useEffect(() => {
+    getData();
+  }, [displayMonth]);
+
+  if (!data) return;
+
+  return <CustomCalender data={data} displayMonth={displayMonth} setDisplayMonth={setDisplayMonth} />;
 }

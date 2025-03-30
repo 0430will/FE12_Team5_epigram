@@ -8,10 +8,6 @@ import { JSX, useState } from 'react';
 import { EmotionLog } from '@/types/Emotionlog';
 import EmotionFilter, { EmotionKey } from './EmotionFilter';
 
-type ValuePiece = Date | null;
-
-type Value = ValuePiece | [ValuePiece, ValuePiece];
-
 const EmotionData = {
   MOVED: {
     image: '/assets/images/heartFace.png',
@@ -23,12 +19,19 @@ const EmotionData = {
   ANGRY: { image: '/assets/images/angry.png', name: '화남' },
 };
 
-export default function CustomCalender({ data }: { data: EmotionLog[] }) {
-  const [value, onChange] = useState<Value>(new Date());
-  const [displayMonth, setDisplayMonth] = useState<Date>(new Date());
+export default function CustomCalender({
+  data,
+  displayMonth,
+  setDisplayMonth,
+}: {
+  data: EmotionLog[];
+  displayMonth: Date;
+  setDisplayMonth: React.Dispatch<React.SetStateAction<Date>>;
+}) {
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey | null>(null);
-  const createdAtArray = data.map((item) => moment(item.createdAt).format('YYYY-MM-DD'));
+  const filteredData = data.filter((item) => selectedEmotion === null || item.emotion === selectedEmotion);
+  const createdAtArray = filteredData.map((item) => moment(item.createdAt).format('YYYY-MM-DD'));
 
   const goToNextMonth = () => {
     const nextMonth = moment(displayMonth).add(1, 'month').toDate();
@@ -46,7 +49,8 @@ export default function CustomCalender({ data }: { data: EmotionLog[] }) {
 
   const addContent = ({ date }: { date: Date | string }) => {
     const contents: JSX.Element[] = [];
-    data.map((day) => {
+
+    filteredData.map((day) => {
       if (moment(day.createdAt).format('YYYY-MM-DD') === moment(date).format('YYYY-MM-DD')) {
         contents.push(
           <Image key={day.id} src={`${EmotionData[day.emotion].image}`} width="24" height="24" alt="오늘의 감정" />,
@@ -92,8 +96,7 @@ export default function CustomCalender({ data }: { data: EmotionLog[] }) {
       <Calendar
         locale="ko"
         formatDay={(local, date) => moment(date).format('D')}
-        value={value}
-        onChange={onChange}
+        value={new Date()}
         next2Label={null}
         prev2Label={null}
         tileContent={addContent}
