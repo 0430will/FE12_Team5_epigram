@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-const EmotionData = {
+export const EmotionData = {
   MOVED: {
     image: '/assets/images/heartFace.png',
     name: '감동',

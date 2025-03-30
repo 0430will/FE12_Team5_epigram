@@ -6,18 +6,7 @@ import './custom-calendar.css';
 import moment from 'moment';
 import { JSX, useState } from 'react';
 import { EmotionLog } from '@/types/Emotionlog';
-import EmotionFilter, { EmotionKey } from './EmotionFilter';
-
-const EmotionData = {
-  MOVED: {
-    image: '/assets/images/heartFace.png',
-    name: '감동',
-  },
-  HAPPY: { image: '/assets/images/smiling.png', name: '기쁨' },
-  WORRIED: { image: '/assets/images/thinking.png', name: '걱정' },
-  SAD: { image: '/assets/images/sad.png', name: '슬픔' },
-  ANGRY: { image: '/assets/images/angry.png', name: '화남' },
-};
+import EmotionFilter, { EmotionData, EmotionKey } from './EmotionFilter';
 
 export default function CustomCalender({
   data,

@@ -1,5 +1,6 @@
 import EmotionPieChart from './_components/EmotionPieChart';
 import EmotionRankList from './_components/EmotionRankList';
+import MyCalender from './_components/MyCalender/MyCalender';
 import MyTabMenu from './_components/MyTabMenu';
 import TodayEmotion from '@/components/TodayEmotion';
 import MyUserProfile from './_components/MyUserProfile';
@@ -9,7 +10,17 @@ export default function MyPage() {
     <main>
       <div className="pc:mt-[120px] shadow-[0px 0px 36px 0px rgba(0, 0, 0, 0.05)] mt-[64px] rounded-3xl bg-white">
         <div className="relative top-[-53px] m-auto max-w-[680px] px-[24px]">
+<<<<<<< HEAD
           <MyUserProfile />
+=======
+          {/* ✅ 여기에 프로필 컴포넌트과 오늘의 감정 컴포넌트를 구현해주세요. */}
+          {/* ✅ <section> 코드는 예시 입니다. 지우고 작업해주세요:-) */}
+          <section className="flex flex-col items-center">
+            <div className="mb-[16px] h-[120px] w-[120px] rounded-full bg-amber-300"></div>
+            <span>프로필</span>
+          </section>
+          <MyCalender />
+>>>>>>> caca7fa (Chore: 중복 코드 제거)
         </div>
         <TodayEmotion emotionType="mypage" />
         <div className="pc:pb-[82px] tablet:pb-[56px] pc:gap-[48px] m-auto flex h-full w-full max-w-[680px] flex-col justify-center gap-[16px] px-[24px] pt-[58px] pb-[40px]">
