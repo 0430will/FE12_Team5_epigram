@@ -1,3 +1,5 @@
+import EmotionPieChart from './_components/EmotionPieChart';
+import EmotionRankList from './_components/EmotionRankList';
 import MyTabMenu from './_components/MyTabMenu';
 
 export default function MyPage() {
@@ -11,6 +13,13 @@ export default function MyPage() {
             <div className="mb-[16px] h-[120px] w-[120px] rounded-full bg-amber-300"></div>
             <span>프로필</span>
           </section>
+        </div>
+        <div className="pc:pb-[82px] tablet:pb-[56px] pc:gap-[48px] m-auto flex h-full w-full max-w-[680px] flex-col justify-center gap-[16px] px-[24px] pt-[58px] pb-[40px]">
+          <h1 className="pc:text-pre-2xl text-pre-lg font-weight-semibold">감정 차트</h1>
+          <div className="border-line-100 pc:h-[264px] flex h-full w-full items-center justify-between rounded-lg border p-[30px]">
+            <EmotionPieChart />
+            <EmotionRankList />
+          </div>
         </div>
       </div>
       <div className="pc:pt-[103px] m-auto max-w-[680px] px-[24px] pt-[56px] pb-[114px]">
