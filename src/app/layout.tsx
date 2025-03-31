@@ -20,8 +20,10 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <PageBackground>
-          <ClientHeader />
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <ClientHeader />
+            {children}
+          </AuthProvider>
         </PageBackground>
         <ToastProvider />
         <FloatingButtons />
