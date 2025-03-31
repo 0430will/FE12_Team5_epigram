@@ -17,15 +17,12 @@ export default function FeedList() {
   const { items: epigrams, hasMore } = useFeedStore();
 
   const { data: session, status } = useSession();
-  const token = session?.accessToken;
+  const token = status === 'authenticated' ? session?.user.accessToken : null;
 
   const fetchEpigrams = async (cursor?: number) => {
     if (!token) return { list: [], totalCount: 0 };
 
-    // ✨ TODO : session?.user.id 적용하기
-    // const writerId = pathname.startsWith('/mypage') && session?.user.id ? Number(session.user.id) : undefined;
-    const writerId = pathname.startsWith('/mypage') ? 1496 : undefined;
-
+    const writerId = pathname.startsWith('/mypage') && session?.user.id ? Number(session.user.id) : undefined;
     return await getEpigramsList(token, 3, cursor, undefined, writerId);
   };
 
@@ -38,7 +35,7 @@ export default function FeedList() {
     if (status === 'authenticated' && token && epigrams.length === 0) {
       loadMore();
     }
-  }, [status, token]);
+  }, [status, token, epigrams.length]);
 
   return (
     <>

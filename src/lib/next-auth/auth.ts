@@ -133,9 +133,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       };
       return session;
     },
-    async redirect({ baseUrl }) {
-      // 로그인 성공 후 리다이렉트할 기본 경로 설정 (예: /epigrams)
-      return baseUrl + '/epigrams';
+    async redirect() {
+      return 'http://localhost:3000/epigrams';
     },
   },
 });

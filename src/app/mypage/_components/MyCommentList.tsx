@@ -8,7 +8,6 @@ import { useSession } from 'next-auth/react';
 
 export default function MyCommentList() {
   const { data: session, status } = useSession();
-
   const [comments, setComments] = useState<Comment[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(0);
 

@@ -6,12 +6,16 @@ import { useEffect, useState } from 'react';
 import { GetMonthEmotion } from '@/lib/Emotionlog';
 import moment from 'moment';
 
-export default function MyCalender() {
+export default function MyCalender({ writerId }: { writerId: string }) {
   const [data, setData] = useState<EmotionLog[]>();
   const [displayMonth, setDisplayMonth] = useState<Date>(new Date());
 
   const getData = async () => {
-    const response = await GetMonthEmotion(1349, moment(displayMonth).year(), moment(displayMonth).month() + 1);
+    const response = await GetMonthEmotion(
+      Number(writerId),
+      moment(displayMonth).year(),
+      moment(displayMonth).month() + 1,
+    );
     if (!response) return;
 
     setData(response);

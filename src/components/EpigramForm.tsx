@@ -3,6 +3,7 @@
 import { TagsInputWithList } from '@/components/TagsInputWithList';
 import { PatchEpigram, PostEpigram } from '@/lib/Epigram';
 import { EpigramTag } from '@/types/Epigram';
+import { useSession } from 'next-auth/react';
 import { ChangeEvent, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -44,6 +45,9 @@ export default function EpigramForm({
     },
   });
 
+  const { data: session, status } = useSession();
+  const token = status === 'authenticated' ? session?.user.accessToken : null;
+
   const selectedOption = watch('authorSelected');
   const author = watch('author');
   const content = watch('content');
@@ -63,16 +67,17 @@ export default function EpigramForm({
   };
 
   const SubmitPostForm = async () => {
+    if (!token) return;
     const allValues = watch();
-    const response = await PostEpigram(allValues);
+    const response = await PostEpigram(allValues, token);
     if (!response) return;
     alert('폼 제출 완료');
   };
 
   const SubmitPatchForm = async () => {
-    if (!initialValue?.id) return;
+    if (!initialValue?.id || !token) return;
     const allValues = watch();
-    const response = await PatchEpigram(allValues, initialValue.id);
+    const response = await PatchEpigram(allValues, initialValue.id, token);
     if (!response) return;
     alert('폼 수정 완료');
   };
