@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> de4ffa63f70f3f9bb52c571683cb1f8bc10d05ce
 export default function Su() {
   return (
     <>
