@@ -99,7 +99,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-
     async signIn({ user, account }) {
       // Google 로그인 시, OAuth 제공자에서 받은 토큰을 user 객체에 저장
       if (account?.provider === 'google') {
