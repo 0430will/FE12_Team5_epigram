@@ -18,7 +18,7 @@ export const middleware = async (request: NextRequest) => {
   const isBeforeLoginRoute = pathname === '/auth/login' || pathname === '/auth/signup';
 
   // 로그인 후 접근 가능한 경로 (로그인 후 경로에 대해서만 리디렉션을 처리)
-  const isAfterLoginRoute = pathname.startsWith('/mypage') || pathname.startsWith('/epigrams');
+  const isAfterLoginRoute = pathname.startsWith('/mypage') || pathname.startsWith('/main');
 
   // 로그인 전 경로에 로그인된 상태로 접근 시 홈 페이지로 리디렉션
   if (isBeforeLoginRoute && isAuthenticated) {
@@ -36,5 +36,5 @@ export const middleware = async (request: NextRequest) => {
 
 // matcher 설정: 모든 경로에 대해 middleware가 동작하도록 설정
 export const config = {
-  matcher: ['/login', '/signup', '/mypage', '/epigrams', '/auth/login', '/auth/signup', '/:path*'],
+  matcher: ['/login', '/signup', '/mypage', '/epigrams', '/auth/login', '/auth/signup', '/main', '/:path*'],
 };

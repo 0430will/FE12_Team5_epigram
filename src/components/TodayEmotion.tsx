@@ -96,6 +96,7 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
 
   const OnClickEmotion = async (emotion: EmotionKey) => {
     if (isEmotionLogged) return;
+
     if (!token) {
       console.error('Access token is undefined');
       return;
