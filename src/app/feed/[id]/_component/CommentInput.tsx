@@ -37,7 +37,7 @@ export default function CommentInput({ userImage, onSubmit }: Props) {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           maxLength={100}
-          className="border-line-200 text-pre-sm tablet:text-pre-md pc:text-pre-lg font-regular focus:border-black-600 tablet:h-[80px] pc:h-[104px] h-[66px] w-full resize-none rounded-md border px-3 py-2 outline-none"
+          className="custom-scrollbar border-line-200 text-pre-sm tablet:text-pre-md pc:text-pre-lg font-regular focus:border-black-600 tablet:h-[80px] pc:h-[104px] h-[66px] w-full resize-none rounded-md border px-3 py-2 outline-none"
         />
 
         <div className="flex items-center justify-between">

@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 interface AvatarProps {
   src: string;
   alt: string;
@@ -7,8 +9,19 @@ interface AvatarProps {
 }
 
 export function Avatar({ src, alt, className }: AvatarProps) {
-  const fallbackSrc = '/assets/icons/comment-user.svg';
+  const fallbackSrc = '/assets/images/defaultUser.png';
   const imageSrc = src && src.trim() !== '' ? src : fallbackSrc;
 
-  return <img src={imageSrc} alt={alt} className={`rounded-full ${className}`} />;
+  return (
+    <div className={className}>
+      <Image
+        src={imageSrc}
+        alt={alt}
+        width={48}
+        height={48}
+        className="h-full w-full rounded-full object-cover"
+        unoptimized
+      />
+    </div>
+  );
 }
