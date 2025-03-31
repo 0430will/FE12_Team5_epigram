@@ -8,3 +8,7 @@ export interface OauthApp {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface KakaoCredentials {
+  code: string;
+}
