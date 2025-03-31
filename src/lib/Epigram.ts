@@ -4,7 +4,7 @@ import { AddEpigram } from '@/components/EpigramForm';
 import { notFound } from 'next/navigation';
 
 // 에피그램 post
-export async function PostEpigram(epigrams: AddEpigram) {
+export async function PostEpigram(epigrams: AddEpigram, token: string) {
   const { tags, referenceUrl, referenceTitle, author, content } = epigrams;
 
   const tagslist = tags.map((item) => item.name);
@@ -14,7 +14,7 @@ export async function PostEpigram(epigrams: AddEpigram) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer 토큰`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         tags: tagslist,
@@ -43,7 +43,7 @@ export async function PostEpigram(epigrams: AddEpigram) {
   }
 }
 
-export async function PatchEpigram(epigrams: AddEpigram, id: number) {
+export async function PatchEpigram(epigrams: AddEpigram, id: number, token: string) {
   const { tags, referenceUrl, referenceTitle, author, content } = epigrams;
 
   const tagslist = tags.map((item) => item.name);
@@ -53,7 +53,7 @@ export async function PatchEpigram(epigrams: AddEpigram, id: number) {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer 토큰`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         tags: tagslist,
@@ -158,12 +158,12 @@ export async function GetTodayEpigram() {
   }
 }
 
-export async function GetEpigram(id: number) {
+export async function GetEpigram(id: number, token: string) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer 토큰`,
+      Authorization: `Bearer ${token}`,
     },
   });
   if (!response.ok) {
