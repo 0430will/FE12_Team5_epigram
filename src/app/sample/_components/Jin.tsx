@@ -14,13 +14,11 @@ export default function Jin() {
         <div className="bg-white p-5">
           <LatestCommentSection />
           <br></br>
-          <EpigramCommentSection
-            epigramId={1067}
-            token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTU0NywidGVhbUlkIjoiMTItNSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzQzMDI1OTk0LCJleHAiOjE3NDMwMjc3OTQsImlzcyI6InNwLWVwaWdyYW0ifQ.aUPn33DCvlJC_A49S04cSzQ5qprul93-ROjPJypgR18"
-          />
+          <EpigramCommentSection />
           <br></br>
           <h1>내 댓글 목록</h1>
           <MyCommentList />
+          <br></br>
         </div>
       </div>
     </SessionProvider>

@@ -8,16 +8,19 @@ import { useSession } from 'next-auth/react';
 
 export default function MyCommentList() {
   const { data: session, status } = useSession();
+
   const [comments, setComments] = useState<Comment[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(0);
 
   useEffect(() => {
     const fetchMyComments = async () => {
-      if (!session || !session.accessToken || !session.user?.id) return;
+      if (!session || !session.user?.accessToken || !session.user?.id) return;
       if (nextCursor === null) return;
 
       try {
-        const response = await getUserComments(session.accessToken, Number(session.user.id), 4, nextCursor);
+        const userId = Number(session.user.id);
+        const response = await getUserComments(session.user.accessToken, userId, 4, nextCursor);
+
         if (!response.list.length) return;
 
         setComments((prev) => [...prev, ...response.list]);
@@ -44,7 +47,7 @@ export default function MyCommentList() {
         <CommentItem
           key={comment.id}
           comment={comment}
-          token={session.accessToken}
+          token={session.user.accessToken}
           onDelete={(id) => setComments((prev) => prev.filter((c) => c.id !== id))} // 삭제 시 필터링
           onSave={(updated) => setComments((prev) => prev.map((c) => (c.id === updated.id ? updated : c)))} // 수정 시 상태 업데이트
         />
