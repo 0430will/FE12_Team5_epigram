@@ -95,12 +95,12 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
 
   const OnClickEmotion = async (emotion: EmotionKey) => {
     if (isEmotionLogged) return;
-    if (!session?.accessToken) {
+    if (!session?.user.accessToken) {
       console.error('Access token is undefined');
       return;
     }
 
-    const response = await PostTodayEmotion(EmotionData[emotion].name, session.accessToken);
+    const response = await PostTodayEmotion(EmotionData[emotion].name, session.user.accessToken);
     if (!response) return;
 
     console.log(`오늘의 감정 등록 완료: ${emotion}`);
