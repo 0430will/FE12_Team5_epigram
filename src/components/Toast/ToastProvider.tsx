@@ -1,6 +1,6 @@
 import { ToastContainer, Slide } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import './ToastCustom.css';
+import 'react-toastify/dist/ReactToastify.css';
+import './ToastCustom.css';
 
 export default function ToastProvider() {
   return (
