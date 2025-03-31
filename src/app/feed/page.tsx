@@ -15,7 +15,7 @@ export default function FeedPage() {
   const { items: epigrams, hasMore, isGridView, setState } = useFeedStore();
 
   const { data: session, status } = useSession();
-  const token = session?.accessToken;
+  const token = status === 'authenticated' ? session?.user.accessToken : null;
 
   const fetchEpigrams = async (cursor?: number) => {
     if (!token) return { list: [], totalCount: 0 };
@@ -31,7 +31,7 @@ export default function FeedPage() {
     if (status === 'authenticated' && token && epigrams.length === 0) {
       loadMore();
     }
-  }, [status, token]);
+  }, [status, token, epigrams.length]);
 
   const gridStyle = isGridView ? 'grid grid-cols-2' : 'grid grid-cols-1';
   const gridGapStyle =
