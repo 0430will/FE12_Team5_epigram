@@ -3,6 +3,7 @@ import './globals.css';
 import { AuthProvider } from '@/lib/next-auth/auth_provider';
 import PageBackground from '@/components/PageBackground';
 import ClientHeader from '@/components/header/ClientHeader';
+import FloatingButtons from '@/components/FloatingButtons';
 import ToastProvider from '@/components/Toast/ToastProvider';
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export default function RootLayout({
           </AuthProvider>
         </PageBackground>
         <ToastProvider />
+        <FloatingButtons />
       </body>
     </html>
   );
