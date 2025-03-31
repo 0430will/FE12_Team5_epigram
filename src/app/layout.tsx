@@ -4,6 +4,7 @@ import { AuthProvider } from '@/lib/next-auth/auth_provider';
 import PageBackground from '@/components/PageBackground';
 import ClientHeader from '@/components/header/ClientHeader';
 import FloatingButtons from '@/components/FloatingButtons';
+import ToastProvider from '@/components/Toast/ToastProvider';
 
 export const metadata: Metadata = {
   title: 'Epigram',
@@ -22,6 +23,7 @@ export default function RootLayout({
           <ClientHeader />
           <AuthProvider>{children}</AuthProvider>
         </PageBackground>
+        <ToastProvider />
         <FloatingButtons />
       </body>
     </html>
