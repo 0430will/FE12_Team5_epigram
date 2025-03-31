@@ -40,7 +40,7 @@ export default function LoginPage() {
     }); // 응답 로그 확인
 
     if (res?.error) {
-      setError(res.error); // NextAuth에서 받은 에러 메시지를 그대로 사용
+      setError('이메일 또는 비밀번호가 다릅니다.'); // NextAuth에서 받은 에러 메시지를 그대로 사용
       return;
     }
 
