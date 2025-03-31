@@ -13,7 +13,7 @@ import ModalUSerProfile from '../Modal/ModalUserProfile';
 
 interface Props {
   comment: Comment;
-  token: string;
+  token?: string;
   onDelete: (id: number) => void;
   onSave: (updated: Comment) => void;
 }
@@ -25,6 +25,11 @@ export function CommentItem({ comment, token, onDelete, onSave }: Props) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const handleSave = async () => {
+    if (!token) {
+      console.error('토큰이 없습니다. 댓글 수정 요청이 중단됩니다');
+      alert('로그인이 필요합니다.');
+      return;
+    }
     try {
       console.log('저장 전송:', {
         content: editedContent,
@@ -43,6 +48,12 @@ export function CommentItem({ comment, token, onDelete, onSave }: Props) {
   const handleDelete = async () => {
     const confirm = window.confirm('정말 삭제하시겠습니까?');
     if (!confirm) return;
+
+    if (!token) {
+      console.error('토큰이 없습니다. 댓글 삭제 요청이 중단됩니다.');
+      alert('로그인이 필요합니다');
+      return;
+    }
 
     try {
       await deleteComment(token, comment.id);
