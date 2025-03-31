@@ -21,11 +21,8 @@
     "framer-motion": "^12.5.0",
     "google-auth-library": "^9.15.1",
     "js-cookie": "^3.0.5",
-<<<<<<< HEAD
     "lightningcss": "^1.29.3",
-=======
     "moment": "^2.30.1",
->>>>>>> 685ee2d (Feat: 캘린더 유저log 가져오기)
     "motion": "^12.5.0",
     "next": "15.2.1",
     "next-auth": "^5.0.0-beta.25",
