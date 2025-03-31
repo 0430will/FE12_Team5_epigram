@@ -73,10 +73,11 @@ function Emotion({ emotion, isSelected, onClick, emotionType }: EmotionProps) {
 }
 
 export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey | null>(null);
   const [isEmotionLogged, setIsEmotionLogged] = useState(false);
 
+  const token = status === 'authenticated' ? session?.user.accessToken : null;
   const getTodayDate = () => new Date().toISOString().split('T')[0];
 
   useEffect(() => {
@@ -95,12 +96,13 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
 
   const OnClickEmotion = async (emotion: EmotionKey) => {
     if (isEmotionLogged) return;
-    if (!session?.user.accessToken) {
+
+    if (!token) {
       console.error('Access token is undefined');
       return;
     }
 
-    const response = await PostTodayEmotion(EmotionData[emotion].name, session.user.accessToken);
+    const response = await PostTodayEmotion(EmotionData[emotion].name, token);
     if (!response) return;
 
     console.log(`오늘의 감정 등록 완료: ${emotion}`);
