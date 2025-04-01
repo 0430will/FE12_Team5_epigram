@@ -16,7 +16,6 @@ export default function MyUserProfile() {
   return (
     <div>
       <section className="pc:mb-[96px] mb-[56px] flex flex-col items-center">
-        {/* 프로필 이미지 */}
         <div className="mb-[16px] h-[120px] w-[120px] rounded-full bg-amber-300">
           <img
             src={user.image ?? '/assets/images/defaultUser.png'}
@@ -24,10 +23,10 @@ export default function MyUserProfile() {
             className="h-full w-full rounded-full object-cover"
           />
         </div>
-        <span className="pc:mb-[24px] mb-[16px]">{user.nickname}</span> {/* 사용자 닉네임 */}
+        <span className="pc:mb-[24px] mb-[16px]">{user.nickname}</span>
         <div
-          className="text-pre-xs--line-height font-weight-regular pc:font-weight-medium pc:text-pre-md--line-height pc:h-[54px] pc:w-[114px] bg-line-100 flex h-[42px] w-[91px] cursor-pointer items-center justify-center rounded-[100px] text-blue-400 hover:bg-gray-200 hover:text-black"
-          onClick={() => signOut()} //로그아웃
+          className="text-pre-md font-weight-regular pc:font-weight-medium pc:text-pre-xl pc:h-[48px] pc:w-[100px] bg-line-100 flex h-[38px] w-[77px] cursor-pointer items-center justify-center rounded-[100px] text-blue-400 hover:bg-gray-200 hover:text-black"
+          onClick={() => signOut()}
         >
           로그아웃
         </div>
