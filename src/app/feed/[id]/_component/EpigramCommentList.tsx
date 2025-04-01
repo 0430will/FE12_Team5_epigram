@@ -8,23 +8,27 @@ interface EpigramCommentListProps {
   epigramId: number;
   comments: Comment[];
   setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
+  setTotalCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function EpigramCommentList({ epigramId, comments, setComments }: EpigramCommentListProps) {
+export default function EpigramCommentList({ comments, setComments, setTotalCount }: EpigramCommentListProps) {
   const { data: session, status } = useSession();
 
   const token = status === 'authenticated' ? session?.user.accessToken : undefined;
-
-  const filteredComments = comments.filter((comment) => comment.epigramId === epigramId);
+  const writerId = session?.user.id ? Number(session.user.id) : undefined;
 
   return (
     <div>
-      {filteredComments.map((comment) => (
+      {comments.map((comment) => (
         <CommentItem
           key={comment.id}
           comment={comment}
           token={token}
-          onDelete={(id) => setComments((prev) => prev.filter((c) => c.id !== id))}
+          writerId={writerId}
+          onDelete={(id) => {
+            setComments((prev) => prev.filter((c) => c.id !== id));
+            setTotalCount((prev) => prev - 1);
+          }}
           onSave={(updated) => setComments((prev) => prev.map((c) => (c.id === updated.id ? updated : c)))}
         />
       ))}

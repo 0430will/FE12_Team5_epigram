@@ -4,6 +4,12 @@ import { CommentList } from '@/types/Comment';
 
 // 댓글 작성
 export async function createComment(token: string, epigramId: number, content: string, isPrivate: boolean) {
+  console.log('[createComment] 보내는 body:', {
+    epigramId,
+    content,
+    isPrivate,
+  });
+
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments`, {
     method: 'POST',
     headers: {
@@ -13,7 +19,11 @@ export async function createComment(token: string, epigramId: number, content: s
     body: JSON.stringify({ epigramId, isPrivate, content }),
   });
 
-  if (!response.ok) throw new Error('댓글 작성 실패');
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('[createComment] 서버 응답 실패:', errorText); // 응답 본문 로그!
+    throw new Error('댓글 작성 실패');
+  }
   return await response.json();
 }
 

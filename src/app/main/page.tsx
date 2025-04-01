@@ -22,7 +22,7 @@ export default function Page() {
           <div className="pc:mb-[140px] mb-[56px]">
             <LatestEpigrams />
           </div>
-          <div>
+          <div className="tablet:pb-[270px] pc:pb-[119px] pb-[114px]">
             <LatestCommentSection />
           </div>
         </div>

@@ -1,56 +1,80 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Comment } from '@/types/Comment';
 import { CommentItem } from '@/components/Comment/CommentItem';
 import { getUserComments } from '@/lib/User';
 import { useSession } from 'next-auth/react';
+import { useMyCommentStore } from '@/stores/pageStores';
+import { usePaginatedList } from '@/hooks/usePaginatedList';
+import Image from 'next/image';
+import EmptyState from '@/components/EmptyState';
+import { useRouter } from 'next/navigation';
 
 export default function MyCommentList() {
   const { data: session, status } = useSession();
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [nextCursor, setNextCursor] = useState<number | null>(0);
+  const token = session?.user.accessToken;
+  const userId = session?.user.id ? Number(session.user.id) : undefined;
+  const router = useRouter();
+
+  const { items: comments, hasMore } = useMyCommentStore();
+
+  const fetchMyComments = async (cursor?: number) => {
+    if (!token || !userId) return { list: [], totalCount: 0 };
+    return await getUserComments(token, userId, 4, cursor ?? 0);
+  };
+
+  const { loadMore, loading } = usePaginatedList({
+    store: useMyCommentStore.getState(),
+    fetchFn: fetchMyComments,
+  });
 
   useEffect(() => {
-    const fetchMyComments = async () => {
-      if (!session || !session.user?.accessToken || !session.user?.id) return;
-      if (nextCursor === null) return;
+    if (status === 'authenticated' && token && userId && comments.length === 0) {
+      loadMore();
+    }
+  }, [status, token, userId, comments.length]);
 
-      try {
-        const userId = Number(session.user.id);
-        const response = await getUserComments(session.user.accessToken, userId, 4, nextCursor);
+  if (status === 'loading') return <div>로딩 중...</div>;
+  if (!session) return <div>로그인이 필요합니다.</div>;
 
-        if (!response.list.length) return;
-
-        setComments((prev) => [...prev, ...response.list]);
-        setNextCursor(response.nextCursor);
-      } catch (error) {
-        console.error('내 댓글 불러오기 실패:', error);
-      }
-    };
-
-    fetchMyComments();
-  }, [session, nextCursor]);
-
-  if (status === 'loading') {
-    return <div>로딩중...</div>;
-  }
-
-  if (!session) {
-    return <div>로그인이 필요합니다.</div>;
-  }
-
-  return (
-    <div className="w-full">
+  return comments.length === 0 ? (
+    <div className="flex flex-col items-center justify-center">
+      <EmptyState message={`아직 작성한 댓글이 없어요!<br/>댓글을 달고 다른 사람들과 교류해보세요.`} />
+      <button
+        onClick={() => router.push('/feed')}
+        className="pc:text-pre-xl pc:px-[40px] text-pre-md bg-bg-100 flex cursor-pointer gap-[4px] rounded-full border border-blue-500 px-[18px] py-[11.5px] font-medium text-blue-500 transition hover:bg-blue-900 hover:text-white"
+      >
+        <Image src={'/assets/icons/plus.svg'} width={24} height={24} alt={'플러스 아이콘'} />
+        에피그램 둘러보기
+      </button>
+    </div>
+  ) : (
+    <>
       {comments.map((comment) => (
         <CommentItem
           key={comment.id}
           comment={comment}
-          token={session.user.accessToken}
-          onDelete={(id) => setComments((prev) => prev.filter((c) => c.id !== id))} // 삭제 시 필터링
-          onSave={(updated) => setComments((prev) => prev.map((c) => (c.id === updated.id ? updated : c)))} // 수정 시 상태 업데이트
+          token={token!}
+          onDelete={(id) => useMyCommentStore.getState().setState({ items: comments.filter((c) => c.id !== id) })}
+          onSave={(updated) =>
+            useMyCommentStore.getState().setState({ items: comments.map((c) => (c.id === updated.id ? updated : c)) })
+          }
+          writerId={userId}
         />
       ))}
-    </div>
+
+      {hasMore && (
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={loadMore}
+            disabled={loading}
+            className="pc:text-pre-xl pc:px-[40px] text-pre-md bg-bg-100 flex cursor-pointer gap-[4px] rounded-full border border-blue-500 px-[18px] py-[11.5px] font-medium text-blue-500 transition hover:bg-blue-900 hover:text-white"
+          >
+            <Image src="/assets/icons/plus.svg" width={24} height={24} alt="더보기" />
+            {loading ? '불러오는 중...' : '내 댓글 더보기'}
+          </button>
+        </div>
+      )}
+    </>
   );
 }
