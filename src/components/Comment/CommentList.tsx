@@ -3,7 +3,6 @@
 import React, { useEffect } from 'react';
 import { CommentItem } from './CommentItem';
 import { useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
 import { useCommentStore } from '@/stores/pageStores';
 import { getComments } from '@/lib/Comment';
 import { usePaginatedList } from '@/hooks/usePaginatedList';
@@ -12,7 +11,6 @@ import { Comment } from '@/types/Comment';
 
 export default function CommentList() {
   const { data: session, status } = useSession();
-  const pathname = usePathname();
   const token = status === 'authenticated' ? session?.user.accessToken : null;
 
   const writerId = session?.user.id ? Number(session.user.id) : undefined;

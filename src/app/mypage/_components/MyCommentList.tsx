@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { CommentItem } from '@/components/Comment/CommentItem';
 import { getUserComments } from '@/lib/User';
 import { useSession } from 'next-auth/react';
