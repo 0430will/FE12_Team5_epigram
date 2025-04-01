@@ -2,15 +2,19 @@
 
 import { CommentItem } from '@/components/Comment/CommentItem';
 import type { Comment } from '@/types/Comment';
+import { useSession } from 'next-auth/react';
 
 interface EpigramCommentListProps {
   epigramId: number;
-  token: string;
   comments: Comment[];
   setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
 }
 
-export default function EpigramCommentList({ epigramId, token, comments, setComments }: EpigramCommentListProps) {
+export default function EpigramCommentList({ epigramId, comments, setComments }: EpigramCommentListProps) {
+  const { data: session, status } = useSession();
+
+  const token = status === 'authenticated' ? session?.user.accessToken : undefined;
+
   const filteredComments = comments.filter((comment) => comment.epigramId === epigramId);
 
   return (

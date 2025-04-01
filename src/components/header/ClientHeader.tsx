@@ -7,9 +7,14 @@ import LandingHeader from '@/components/header/LandingHeader';
 export default function ClientHeader() {
   const pathname = usePathname();
 
-  if (pathname.startsWith('/auth/')) {
-    return null;
+  if (pathname === '/') {
+    return <LandingHeader />;
   }
 
-  return pathname === '/' ? <LandingHeader /> : <MainHeader />;
+  const mainHeaderPaths = ['/main', '/feed', '/mypage', '/addepigram', '/search'];
+  if (mainHeaderPaths.some((path) => pathname.startsWith(path))) {
+    return <MainHeader />;
+  }
+
+  return null;
 }
