@@ -14,11 +14,12 @@ import ModalUSerProfile from '../Modal/ModalUserProfile';
 interface Props {
   comment: Comment;
   token?: string;
+  writerId?: number;
   onDelete: (id: number) => void;
   onSave: (updated: Comment) => void;
 }
 
-export function CommentItem({ comment, token, onDelete, onSave }: Props) {
+export function CommentItem({ comment, token, writerId, onDelete, onSave }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const [isPrivate, setIsPrivate] = useState(comment.isPrivate);
@@ -71,6 +72,8 @@ export function CommentItem({ comment, token, onDelete, onSave }: Props) {
     }).replace(/^약 /, '');
   }
 
+  const isMyComment = writerId === comment.writer.id;
+
   return (
     <>
       <CommentCard className="border-line-200 bg-bg-100 tablet:py-6 pc:py-[35px] flex items-start border-t px-6 py-4">
@@ -99,7 +102,8 @@ export function CommentItem({ comment, token, onDelete, onSave }: Props) {
                 />
               )}
             </div>
-            {!isEditing && (
+
+            {isMyComment && !isEditing && (
               <div className="flex gap-4 text-xs">
                 <span
                   className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-600 cursor-pointer hover:underline"

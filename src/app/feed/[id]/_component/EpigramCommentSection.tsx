@@ -6,20 +6,27 @@ import { createComment, getComments } from '@/lib/Comment';
 import type { Comment } from '@/types/Comment';
 import CommentCount from './CommentCount';
 import CommentInput from './CommentInput';
+import { useSession } from 'next-auth/react';
+// @ts-expect-error : 타입스크립트가 notFound를 오류로 인식합니다. 작동은 잘 됩니다.
+import { useParams } from 'next/navigation';
 
-interface Props {
-  epigramId: number;
-  token: string;
-  userImage?: string;
-}
+export default function EpigramCommentSection() {
+  const { data: session, status } = useSession();
+  const { id } = useParams();
+  const epigramId = Number(id);
 
-export default function EpigramCommentSection({ epigramId, token, userImage }: Props) {
   const [comments, setComments] = useState<Comment[]>([]);
 
+  const token = status === 'authenticated' ? session?.user.accessToken : null;
+  const userImage = session?.user?.image;
+
   useEffect(() => {
+    if (!token || !epigramId) return;
+
     const fetch = async () => {
       try {
         const res = await getComments(token, 50, 0, epigramId.toString());
+
         setComments(res.list);
       } catch (err) {
         console.error('댓글 불러오기 실패', err);
@@ -27,9 +34,14 @@ export default function EpigramCommentSection({ epigramId, token, userImage }: P
     };
 
     fetch();
-  }, [epigramId]);
+  }, [epigramId, token]);
 
   const handleCreate = async (content: string, isPrivate: boolean) => {
+    if (!token || !epigramId) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
     try {
       const response = await createComment(token, epigramId, content, isPrivate);
 
@@ -40,13 +52,21 @@ export default function EpigramCommentSection({ epigramId, token, userImage }: P
     }
   };
 
+  if (status === 'loading') {
+    return <div>로딩 중...</div>;
+  }
+
+  if (!session || !token) {
+    return <div>로그인이 필요합니다.</div>;
+  }
+
   return (
     <div className="rounded-md bg-[#F5F7FA] px-4 py-6">
       <CommentCount count={comments.length} />
 
       <CommentInput userImage={userImage} onSubmit={handleCreate} />
 
-      <EpigramCommentList epigramId={epigramId} token={token} comments={comments} setComments={setComments} />
+      <EpigramCommentList epigramId={epigramId} comments={comments} setComments={setComments} />
     </div>
   );
 }
