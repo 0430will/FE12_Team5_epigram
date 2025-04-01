@@ -119,6 +119,24 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
       }
+      const isAccessTokenExpired = token.accessToken && token.exp && Date.now() >= token.exp * 1000;
+      if (isAccessTokenExpired) {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refreshToken: token.refreshToken }),
+          });
+
+          if (!res.ok) throw new Error('토큰 갱신 실패');
+
+          const data = await res.json();
+          token.accessToken = data.accessToken;
+        } catch (error) {
+          console.error('토큰 갱신 실패:', error);
+          return null;
+        }
+      }
       return token;
     },
     async session({ session, token }) {
