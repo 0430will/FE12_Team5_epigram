@@ -6,7 +6,7 @@ import TopScrollButton from './TopScrollButton';
 
 export default function FloatingButtons() {
   const pathname = usePathname();
-  const showFloatingButtons = ['/main', '/feed'].includes(pathname);
+  const showFloatingButtons = ['/main', '/feed', '/mypage'].includes(pathname);
 
   if (!showFloatingButtons) return null;
 
