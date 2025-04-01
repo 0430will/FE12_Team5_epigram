@@ -13,6 +13,7 @@ export const middleware = async (request: NextRequest) => {
   const isAuthenticated = !!(accessToken?.value || refreshToken?.value || token); // 쿠키 또는 JWT 토큰으로 인증 여부 확인
 
   const pathname = request.nextUrl.pathname;
+  console.log(pathname);
 
   // 로그인 전 접근 가능한 경로 (로그인 전 경로에 대해서만 리디렉션을 처리)
   const isBeforeLoginRoute = pathname === '/auth/login' || pathname === '/auth/signup';
