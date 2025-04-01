@@ -52,7 +52,6 @@ export async function GetUserInfo(id: number) {
     }
 
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error: unknown) {
     if (error instanceof Error) {
