@@ -1,4 +1,3 @@
-import ClientButton from '@/components/Button/ClientButton';
 import ServerButton from '@/components/Button/ServerButton';
 import type { EpigramDetail } from '@/types/Epigram';
 import Image from 'next/image';
@@ -6,6 +5,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { GetEpigram } from '@/lib/Epigram';
 import { auth } from '@/lib/next-auth/auth';
+import EpigramLikedButton from './EpigramLikedButton';
 
 type PageParams = Promise<{ id: string }>;
 
@@ -13,14 +13,13 @@ export default async function EpigramDetail({ params }: { params: PageParams }) 
   const { id } = await params;
   const session = await auth();
   const token = session?.user.accessToken;
+  const writerId = session?.user.id;
 
   if (isNaN(Number(id))) return notFound();
+  if (!token || !writerId) return;
 
-  if (!token) return;
   const data: EpigramDetail = await GetEpigram(Number(id), token);
   if (!data) return <div>오류가 발생했습니다.</div>;
-
-  console.log(data);
 
   return (
     <div>
@@ -35,20 +34,15 @@ export default async function EpigramDetail({ params }: { params: PageParams }) 
                   </span>
                 ))}
               </div>
-              <Image className="cursor-pointer" src="/assets/icons/kebab.svg" width={24} height={24} alt="더보기" />
+              {Number(writerId) === data.writerId && (
+                <Image className="cursor-pointer" src="/assets/icons/kebab.svg" width={24} height={24} alt="더보기" />
+              )}
             </div>
             <h1 className="text-iro-2xl text-black-700 font-iropke font-normal">{data.content}</h1>
             <p className="text-iro-lg font-regular font-iropke text-end text-blue-400">- {data.author} -</p>
           </div>
           <div className="flex items-center justify-center gap-[16px]">
-            <ClientButton
-              isValid
-              isRounded
-              className="bg-black-600 flex items-center justify-center gap-[4px] !px-[14px] !py-[6px]"
-            >
-              <Image src="/assets/icons/like.svg" width={20} height={20} alt="좋아요" />
-              <span className="text-pre-lg font-semibold text-blue-100">{data.likeCount}</span>
-            </ClientButton>
+            <EpigramLikedButton isLiked={data.isLiked} likeCount={data.likeCount} />
             <ServerButton
               isValid
               isRounded
