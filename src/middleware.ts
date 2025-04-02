@@ -3,14 +3,15 @@ import { cookies } from 'next/headers';
 import { getToken } from 'next-auth/jwt'; // getToken을 사용하여 JWT 토큰 확인
 
 export const middleware = async (request: NextRequest) => {
-  // 쿠키에서 accessToken과 refreshToken을 읽기
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken');
   const refreshToken = cookieStore.get('refreshToken');
 
   // JWT 토큰을 가져오기 위한 getToken 사용
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-  const isAuthenticated = !!(accessToken?.value || refreshToken?.value || token); // 쿠키 또는 JWT 토큰으로 인증 여부 확인
+  console.log('Token:', token); // token을 확인해봄
+
+  const isAuthenticated = !!(accessToken?.value || refreshToken?.value || token);
 
   const pathname = request.nextUrl.pathname;
 
@@ -34,7 +35,6 @@ export const middleware = async (request: NextRequest) => {
   return NextResponse.next();
 };
 
-// matcher 설정: 모든 경로에 대해 middleware가 동작하도록 설정
 export const config = {
   matcher: ['/login', '/signup', '/mypage', '/epigrams', '/auth/login', '/auth/signup', '/main', '/:path*'],
 };
