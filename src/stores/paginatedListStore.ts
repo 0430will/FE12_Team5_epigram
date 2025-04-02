@@ -39,20 +39,3 @@ export function createPaginatedListStore<T extends { id: number }>() {
     }),
   );
 }
-
-// export function createPaginatedListStore<T>() {
-//   return create<PaginatedListState<T>>((set) => ({
-//     items: [],
-//     hasMore: true,
-//     isGridView: true,
-//     cursor: undefined,
-//     setState: (state) => set((prev) => ({ ...prev, ...state })),
-//     reset: () =>
-//       set({
-//         items: [],
-//         hasMore: true,
-//         isGridView: true,
-//         cursor: undefined,
-//       }),
-//   }));
-// }

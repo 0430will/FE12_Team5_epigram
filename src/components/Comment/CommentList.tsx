@@ -55,14 +55,6 @@ export default function CommentList() {
           }}
           writerId={writerId}
         />
-        // <CommentItem
-        //   key={comment.id}
-        //   comment={comment}
-        //   token={token!}
-        //   onDelete={() => {}}
-        //   onSave={() => {}}
-        //   writerId={writerId}
-        // />
       ))}
 
       {hasMore && (
