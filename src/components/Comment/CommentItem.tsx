@@ -186,7 +186,8 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
       {isDeleteModalOpen && (
         <ModalLayout
           type="confirm"
-          title="댓글을 삭제 후 복구할 수 없어요."
+          title="댓글을 삭제하시겠어요?."
+          description="댓글은 삭제 후 복구할 수 없어요."
           actionLabel="삭제하기"
           onClose={() => setIsDeleteModalOpen(false)}
           onAction={handleDeleteConfirm}
