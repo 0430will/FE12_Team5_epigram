@@ -95,7 +95,7 @@ export default function MainHeader() {
                 </div>
                 <div
                   className="text-pre-md font-weight-regular cursor-pointer p-2 hover:bg-gray-200"
-                  onClick={() => signOut()} //로그아웃
+                  onClick={() => signOut({ callbackUrl: '/' })} //로그아웃
                 >
                   로그아웃
                 </div>
