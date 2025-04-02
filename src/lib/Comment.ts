@@ -4,6 +4,12 @@ import { CommentList } from '@/types/Comment';
 
 // 댓글 작성
 export async function createComment(token: string, epigramId: number, content: string, isPrivate: boolean) {
+  console.log('[createComment] 보내는 body:', {
+    epigramId,
+    content,
+    isPrivate,
+  });
+
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments`, {
     method: 'POST',
     headers: {

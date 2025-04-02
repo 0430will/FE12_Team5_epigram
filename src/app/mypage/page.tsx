@@ -1,9 +1,12 @@
+'use client';
+
 import EmotionPieChart from './_components/EmotionPieChart';
 import EmotionRankList from './_components/EmotionRankList';
 import MyCalender from './_components/MyCalender/MyCalender';
 import MyTabMenu from './_components/MyTabMenu';
 import TodayEmotion from '@/components/TodayEmotion';
 import MyUserProfile from './_components/MyUserProfile';
+import TodayEmotionHeader from './_components/TodayEmotionHeader';
 import { auth } from '@/lib/next-auth/auth';
 
 export default async function MyPage() {
@@ -17,6 +20,7 @@ export default async function MyPage() {
         <div className="relative top-[-53px] m-auto max-w-[680px] px-[24px]">
           <MyUserProfile />
         </div>
+        <TodayEmotionHeader />
         <TodayEmotion emotionType="mypage" />
         <div className="pc:pb-[82px] tablet:pb-[56px] pc:gap-[48px] m-auto flex h-full w-full max-w-[680px] flex-col justify-center gap-[16px] px-[24px] pt-[58px] pb-[40px]">
           <MyCalender writerId={writerId} />

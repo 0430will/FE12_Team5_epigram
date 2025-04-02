@@ -1,5 +1,6 @@
 'use client';
 import useFetchUser from '@/hooks/useFetchdata';
+import { signOut } from 'next-auth/react';
 
 export default function MyUserProfile() {
   const { isLoading, user } = useFetchUser(); //isLoading을 불러 null값 방지. user.~~로 user의 정보 불러옴
@@ -14,8 +15,7 @@ export default function MyUserProfile() {
 
   return (
     <div>
-      <section className="flex flex-col items-center">
-        {/* 프로필 이미지 */}
+      <section className="pc:mb-[96px] mb-[56px] flex flex-col items-center">
         <div className="mb-[16px] h-[120px] w-[120px] rounded-full bg-amber-300">
           <img
             src={user.image ?? '/assets/images/defaultUser.png'}
@@ -23,7 +23,13 @@ export default function MyUserProfile() {
             className="h-full w-full rounded-full object-cover"
           />
         </div>
-        <span>{user.nickname}</span> {/* 사용자 닉네임 */}
+        <span className="pc:mb-[24px] mb-[16px]">{user.nickname}</span>
+        <div
+          className="text-pre-md font-weight-regular pc:font-weight-medium pc:text-pre-xl pc:h-[48px] pc:w-[100px] bg-line-100 flex h-[38px] w-[77px] cursor-pointer items-center justify-center rounded-[100px] text-blue-400 hover:bg-gray-200 hover:text-black"
+          onClick={() => signOut()}
+        >
+          로그아웃
+        </div>
       </section>
     </div>
   );

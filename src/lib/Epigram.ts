@@ -33,7 +33,7 @@ export async function PostEpigram(epigrams: AddEpigram, token: string) {
     if (!response.ok || response === null) {
       throw new Error('서버 오류가 발생하였습니다.');
     }
-    const data = response.json();
+    const data = await response.json();
     return data;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -72,7 +72,7 @@ export async function PatchEpigram(epigrams: AddEpigram, id: number, token: stri
     if (!response.ok || response === null) {
       throw new Error('서버 오류가 발생하였습니다.');
     }
-    const data = response.json();
+    const data = await response.json();
     return data;
   } catch (error: unknown) {
     if (error instanceof Error) {
