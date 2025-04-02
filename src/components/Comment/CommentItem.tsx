@@ -24,6 +24,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
   const [editedContent, setEditedContent] = useState(comment.content);
   const [isPrivate, setIsPrivate] = useState(comment.isPrivate);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleSave = async () => {
     if (!token) {
@@ -46,12 +47,8 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
     }
   };
 
-  const handleDelete = async () => {
-    const confirm = window.confirm('정말 삭제하시겠습니까?');
-    if (!confirm) return;
-
+  const handleDeleteConfirm = async () => {
     if (!token) {
-      console.error('토큰이 없습니다. 댓글 삭제 요청이 중단됩니다.');
       alert('로그인이 필요합니다');
       return;
     }
@@ -59,6 +56,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
     try {
       await deleteComment(token, comment.id);
       onDelete(comment.id); // 삭제 후 부모에 알림
+      setIsDeleteModalOpen(false);
     } catch (error) {
       console.error('댓글 삭제 실패:', error);
       alert('댓글 삭제 중 오류가 발생했습니다.');
@@ -113,7 +111,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
                 </span>
                 <span
                   className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular cursor-pointer text-[color:var(--color-state-error)] hover:underline"
-                  onClick={handleDelete}
+                  onClick={() => setIsDeleteModalOpen(true)}
                 >
                   삭제
                 </span>
@@ -183,6 +181,17 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
         <ModalLayout type="content" onClose={() => setIsProfileOpen(false)}>
           <ModalUSerProfile nickname={comment.writer.nickname} />
         </ModalLayout>
+      )}
+
+      {isDeleteModalOpen && (
+        <ModalLayout
+          type="confirm"
+          title="댓글을 삭제하시겠어요?."
+          description="댓글은 삭제 후 복구할 수 없어요."
+          actionLabel="삭제하기"
+          onClose={() => setIsDeleteModalOpen(false)}
+          onAction={handleDeleteConfirm}
+        />
       )}
     </>
   );
