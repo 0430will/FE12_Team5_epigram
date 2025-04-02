@@ -4,6 +4,7 @@ import { TagsInputWithList } from '@/components/TagsInputWithList';
 import { PatchEpigram, PostEpigram } from '@/lib/Epigram';
 import { EpigramTag } from '@/types/Epigram';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -46,6 +47,7 @@ export default function EpigramForm({
   });
 
   const { data: session, status } = useSession();
+  const router = useRouter();
   const token = status === 'authenticated' ? session?.user.accessToken : null;
 
   const selectedOption = watch('authorSelected');
@@ -71,7 +73,7 @@ export default function EpigramForm({
     const allValues = watch();
     const response = await PostEpigram(allValues, token);
     if (!response) return;
-    alert('폼 제출 완료');
+    router.push(`/feed/${response.id}`);
   };
 
   const SubmitPatchForm = async () => {
@@ -79,7 +81,7 @@ export default function EpigramForm({
     const allValues = watch();
     const response = await PatchEpigram(allValues, initialValue.id, token);
     if (!response) return;
-    alert('폼 수정 완료');
+    router.push(`/feed/${response.id}`);
   };
 
   const SelectForm = submitType === '작성하기' ? SubmitPostForm : SubmitPatchForm;
