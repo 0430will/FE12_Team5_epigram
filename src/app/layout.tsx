@@ -1,9 +1,14 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { AuthProvider } from '@/lib/next-auth/auth_provider';
+import PageBackground from '@/components/PageBackground';
+import ClientHeader from '@/components/header/ClientHeader';
+import FloatingButtons from '@/components/FloatingButtons';
+import ToastProvider from '@/components/Toast/ToastProvider';
 
 export const metadata: Metadata = {
-  title: 'Cowokers',
-  description: '함께 만들어가는 투두 리스트 - Coworkes',
+  title: 'Epigram',
+  description: '날마다 에피그램 - Epigram',
 };
 
 export default function RootLayout({
@@ -13,7 +18,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <PageBackground>
+          <AuthProvider>
+            <ClientHeader />
+            {children}
+          </AuthProvider>
+        </PageBackground>
+        <ToastProvider />
+        <FloatingButtons />
+      </body>
     </html>
   );
 }
