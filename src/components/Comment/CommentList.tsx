@@ -45,10 +45,24 @@ export default function CommentList() {
           key={comment.id}
           comment={comment}
           token={token!}
-          onDelete={() => {}}
-          onSave={() => {}}
+          onDelete={(id) => {
+            console.log('removeItem:', useCommentStore.getState().removeItem);
+            console.log('store keys:', Object.keys(useCommentStore.getState()));
+            useCommentStore.getState().removeItem(id); // store에서 제거
+          }}
+          onSave={(updated) => {
+            useCommentStore.getState().updateItem(updated); // 수정 반영
+          }}
           writerId={writerId}
         />
+        // <CommentItem
+        //   key={comment.id}
+        //   comment={comment}
+        //   token={token!}
+        //   onDelete={() => {}}
+        //   onSave={() => {}}
+        //   writerId={writerId}
+        // />
       ))}
 
       {hasMore && (
