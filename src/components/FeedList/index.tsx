@@ -8,13 +8,13 @@ import Image from 'next/image';
 import SkeletonFeedCard from '@/components/skeletons/SkeletonFeedCard';
 import EmptyState from '@/components/EmptyState';
 import { getEpigramsList } from '@/lib/Epigram';
-import { useFeedStore } from '@/stores/pageStores';
+import { useMinFeedStore } from '@/stores/pageStores';
 import { usePaginatedList } from '@/hooks/usePaginatedList';
 import { Epigram } from '@/types/Epigram';
 
 export default function FeedList() {
   const pathname = usePathname();
-  const { items: epigrams, hasMore } = useFeedStore();
+  const { items: epigrams, hasMore } = useMinFeedStore();
 
   const { data: session, status } = useSession();
   const token = status === 'authenticated' ? session?.user.accessToken : null;
@@ -27,7 +27,7 @@ export default function FeedList() {
   };
 
   const { loadMore, loading, initialLoading } = usePaginatedList<Epigram>({
-    store: useFeedStore.getState(),
+    store: useMinFeedStore.getState(),
     fetchFn: fetchEpigrams,
   });
 
