@@ -59,7 +59,7 @@ export default function Home() {
       <section className="bg-bg-100">
         <div className="tablet:gap-[380px] tablet:mt-[254px] mx-auto mt-[124px] mb-[200px] flex min-h-screen w-full max-w-[1316px] flex-col items-center justify-center">
           <motion.div initial="hidden" whileInView="visible" variants={ScrollInMotion} viewport={{ once: true }}>
-            <div className="pc:flex-row tablet:gap-[80px] mx-[24px] mb-[196px] flex flex-col items-start justify-center">
+            <div className="pc:flex-row pc:gap-[80px] mx-[24px] mb-[196px] flex flex-col items-start justify-center">
               <Image
                 src="/assets/images/rending/img_Desktop_landing01.png"
                 alt="명언, 글귀 등 공유글 예시 이미지"
@@ -84,7 +84,7 @@ export default function Home() {
           </motion.div>
 
           <motion.div initial="hidden" whileInView="visible" variants={ScrollInMotion} viewport={{ once: true }}>
-            <div className="pc:flex-row-reverse tablet:gap-[80px] mx-[24px] mb-[196px] flex flex-col items-start justify-center">
+            <div className="pc:flex-row-reverse pc:gap-[80px] mx-[24px] mb-[196px] flex flex-col items-start justify-center">
               <Image
                 src="/assets/images/rending/img_Desktop_landing02.png"
                 alt="감정 상태 선택 예시 이미지"
@@ -93,7 +93,7 @@ export default function Home() {
                 quality={100}
                 className="tablet:w-[384px] pc:w-[744px] pc:h-[388px] tablet:h-[240px] tablet:rounded-[16px] mb-[40px] h-[209px] w-[312px] object-contain"
               />
-              <div className="pc:justify-start pc:w-[371px] flex h-[106px] w-[312px] flex-col justify-center text-right">
+              <div className="pc:justify-start pc:w-[371px] tablet:ml-[75px] pc:ml-[0px] flex h-[106px] w-[312px] flex-col justify-center text-right">
                 <h5 className="text-pre-2xl pc:text-pre-3xl text-right font-bold">
                   감정 상태에 따라,
                   <br />
@@ -107,7 +107,7 @@ export default function Home() {
           </motion.div>
 
           <motion.div initial="hidden" whileInView="visible" variants={ScrollInMotion} viewport={{ once: true }}>
-            <div className="pc:flex-row tablet:gap-[80px] mx-[24px] mb-[196px] flex flex-col items-start justify-center">
+            <div className="pc:flex-row pc:gap-[80px] mx-[24px] mb-[196px] flex flex-col items-start justify-center">
               <Image
                 src="/assets/images/rending/img_Desktop_landing03.png"
                 alt="감정 상태 통계 예시 이미지"
