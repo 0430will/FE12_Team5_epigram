@@ -1,5 +1,3 @@
-'use client';
-
 import EmotionPieChart from './_components/EmotionPieChart';
 import EmotionRankList from './_components/EmotionRankList';
 import MyCalender from './_components/MyCalender/MyCalender';
