@@ -152,7 +152,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return session;
     },
     async redirect() {
-      return `${process.env.NEXTAUTH_URL}/main`;
+      return `${process.env.NEXTAUTH_URL}`;
     },
   },
 });
