@@ -102,7 +102,7 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
     console.log(`오늘의 감정 등록 완료: ${emotion}`);
     setSelectedEmotion(emotion);
 
-    if (emotionType === 'main') {
+    if (emotionType) {
       localStorage.setItem('todayEmotion', emotion);
     }
   };
