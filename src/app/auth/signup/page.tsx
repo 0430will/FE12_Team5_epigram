@@ -169,7 +169,7 @@ export default function Page() {
           가입하기
         </button>
         {error && (
-          <p className="text-state-error text-pre-xs font-regular tablet:text-pre-md pc:text-pre-lg tablet:bottom-[-26px] pc:bottom-[-28px] absolute bottom-[-22px]">
+          <p className="text-state-error text-pre-xs font-regular tablet:text-pre-md pc:text-pre-lg tablet:bottom-[-26px] pc:bottom-[-28px] bottom-[-22px]">
             {error}
           </p>
         )}

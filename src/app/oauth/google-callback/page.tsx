@@ -58,7 +58,7 @@ export default function GoogleOAuthCallback() {
         const data = await response.json();
         console.log('Swagger API 응답:', data);
         // 성공 시, 원하는 페이지로 리디렉션
-        router.push('/epigrams');
+        router.push('/main');
       } catch (error: unknown) {
         if (error instanceof Error) {
           console.error('Swagger API 호출 에러:', error.message);

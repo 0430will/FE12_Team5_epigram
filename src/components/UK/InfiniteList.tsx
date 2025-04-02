@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState, JSX } from "react";
+import React, { useEffect, useState, JSX } from 'react';
 
 interface FetchResult<T> {
   list: T[];
@@ -20,8 +20,8 @@ export default function InfiniteList<T extends { id: string | number }>({
   fetchItems,
   renderItem,
   limit = 5,
-  buttonText = "+ 더보기",
-  storageKey = "infinite_list",
+  buttonText = '+ 더보기',
+  storageKey = 'infinite_list',
 }: InfiniteListProps<T>) {
   const [items, setItems] = useState<T[]>([]);
   const [cursor, setCursor] = useState<number | null>(null);
@@ -30,14 +30,14 @@ export default function InfiniteList<T extends { id: string | number }>({
   const [shouldAutoLoad, setShouldAutoLoad] = useState(false);
 
   const isRefresh = (() => {
-    if (typeof window === "undefined") return false;
-    const entries = window.performance.getEntriesByType("navigation");
+    if (typeof window === 'undefined') return false;
+    const entries = window.performance.getEntriesByType('navigation');
     const nav = entries.length > 0 ? (entries[0] as PerformanceNavigationTiming) : null;
-    return nav?.type === "reload";
+    return nav?.type === 'reload';
   })();
 
   useEffect(() => {
-    if (typeof window !== "undefined" && isRefresh) {
+    if (typeof window !== 'undefined' && isRefresh) {
       localStorage.removeItem(`${storageKey}_items`);
       localStorage.removeItem(`${storageKey}_cursor`);
       localStorage.removeItem(`${storageKey}_hasMore`);
@@ -63,7 +63,7 @@ export default function InfiniteList<T extends { id: string | number }>({
       setShouldAutoLoad(shouldLoad);
     };
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       restore();
     }
   }, []);
@@ -75,7 +75,7 @@ export default function InfiniteList<T extends { id: string | number }>({
   }, [shouldAutoLoad]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       localStorage.setItem(`${storageKey}_items`, JSON.stringify(items));
       localStorage.setItem(`${storageKey}_cursor`, JSON.stringify(cursor));
       localStorage.setItem(`${storageKey}_hasMore`, JSON.stringify(hasMore));
@@ -99,8 +99,8 @@ export default function InfiniteList<T extends { id: string | number }>({
       window.history.replaceState({ scrollPosition }, '', window.location.pathname);
     };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
   const loadMore = async () => {
@@ -114,15 +114,13 @@ export default function InfiniteList<T extends { id: string | number }>({
         return;
       }
 
-      const newItems = data.list.filter(
-        (item) => !items.some((existing) => existing.id === item.id)
-      );
+      const newItems = data.list.filter((item) => !items.some((existing) => existing.id === item.id));
 
       setItems((prev) => [...prev, ...newItems]);
       setCursor(data.nextCursor);
       setHasMore(data.hasMore);
     } catch (error) {
-      console.error("데이터 로딩 실패:", error);
+      console.error('데이터 로딩 실패:', error);
       setHasMore(false);
     } finally {
       setLoading(false);
@@ -135,17 +133,17 @@ export default function InfiniteList<T extends { id: string | number }>({
         {items.map((item, index) =>
           React.cloneElement(renderItem(item, index), {
             key: `${item.id}_${index}`,
-          })
+          }),
         )}
       </ul>
 
-      {loading && <p className="text-center text-gray-500 mt-4">로딩 중...</p>}
+      {loading && <p className="mt-4 text-center text-gray-500">로딩 중...</p>}
 
       {!loading && hasMore && (
-        <div className="text-center mt-6">
+        <div className="mt-6 text-center">
           <button
             onClick={loadMore}
-            className="px-6 py-3 bg-blue-100 rounded-full text-blue-600 border border-blue-300 hover:bg-blue-200 transition"
+            className="rounded-full border border-blue-300 bg-blue-100 px-6 py-3 text-blue-600 transition hover:bg-blue-200"
           >
             {buttonText}
           </button>
