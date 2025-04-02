@@ -8,7 +8,11 @@ export const middleware = async (request: NextRequest) => {
   const refreshToken = cookieStore.get('refreshToken');
 
   // JWT 토큰을 가져오기 위한 getToken 사용
-  const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+    secureCookie: process.env.NEXTAUTH_URL?.startsWith('https://'),
+  });
   console.log('Token:', token); // token을 확인해봄
 
   const isAuthenticated = !!(accessToken?.value || refreshToken?.value || token);
