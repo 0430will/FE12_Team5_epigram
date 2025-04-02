@@ -1,57 +1,68 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { getComments } from '@/lib/Comment';
-import type { Comment } from '@/types/Comment';
+import React, { useEffect } from 'react';
 import { CommentItem } from './CommentItem';
 import { useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
+import { useCommentStore } from '@/stores/pageStores';
+import { getComments } from '@/lib/Comment';
+import { usePaginatedList } from '@/hooks/usePaginatedList';
+import Image from 'next/image';
+import { Comment } from '@/types/Comment';
 
 export default function CommentList() {
   const { data: session, status } = useSession();
-  const pathname = usePathname();
-
-  const [comments, setComments] = useState<Comment[]>([]);
-
   const token = status === 'authenticated' ? session?.user.accessToken : null;
 
-  const writerId = pathname.startsWith('/mypage') && session?.user.id ? Number(session.user.id) : undefined;
+  const writerId = session?.user.id ? Number(session.user.id) : undefined;
+
+  const { items: comments, hasMore } = useCommentStore();
+
+  const fetchComments = async (cursor?: number) => {
+    if (!token) return { list: [], totalCount: 0 };
+
+    const realCursor = cursor ?? 0;
+    return await getComments(token, 4, realCursor);
+  };
+
+  const { loadMore, loading } = usePaginatedList<Comment>({
+    store: useCommentStore.getState(),
+    fetchFn: fetchComments,
+  });
 
   useEffect(() => {
-    const fetchComments = async () => {
-      if (!token) return;
+    if (status === 'authenticated' && token && comments.length === 0) {
+      loadMore();
+    }
+  }, [status, token, comments.length]);
 
-      try {
-        const response = await getComments(token, 4, 0);
-        setComments(response.list);
-      } catch (error) {
-        console.error('댓글 불러오기 실패:', error);
-      }
-    };
-
-    fetchComments();
-  }, [token]); //세션이 바뀌면 댓글 다시 불러옴
-
-  if (status === 'loading') {
-    return <div>로딩 중...</div>;
-  }
-
-  if (!session) {
-    return <div>로그인이 필요합니다.</div>;
-  }
+  if (status === 'loading') return <div>로딩 중...</div>;
+  if (!session) return <div>로그인이 필요합니다.</div>;
 
   return (
-    <div className="w-full">
+    <div className="w-full space-y-4">
       {comments.map((comment) => (
         <CommentItem
           key={comment.id}
           comment={comment}
           token={token!}
-          onDelete={(id) => setComments((prev) => prev.filter((c) => c.id !== id))}
-          onSave={(updated) => setComments((prev) => prev.map((c) => (c.id === updated.id ? updated : c)))}
+          onDelete={() => {}}
+          onSave={() => {}}
           writerId={writerId}
         />
       ))}
+
+      {hasMore && (
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={loadMore}
+            className="pc:text-pre-xl pc:px-[40px] text-pre-md bg-bg-100 flex cursor-pointer gap-[4px] rounded-full border border-blue-500 px-[18px] py-[11.5px] font-medium text-blue-500 transition hover:bg-blue-900 hover:text-white"
+            disabled={loading}
+          >
+            <Image src="/assets/icons/plus.svg" width={24} height={24} alt="더보기" />
+            최신 댓글 더보기
+          </button>
+        </div>
+      )}
     </div>
   );
 }

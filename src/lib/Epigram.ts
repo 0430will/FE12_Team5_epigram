@@ -2,6 +2,7 @@ import { Epigram } from '@/types/Epigram';
 import { AddEpigram } from '@/components/EpigramForm';
 // @ts-expect-error : 타입스크립트가 notFound를 오류로 인식합니다. 작동은 잘 됩니다.
 import { notFound } from 'next/navigation';
+import { CommentList } from '@/types/Comment';
 
 // 에피그램 post
 export async function PostEpigram(epigrams: AddEpigram, token: string) {
@@ -173,5 +174,33 @@ export async function GetEpigram(id: number, token: string) {
     return null;
   }
   const data = await response.json();
+  return data;
+}
+
+//에피그램 댓글목록 조회
+export async function getEpigramComments(
+  token: string,
+  epigramId: number,
+  limit: number,
+  cursor?: number,
+): Promise<CommentList> {
+  let url = `${process.env.NEXT_PUBLIC_API_URL}/epigrams/${epigramId}/comments?limit=${limit}`;
+  if (cursor !== undefined) {
+    url += `&cursor=${cursor}`;
+  }
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('에피그램 댓글 목록 조회 실패');
+  }
+
+  const data: CommentList = await response.json();
   return data;
 }
