@@ -57,7 +57,7 @@ export default function Home() {
       </section>
 
       <section className="bg-bg-100">
-        <div className="pc:gap-[184px] tablet:mt-[254px] mx-auto mt-[124px] mb-[200px] flex min-h-screen w-full max-w-[1316px] flex-col items-center justify-center">
+        <div className="pc:gap-[184px] pc:mt-[240px] mx-auto mt-[124px] mb-[200px] flex min-h-screen w-full max-w-[1316px] flex-col items-center justify-center">
           <motion.div initial="hidden" whileInView="visible" variants={ScrollInMotion} viewport={{ once: true }}>
             <div className="pc:flex-row pc:gap-[80px] mx-[24px] mb-[196px] flex flex-col items-start justify-center">
               <Image
