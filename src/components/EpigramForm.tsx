@@ -3,6 +3,7 @@
 import { TagsInputWithList } from '@/components/TagsInputWithList';
 import { PatchEpigram, PostEpigram } from '@/lib/Epigram';
 import { EpigramTag } from '@/types/Epigram';
+import { notify } from '@/util/toast';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect } from 'react';
@@ -73,6 +74,7 @@ export default function EpigramForm({
     const allValues = watch();
     const response = await PostEpigram(allValues, token);
     if (!response) return;
+    notify({ type: 'success', message: '게시물이 작성되었습니다.' });
     router.push(`/feed/${response.id}`);
   };
 
@@ -81,6 +83,7 @@ export default function EpigramForm({
     const allValues = watch();
     const response = await PatchEpigram(allValues, initialValue.id, token);
     if (!response) return;
+    notify({ type: 'success', message: '게시물이 수정되었습니다.' });
     router.push(`/feed/${response.id}`);
   };
 

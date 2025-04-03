@@ -51,7 +51,7 @@ export default async function EpigramDetail({ params }: { params: PageParams }) 
               isValid
               isRounded
               className="bg-line-100 pc:!pl-[16px] inline-flex items-center justify-center gap-[5px] !px-[14px] !py-[6px] hover:bg-gray-100"
-              href={data.referenceUrl}
+              href={data.referenceUrl || `/feed/${id}`}
             >
               <span className="font-regular text-pre-md pc:text-pre-xl text-gray-300">왕도로 가는길</span>
               <div className="pc:w-[36px] pc:h-[36px] relative h-[20px] w-[20px]">
