@@ -4,3 +4,4 @@ import { createPaginatedListStore } from './paginatedListStore';
 
 export const useFeedStore = createPaginatedListStore<Epigram>();
 export const useCommentStore = createPaginatedListStore<Comment>();
+export const useMyCommentStore = createPaginatedListStore<Comment>();

@@ -1,6 +1,7 @@
 import TodayEmotion from '@/components/TodayEmotion';
 import TodayEpirams from './_conponents/todayEpigrams';
 import LatestEpigrams from './_conponents/LatestEpigrams';
+import LatestCommentSection from './_conponents/LatestCommentSection';
 
 export default function Page() {
   return (
@@ -20,6 +21,9 @@ export default function Page() {
           </div>
           <div className="pc:mb-[140px] mb-[56px]">
             <LatestEpigrams />
+          </div>
+          <div className="tablet:pb-[270px] pc:pb-[119px] pb-[114px]">
+            <LatestCommentSection />
           </div>
         </div>
       </div>

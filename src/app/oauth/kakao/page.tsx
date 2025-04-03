@@ -56,11 +56,13 @@ export default function KakaoRedirection() {
 
       const { accessToken, refreshToken, user } = data;
       const nickname = user.nickname;
+      const userId = user.id;
       Cookies.set('accessToken', accessToken, { expires: 7, path: '/' });
       Cookies.set('refreshToken', refreshToken, { expires: 7, path: '/' });
 
       console.log(data);
       localStorage.setItem('nickname', nickname);
+      localStorage.setItem('id', userId);
       console.log('Redirecting to /epigrams');
 
       router.push('/epigrams');
@@ -77,3 +79,49 @@ export default function KakaoRedirection() {
     </div>
   );
 }
+
+// export async function kakaoExchangeCode(authorizationCode: string) {
+//   try {
+//     // Kakao의 token endpoint에 POST 요청을 보내 액세스 토큰을 요청합니다.
+//     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signIn/KAKAO`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: new URLSearchParams({
+//         redirect_uri: process.env.KAKAO_REDIRECT_URI!,
+//         code: authorizationCode,
+//       }),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Failed to exchange authorization code');
+//     }
+
+//     const data = await response.json();
+//     const { access_token, refresh_token } = data;
+
+//     // 액세스 토큰을 사용해 Kakao 사용자 프로필 정보를 가져옵니다.
+//     const userProfileResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
+//       method: 'GET',
+//       headers: {
+//         Authorization: `Bearer ${access_token}`,
+//       },
+//     });
+
+//     if (!userProfileResponse.ok) {
+//       throw new Error('Failed to fetch user profile');
+//     }
+
+//     const userProfile = await userProfileResponse.json();
+
+//     return {
+//       user: userProfile,
+//       accessToken: access_token,
+//       refreshToken: refresh_token,
+//     };
+//   } catch (error) {
+//     console.error('Error during Kakao authentication:', error);
+//     throw new Error('Failed to exchange Kakao code');
+//   }
+// }

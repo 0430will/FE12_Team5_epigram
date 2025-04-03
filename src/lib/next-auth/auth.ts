@@ -3,7 +3,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { signinSchema, signupSchema } from '@/lib/validation/auth';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  debug: true,
   session: {
     strategy: 'jwt', //jwt 기반 인증
   },
@@ -49,15 +48,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             throw new Error('서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
           }
 
-          const user = await res.json();
-
-          return {
-            id: user.id,
-            email: user.email,
-            image: user.image,
-            accessToken: user.accessToken,
-            refreshToken: user.refreshToken,
+          const data = await res.json();
+          const user = {
+            id: String(data.user.id),
+            email: data.user.email ?? '',
+            nickname: data.user.nickname ?? '',
+            image: data.user.image ?? null,
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
           };
+          return user;
         }
         // 회원가입부분
         const signUpParse = signupSchema.safeParse(credentials); //zod스키마를 통한 유효성 검사
@@ -79,14 +79,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               throw new Error('서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
             }
 
-            const user = await res.json();
-
-            return {
-              id: user.user.id,
-              email: user.email,
-              accessToken: user.accessToken,
-              refreshToken: user.refreshToken,
+            const data = await res.json();
+            const user = {
+              id: String(data.user.id),
+              email: data.user.email ?? '',
+              nickname: data.user.nickname ?? '',
+              image: data.user.image ?? null,
+              accessToken: data.accessToken,
+              refreshToken: data.refreshToken,
             };
+            return user;
           } catch (error: unknown) {
             if (error instanceof Error) throw new Error('알 수 없는 오류가 발생하였습니다.');
           }
@@ -97,25 +99,60 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      // Google 로그인 시, OAuth 제공자에서 받은 토큰을 user 객체에 저장
+      if (account?.provider === 'google') {
+        const googleToken = account.id_token ?? account.access_token;
+        if (googleToken) {
+          user.accessToken = googleToken;
+          user.refreshToken = account.refresh_token ?? '';
+        }
+      }
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
+        token.id = user.id ?? '';
+        token.email = user.email ?? '';
+        token.nickname = (user as { nickname?: string }).nickname ?? '';
+        token.image = user.image ?? '';
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.iamge = user.image;
-        token.id = String(user.id);
-        token.email = user.email ?? token.email;
+      }
+      const isAccessTokenExpired = token.accessToken && token.exp && Date.now() >= token.exp * 1000;
+      if (isAccessTokenExpired) {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refreshToken: token.refreshToken }),
+          });
+
+          if (!res.ok) throw new Error('토큰 갱신 실패');
+
+          const data = await res.json();
+          token.accessToken = data.accessToken;
+        } catch (error) {
+          console.error('토큰 갱신 실패:', error);
+          return null;
+        }
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.id = String(token.id);
-      session.user.email = token.email ?? '';
-      session.accessToken = token.accessToken;
+      session.user = {
+        id: token.id,
+        email: token.email ?? '',
+        nickname: token.nickname ?? '',
+        image: token.image ?? null,
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
+        emailVerified: null,
+      };
       return session;
     },
-    async redirect({ baseUrl }) {
-      // 로그인 성공 후 리다이렉트할 기본 경로 설정 (예: /epigrams)
-      return baseUrl + '/epigrams';
+    async redirect() {
+      return 'http://localhost:3000/main';
     },
   },
 });

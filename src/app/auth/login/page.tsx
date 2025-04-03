@@ -40,7 +40,7 @@ export default function LoginPage() {
     }); // 응답 로그 확인
 
     if (res?.error) {
-      setError(res.error); // NextAuth에서 받은 에러 메시지를 그대로 사용
+      setError('이메일 또는 비밀번호가 다릅니다.'); // NextAuth에서 받은 에러 메시지를 그대로 사용
       return;
     }
 
@@ -115,7 +115,7 @@ export default function LoginPage() {
         <p className="font-pretendard flex w-full justify-end gap-2 text-[14px] leading-[24px] font-medium text-[#ABB8CE] md:text-[16px] md:leading-[26px] md:font-normal lg:text-[20px] lg:leading-[32px] lg:font-medium">
           회원이 아니신가요?
           <a
-            href="/signup"
+            href="/auth/signup"
             className="text-[14px] leading-[26px] font-medium text-[#454545] underline md:text-[16px] md:font-semibold lg:text-[20px] lg:leading-[26px] lg:font-medium"
           >
             가입하기
