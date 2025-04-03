@@ -121,7 +121,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
       const isAccessTokenExpired = Date.now() >= ((token.accessTokenExpires as number) ?? 0);
       if (isAccessTokenExpired) {
-        console.log('🔄 토큰 만료됨, 갱신 시도');
         try {
           const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`, {
             method: 'POST',
@@ -138,7 +137,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           return token;
         }
       }
-      console.log('✅ 저장된 토큰:', token);
       return token;
     },
     async session({ session, token }) {
