@@ -33,10 +33,10 @@ export default function SearchPage() {
 
   // 로컬 스토리지에서 최근 검색어 불러오기
   useEffect(() => {
-    console.log('✅ useEffect 실행됨!');
+    console.log('useEffect 실행됨!');
   
     const savedSearches = localStorage.getItem('recentSearches');
-    console.log('📦 저장된 검색어:', savedSearches);
+    console.log('저장된 검색어:', savedSearches);
   
     if (savedSearches) {
       setRecentSearches(JSON.parse(savedSearches));
