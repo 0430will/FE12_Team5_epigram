@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { GetEpigram } from '@/lib/Epigram';
 import { auth } from '@/lib/next-auth/auth';
 import EpigramLikedButton from './EpigramLikedButton';
+import EpigramDetailKebab from './EpigramDetailKebab';
 
 type PageParams = Promise<{ id: string }>;
 
@@ -34,9 +35,7 @@ export default async function EpigramDetail({ params }: { params: PageParams }) 
                   </span>
                 ))}
               </div>
-              {Number(writerId) === data.writerId && (
-                <Image className="cursor-pointer" src="/assets/icons/kebab.svg" width={24} height={24} alt="더보기" />
-              )}
+              {Number(writerId) === data.writerId && <EpigramDetailKebab />}
             </div>
             <h1 className="text-iro-2xl text-black-700 font-iropke font-normal">{data.content}</h1>
             <p className="text-iro-lg font-regular font-iropke text-end text-blue-400">- {data.author} -</p>

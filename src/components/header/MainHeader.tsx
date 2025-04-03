@@ -87,7 +87,7 @@ export default function MainHeader() {
               <span className="text-pre-md tablet:inline text-[var(--color-black-500)]">{session?.user.nickname}</span>
             </div>
             {isDropdown && ( //드롭다운
-              <div className="absolute right-0 w-[90px] rounded-md border border-gray-100 bg-white text-center shadow-lg">
+              <div className="absolute right-0 z-1 w-[90px] rounded-md border border-gray-100 bg-white text-center shadow-lg">
                 <div className="text-pre-md font-weight-regular cursor-pointer border-b border-gray-100 p-2 hover:bg-gray-200">
                   <Link href="/mypage" onClick={() => setIsDropdown(false)}>
                     마이 프로필

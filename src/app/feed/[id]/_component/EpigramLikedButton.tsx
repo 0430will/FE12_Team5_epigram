@@ -43,7 +43,7 @@ export default function EpigramLikedButton({ isLiked, likeCount }: { isLiked: bo
       isValid
       isRounded
       onClick={() => OnClickLiked()}
-      className={`${islike ? 'bg-blue-500' : 'bg-black-600'} flex items-center justify-center gap-[4px] !px-[14px] !py-[6px]`}
+      className={`${islike ? 'bg-black-600' : 'bg-blue-500'} flex items-center justify-center gap-[4px] !px-[14px] !py-[6px]`}
     >
       <Image src="/assets/icons/like.svg" width={20} height={20} alt="좋아요" />
       <span className="text-pre-lg leading-[24px] font-semibold text-blue-100">{count}</span>

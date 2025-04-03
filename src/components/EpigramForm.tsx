@@ -142,7 +142,9 @@ export default function EpigramForm({
                 저자
               </label>
               <div className="relative">
-                <span className="text-pre-lg text-state-error absolute top-[2px] font-medium">*</span>
+                <span className="text-pre-lg text-state-error tablet:text-pre-lg pc:text-pre-xl absolute top-[2px] font-medium">
+                  *
+                </span>
               </div>
             </div>
             <div className="flex flex-col gap-[12px]">

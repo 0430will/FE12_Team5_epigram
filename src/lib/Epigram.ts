@@ -228,3 +228,21 @@ export async function LikeEpigram(method: string, id: number, token: string) {
     }
   }
 }
+
+export async function DeleteEpigram(id: number, token: string) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    if (response.status == 404) {
+      notFound();
+    }
+    return null;
+  }
+  const data = await response.json();
+  return data;
+}
