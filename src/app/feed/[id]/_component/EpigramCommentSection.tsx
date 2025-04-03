@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import EpigramCommentList from './EpigramCommentList';
 import { createComment } from '@/lib/Comment';
 import type { Comment } from '@/types/Comment';
@@ -19,32 +19,89 @@ export default function EpigramCommentSection() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [totalCount, setTotalCount] = useState(0);
 
+  const [cursor, setCursor] = useState<number | null>(null); // 마지막 댓글 id
+  const [hasMore, setHasMore] = useState(true); // 더 불러올 댓글이 있는지 여부
+  const [isLoading, setIsLoading] = useState(false); // 중복 요청 방지
+
+  const observerRef = useRef<HTMLDivElement | null>(null);
+  const observer = useRef<IntersectionObserver | null>(null);
+
   const token = session?.user.accessToken;
   const userImage = session?.user?.image;
 
   useEffect(() => {
     if (!token || !epigramId || Number.isNaN(epigramId)) return;
 
-    const fetch = async () => {
+    const fetchInital = async () => {
       try {
-        const res = await getEpigramComments(token, epigramId, 50);
+        const res = await getEpigramComments(token, epigramId, 3);
 
         setComments(res.list);
         setTotalCount(res.totalCount);
+
+        if (res.list.length < 3) {
+          setHasMore(false);
+        } else {
+          const lastId = res.list[res.list.length - 1].id;
+          setCursor(lastId); // 다음 커서 설정
+        }
       } catch (err) {
-        console.error('댓글 불러오기 실패', err);
+        console.error('댓글 초기 불러오기 실패', err);
       }
     };
 
-    fetch();
+    fetchInital();
   }, [epigramId, token]);
+
+  useEffect(() => {
+    if (observer.current) observer.current.disconnect();
+    if (!hasMore || isLoading) return;
+
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchMoreComments();
+        }
+      },
+      { threshold: 1.0, rootMargin: '200px' },
+    );
+    if (observerRef.current) {
+      observer.current.observe(observerRef.current);
+    }
+    return () => observer.current?.disconnect();
+  }, [comments, hasMore, isLoading]);
+
+  const fetchMoreComments = async () => {
+    if (!token || !epigramId || !cursor) return;
+
+    setIsLoading(true);
+    try {
+      const res = await getEpigramComments(token, epigramId, 3, cursor);
+
+      if (res.list.length > 0) {
+        setComments((prev) => [...prev, ...res.list]);
+
+        if (res.list.length < 3) {
+          setHasMore(false); // 마지막 페이지 도달
+        } else {
+          const lastId = res.list[res.list.length - 1].id;
+          setCursor(lastId); // 다음 커서 업데이트
+        }
+      } else {
+        setHasMore(false);
+      }
+    } catch (err) {
+      console.error('추가 댓글 불러오기 실패', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleCreate = async (content: string, isPrivate: boolean) => {
     if (!token) {
       alert('로그인이 필요합니다.');
       return;
     }
-
     try {
       const response = await createComment(token, epigramId, content, isPrivate);
 
@@ -76,6 +133,8 @@ export default function EpigramCommentSection() {
         setComments={setComments}
         setTotalCount={setTotalCount}
       />
+      <div ref={observerRef} className="h-4" />
+      {isLoading && <div className="text-center text-sm text-gray-500">댓글 불러오는 중...</div>}
     </div>
   );
 }
