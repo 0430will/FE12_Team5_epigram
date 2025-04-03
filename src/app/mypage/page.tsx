@@ -1,5 +1,5 @@
-import EmotionPieChart from './_components/EmotionPieChart';
-import EmotionRankList from './_components/EmotionRankList';
+import EmotionPieChart from './_components/MyChart/EmotionPieChart';
+import EmotionRankList from './_components/MyChart/EmotionRankList';
 import MyCalender from './_components/MyCalender/MyCalender';
 import MyTabMenu from './_components/MyTabMenu';
 import TodayEmotion from '@/components/TodayEmotion';
