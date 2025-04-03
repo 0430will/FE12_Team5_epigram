@@ -208,12 +208,12 @@ export default function Home() {
             </motion.div>
             <motion.div initial="hidden" whileInView="visible" variants={ScrollInMotion} viewport={{ once: true }}>
               <motion.div {...DampingMotion}>
-                <Link
-                  href={'/main'}
+                <button
+                  onClick={() => (window.location.href = '/main')}
                   className="pc:text-pre-xl pc:px-[108px] pc:py-[16px] bg-black-500 text-pre-lg rounded-[12px] px-[28px] py-[11px] font-semibold text-blue-100"
                 >
                   시작하기
-                </Link>
+                </button>
               </motion.div>
             </motion.div>
           </div>
