@@ -18,8 +18,10 @@ export default async function MyPage() {
         <div className="relative top-[-53px] m-auto max-w-[680px] px-[24px]">
           <MyUserProfile />
         </div>
-        <TodayEmotionHeader />
-        <TodayEmotion emotionType="mypage" />
+        <div className="pc:pb-[165px] tablet:pb-[62px] pc:gap-[48px] m-auto flex h-full w-full max-w-[680px] flex-col justify-center gap-[16px] px-[24px] pt-[58px] pb-[58px]">
+          <TodayEmotionHeader />
+          <TodayEmotion emotionType="mypage" />
+        </div>
         <div className="pc:pb-[82px] tablet:pb-[56px] pc:gap-[48px] m-auto flex h-full w-full max-w-[680px] flex-col justify-center gap-[16px] px-[24px] pt-[58px] pb-[40px]">
           <MyCalender writerId={writerId} />
           <h1 className="pc:text-pre-2xl text-pre-lg font-weight-semibold">감정 차트</h1>
