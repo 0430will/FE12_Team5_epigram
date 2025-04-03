@@ -31,14 +31,15 @@ export default function EpigramDetailKebab() {
 
   return (
     <div className="relative">
-      <Image
-        className="cursor-pointer"
-        src="/assets/icons/kebab.svg"
-        width={24}
-        height={24}
-        alt="더보기"
-        onClick={() => setIsKebab((pre) => !pre)}
-      />
+      <div className="pc:h-[36px] pc:w-[36px] relative h-[24px] w-[24px]">
+        <Image
+          className="cursor-pointer"
+          src="/assets/icons/kebab.svg"
+          fill
+          alt="더보기"
+          onClick={() => setIsKebab((pre) => !pre)}
+        />
+      </div>
       {isKebab && (
         <Kebab
           label1="수정하기"

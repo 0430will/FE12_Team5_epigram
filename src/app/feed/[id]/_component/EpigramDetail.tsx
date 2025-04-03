@@ -25,31 +25,38 @@ export default async function EpigramDetail({ params }: { params: PageParams }) 
   return (
     <div>
       <div className="border-line-100 relative flex w-full items-center justify-center border-b-[1px] bg-blue-100 bg-[repeating-linear-gradient(0deg,#ffffff_0px,#ffffff_24px,#F2F2F2_24px,#F2F2F2_25px)]">
-        <div className="flex w-full flex-col gap-[32px] px-[24px] pt-[40px] pb-[16px]">
-          <div className="flex flex-col gap-[16px]">
+        <div className="tablet:max-w-[384px] tablet:px-0 pc:max-w-[640px] tablet:pb-[40px] flex w-full flex-col gap-[32px] px-[24px] pt-[40px] pb-[16px]">
+          <div className="tablet:gap-[24px] pc:gap-[32px] flex flex-col gap-[16px]">
             <div className="flex w-full items-start justify-between">
               <div className="flex flex-wrap gap-[16px]">
                 {data.tags.map((value) => (
-                  <span className="text-pre-lg font-regular flex whitespace-nowrap text-blue-400" key={value.id}>
+                  <span
+                    className="text-pre-lg font-regular pc:text-pre-xl flex whitespace-nowrap text-blue-400"
+                    key={value.id}
+                  >
                     #{value.name}
                   </span>
                 ))}
               </div>
               {Number(writerId) === data.writerId && <EpigramDetailKebab />}
             </div>
-            <h1 className="text-iro-2xl text-black-700 font-iropke font-normal">{data.content}</h1>
-            <p className="text-iro-lg font-regular font-iropke text-end text-blue-400">- {data.author} -</p>
+            <h1 className="text-iro-2xl text-black-700 font-iropke pc:text-iro-3xl font-normal">{data.content}</h1>
+            <p className="text-iro-lg font-regular font-iropke tablet:text-iro-xl pc:text-iro-2xl text-end text-blue-400">
+              - {data.author} -
+            </p>
           </div>
-          <div className="flex items-center justify-center gap-[16px]">
+          <div className="pc:gap-[23px] flex items-center justify-center gap-[16px]">
             <EpigramLikedButton isLiked={data.isLiked} likeCount={data.likeCount} />
             <ServerButton
               isValid
               isRounded
-              className="bg-line-100 inline-flex items-center justify-center gap-[5px] !px-[14px] !py-[6px] hover:bg-blue-200"
+              className="bg-line-100 pc:!pl-[16px] inline-flex items-center justify-center gap-[5px] !px-[14px] !py-[6px] hover:bg-gray-100"
               href={data.referenceUrl}
             >
-              <span className="font-regular text-pre-md text-gray-300">왕도로 가는길</span>
-              <Image src="/assets/icons/link.svg" width={20} height={20} alt="출처" />
+              <span className="font-regular text-pre-md pc:text-pre-xl text-gray-300">왕도로 가는길</span>
+              <div className="pc:w-[36px] pc:h-[36px] relative h-[20px] w-[20px]">
+                <Image src="/assets/icons/link.svg" fill alt="출처" />
+              </div>
             </ServerButton>
           </div>
         </div>
