@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { DeleteEpigram } from '@/lib/Epigram';
 import { useSession } from 'next-auth/react';
+import Kebab from '@/components/Kebab';
+import { notify } from '@/util/toast';
 
 export default function EpigramDetailKebab() {
   const [isKebab, setIsKebab] = useState(false);
@@ -23,6 +25,7 @@ export default function EpigramDetailKebab() {
     const response = await DeleteEpigram(id, token);
     if (!response) return;
     modalRef.current?.close();
+    notify({ type: 'success', message: '게시물이 삭제되었습니다.' });
     router.push(`/feed`);
   };
 
@@ -37,33 +40,26 @@ export default function EpigramDetailKebab() {
         onClick={() => setIsKebab((pre) => !pre)}
       />
       {isKebab && (
-        <div className="bg-bg-100 absolute top-[31px] right-0 flex h-[80px] w-[97px] flex-col overflow-hidden rounded-[16px] border border-blue-300">
-          <div
-            className="hover:bg-sub-gray-2 text-pre-md font-regular text-black-600 flex flex-1 cursor-pointer items-center justify-center"
-            onClick={() => {
-              router.push(`/addepigram/${id}`);
-            }}
-          >
-            수정하기
-          </div>
-          <div
-            className="hover:bg-sub-gray-2 text-pre-md font-regular text-black-600 flex flex-1 cursor-pointer items-center justify-center"
-            onClick={() => {
-              modalRef.current?.open();
-            }}
-          >
-            삭제하기
-          </div>
-          <Modal
-            ref={modalRef}
-            type="confirm"
-            title="게시물을 삭제하시겠어요?"
-            description="게시물은 삭제 후 복구할 수 없어요."
-            actionLabel="삭제하기"
-            onAction={handleAction}
-          />
-        </div>
+        <Kebab
+          label1="수정하기"
+          onCLick1={() => {
+            router.push(`/addepigram/${id}`);
+          }}
+          label2="삭제하기"
+          onClick2={() => {
+            setIsKebab(false);
+            modalRef.current?.open();
+          }}
+        />
       )}
+      <Modal
+        ref={modalRef}
+        type="confirm"
+        title="게시물을 삭제하시겠어요?"
+        description="게시물은 삭제 후 복구할 수 없어요."
+        actionLabel="삭제하기"
+        onAction={handleAction}
+      />
     </div>
   );
 }
