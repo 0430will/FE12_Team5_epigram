@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 const ScrollInMotion = {
@@ -35,12 +34,12 @@ export default function Home() {
             </motion.div>
             <motion.div initial="hidden" whileInView="visible" variants={ScrollInMotion} viewport={{ once: true }}>
               <motion.div {...DampingMotion}>
-                <Link
-                  href={'/main'}
+                <button
+                  onClick={() => (window.location.href = '/main')}
                   className="bg-black-500 text-pre-lg pc:text-pre-xl pc:px-[108px] pc:py-[16px] rounded-[12px] px-[28px] py-[11px] font-semibold text-blue-100"
                 >
                   시작하기
-                </Link>
+                </button>
               </motion.div>
             </motion.div>
           </div>
