@@ -3,6 +3,7 @@
 import { GetMonthEmotion } from '@/lib/Emotionlog';
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useEmotionContext } from '../EmotionContext';
 // import Image from 'next/image';
 
 interface EmotionData {
@@ -21,6 +22,7 @@ const emotionMapping: Record<string, { image: string; name: string }> = {
 export default function EmotionList() {
   const [emotions, setEmotions] = useState<EmotionData[]>([]);
   const { data: session } = useSession();
+  const { todayEmotion } = useEmotionContext();
 
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -57,7 +59,7 @@ export default function EmotionList() {
     };
 
     fetchEmotions();
-  }, [session]);
+  }, [session, todayEmotion]);
 
   return (
     <div className="flex h-full w-full flex-col justify-center gap-[8px] empty:hidden">

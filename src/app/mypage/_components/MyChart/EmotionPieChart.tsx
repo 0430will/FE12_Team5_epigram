@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { GetMonthEmotion } from '@/lib/Emotionlog'; // 경로 맞게 수정
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import NonEmotionChart from './NonEmotionChart';
+import { useEmotionContext } from '../EmotionContext';
 // import Image from 'next/image';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6B6B'];
@@ -22,6 +23,7 @@ export default function EmotionPieChart() {
   const [chartData, setChartData] = useState<{ name: string; value: number }[]>([]);
   const [topEmotion, setTopEmotion] = useState<{ image: string; name: string } | null>(null);
   const [hasData, setHasData] = useState(true);
+  const { todayEmotion } = useEmotionContext();
 
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -60,7 +62,7 @@ export default function EmotionPieChart() {
       }
     };
     fetchData();
-  }, [session]);
+  }, [session, todayEmotion]);
 
   if (!hasData) {
     return <NonEmotionChart message="이번달의 감정 기록이 없습니다." />;

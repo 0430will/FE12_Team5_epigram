@@ -4,6 +4,7 @@ import { PostTodayEmotion } from '@/lib/Emotionlog';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { useEmotionContext } from '@/app/mypage/_components/EmotionContext';
 
 const EmotionData = {
   감동: {
@@ -78,6 +79,7 @@ function Emotion({ emotion, isSelected, isDisabled, onClick, emotionType }: Emot
 export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
   const { data: session } = useSession();
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey | null>(null);
+  const { setTodayEmotion } = useEmotionContext();
 
   useEffect(() => {
     if (emotionType === 'main') {
@@ -105,6 +107,7 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
     if (emotionType) {
       localStorage.setItem('todayEmotion', emotion);
     }
+    setTodayEmotion(EmotionData[emotion].name);
   };
 
   return (
