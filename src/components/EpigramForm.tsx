@@ -110,7 +110,7 @@ export default function EpigramForm({
         <div className="pc:gap-[54px] flex flex-col gap-[40px]">
           <div className="pc:gap-[24px] flex flex-col gap-[8px]">
             <div className="flex justify-between">
-              <div className="flex items-center justify-center gap-[4px]">
+              <div className="flex justify-center gap-[4px]">
                 <label
                   htmlFor="content"
                   className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
@@ -137,7 +137,7 @@ export default function EpigramForm({
             />
           </div>
           <div className="pc:gap-[16px] flex flex-col gap-[8px]">
-            <div className="flex items-center justify-center gap-[4px]">
+            <div className="flex gap-[4px]">
               <label
                 htmlFor="author"
                 className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
@@ -192,7 +192,7 @@ export default function EpigramForm({
             </div>
           </div>
           <div className="pc:gap-[16px] flex flex-col gap-[8px]">
-            <div className="flex items-center justify-center gap-[4px]">
+            <div className="flex gap-[4px]">
               <label
                 htmlFor="referenceTitle"
                 className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
