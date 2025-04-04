@@ -60,7 +60,7 @@ export default function EmotionList() {
   }, [session]);
 
   return (
-    <div className="flex h-full w-full flex-col justify-center gap-[8px]">
+    <div className="flex h-full w-full flex-col justify-center gap-[8px] empty:hidden">
       {emotions.map((emotion, index) => {
         const mapped = emotionMapping[emotion.key];
         if (!mapped) return null;
