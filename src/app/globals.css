@@ -18,6 +18,10 @@ body {
   src: url('../../public/assets/fonts/IropkeBatangM.woff');
 }
 
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../../public/assets/fonts/PretendardVariable.woff2');
+}
 
 @layer components {
   .custom-scrollbar::-webkit-scrollbar {
