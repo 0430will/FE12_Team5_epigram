@@ -8,16 +8,18 @@ import Image from 'next/image';
 import SkeletonFeedCard from '@/components/skeletons/SkeletonFeedCard';
 import EmptyState from '@/components/EmptyState';
 import { getEpigramsList } from '@/lib/Epigram';
-import { useFeedStore } from '@/stores/pageStores';
+import { useMainFeedStore, useMyFeedStore } from '@/stores/pageStores';
 import { usePaginatedList } from '@/hooks/usePaginatedList';
 import { Epigram } from '@/types/Epigram';
 
 export default function FeedList() {
   const pathname = usePathname();
-  const { items: epigrams, hasMore } = useFeedStore();
-
   const { data: session, status } = useSession();
   const token = status === 'authenticated' ? session?.user.accessToken : null;
+
+  // 경로에 따라 적절한 store 선택
+  const useFeedStore = pathname.startsWith('/mypage') ? useMyFeedStore : useMainFeedStore;
+  const { items: epigrams, hasMore } = useFeedStore();
 
   const fetchEpigrams = async (cursor?: number) => {
     if (!token) return { list: [], totalCount: 0 };

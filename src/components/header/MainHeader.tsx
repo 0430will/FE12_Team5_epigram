@@ -27,7 +27,7 @@ export default function MainHeader() {
           <div className="flex items-center gap-[12px]">
             {/* 모바일에서만 보이는 메뉴 아이콘 */}
             <div
-              className="mobile:flex mobile:items-center tablet:hidden h-8 w-auto"
+              className="mobile:flex mobile:items-center tablet:hidden h-8 w-auto cursor-pointer"
               onClick={(e) => {
                 //사이드바 열기
                 e.stopPropagation();
@@ -37,22 +37,24 @@ export default function MainHeader() {
               <Image src="/assets/icons/gnb-menu.svg" alt="Menu Icon" width={24} height={24} className="object-cover" />
             </div>
             {/* 로고 + Epigram 텍스트 */}
-            <div className="flex items-center gap-[4px]">
-              <div className="h-8 w-8">
-                <Image
-                  src="/assets/images/logo.png"
-                  alt="Epigram Logo"
-                  width={36}
-                  height={36}
-                  className="rounded-full object-cover"
-                />
-              </div>
-              <span
-                className="tablet:text-[var(--text-mon-xxs)] tablet:leading-[var(--text-mon-lg--line-height)] pc:text-[var(--text-mon-sm)] pc:leading-[var(--text-mon-lg--line-height)] leading-[var(--text-mon-lg--line-height)] font-black tracking-normal text-[var(--text-mon-xxs)]"
-                style={{ fontFamily: 'var(--font-montserrat)', color: 'var(--color-black-900)', fontWeight: '900' }}
-              >
-                Epigram
-              </span>
+            <div>
+              <Link href="/main" className="flex items-center gap-[4px]">
+                <div className="h-8 w-8">
+                  <Image
+                    src="/assets/images/logo.png"
+                    alt="Epigram Logo"
+                    width={36}
+                    height={36}
+                    className="rounded-full object-cover"
+                  />
+                </div>
+                <span
+                  className="tablet:text-[var(--text-mon-xxs)] tablet:leading-[var(--text-mon-lg--line-height)] pc:text-[var(--text-mon-sm)] pc:leading-[var(--text-mon-lg--line-height)] leading-[var(--text-mon-lg--line-height)] font-black tracking-normal text-[var(--text-mon-xxs)]"
+                  style={{ fontFamily: 'var(--font-montserrat)', color: 'var(--color-black-900)', fontWeight: '900' }}
+                >
+                  Epigram
+                </span>
+              </Link>
             </div>
             {/* 네비게이션 메뉴 (피드, 검색) */}
             <nav
@@ -70,7 +72,7 @@ export default function MainHeader() {
           {/* 유저 프로필 */}
           <div className="relative">
             <div
-              className="flex items-center gap-2"
+              className="flex cursor-pointer items-center gap-2"
               onClick={(e) => {
                 // 드롭다운버튼 열기
                 e.stopPropagation();

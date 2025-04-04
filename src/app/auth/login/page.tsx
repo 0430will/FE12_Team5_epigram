@@ -56,7 +56,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="mx-auto flex w-full max-w-[312px] flex-col items-center justify-center md:max-w-[384px] lg:max-w-[640px]">
+      <div className="tablet:max-w-none mx-auto flex w-full max-w-[384px] flex-col items-center justify-center">
         <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-[10px]">
           {/* 이메일 입력 */}
           <div className="flex flex-col items-start gap-[8px]">
@@ -85,7 +85,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute top-1/2 right-4 flex -translate-y-1/2 items-center justify-center"
+                className="absolute top-1/2 right-4 flex -translate-y-1/2 cursor-pointer items-center justify-center"
               >
                 <Image
                   src={showPassword ? '/assets/icons/visibility_on.svg' : '/assets/icons/visibility_off.svg'}
@@ -102,7 +102,7 @@ export default function LoginPage() {
           {/* 로그인 버튼 */}
           <button
             type="submit"
-            className={`font-pretendard h-[44px] w-full rounded-[12px] text-[16px] leading-[26px] font-semibold text-white transition ${
+            className={`font-pretendard mt-[10px] h-[44px] w-full rounded-[12px] text-[16px] leading-[26px] font-semibold text-white transition ${
               isValid ? 'cursor-pointer bg-[#454545]' : 'bg-[#CBD3E1] opacity-50'
             }`}
             disabled={!isValid}
@@ -111,12 +111,11 @@ export default function LoginPage() {
           </button>
           {error && <p className="text-sm text-red-500">{error}</p>}
         </form>
-        <div className="h-[10px]" />
-        <p className="font-pretendard flex w-full justify-end gap-2 text-[14px] leading-[24px] font-medium text-[#ABB8CE] md:text-[16px] md:leading-[26px] md:font-normal lg:text-[20px] lg:leading-[32px] lg:font-medium">
+        <p className="pc:text-pre-xl! tablet:text-pre-lg tablet:mb-[60px] text-pre-md mt-[10px] mb-[50px] flex w-full justify-end gap-2 font-medium text-[#ABB8CE]">
           회원이 아니신가요?
           <a
             href="/auth/signup"
-            className="text-[14px] leading-[26px] font-medium text-[#454545] underline md:text-[16px] md:font-semibold lg:text-[20px] lg:leading-[26px] lg:font-medium"
+            className="pc:text-pre-xl! tablet:text-pre-lg text-pre-md font-medium text-[#454545] underline"
           >
             가입하기
           </a>
