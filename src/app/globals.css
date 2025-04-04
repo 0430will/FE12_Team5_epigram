@@ -18,6 +18,7 @@ body {
   src: url('../../public/assets/fonts/IropkeBatangM.woff');
 }
 
+
 @layer components {
   .custom-scrollbar::-webkit-scrollbar {
     width: 16px;
