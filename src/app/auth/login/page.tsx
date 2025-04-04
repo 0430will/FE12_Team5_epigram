@@ -19,6 +19,8 @@ export default function LoginPage() {
   const { data: session, status } = useSession(); // 현재 로그인된 세션 정보 가져오기
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string>('');
+  const [errorEmail, setErrorEmail] = useState<string>('');
+  const [errorPassword, setErrorPassword] = useState<string>('');
   const router = useRouter();
 
   const {
@@ -32,6 +34,8 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormInputs) => {
     setError(''); // 기존 에러 초기화
+    setErrorEmail('');
+    setErrorPassword('');
 
     const res = await signIn('credentials', {
       email: data.email,
@@ -40,7 +44,13 @@ export default function LoginPage() {
     }); // 응답 로그 확인
 
     if (res?.error) {
-      setError('이메일 또는 비밀번호가 다릅니다.'); // NextAuth에서 받은 에러 메시지를 그대로 사용
+      if (res.error.includes('존재하지 않는 아이디')) {
+        setErrorEmail('존재하지 않는 아이디입니다.');
+      } else if (res.error.includes('비밀번호가 올바르지 않습니다')) {
+        setErrorPassword('비밀번호가 올바르지 않습니다.');
+      } else {
+        setError('알 수 없는 오류가 발생했습니다.');
+      }
       return;
     }
 
@@ -69,6 +79,7 @@ export default function LoginPage() {
               }`}
             />
             {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+            {errorEmail && <p className="text-sm text-red-500">{errorEmail}</p>}
           </div>
 
           {/* 비밀번호 입력 */}
@@ -97,6 +108,7 @@ export default function LoginPage() {
             </div>
 
             {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+            {errorPassword && <p className="text-sm text-red-500">{errorPassword}</p>}
           </div>
 
           {/* 로그인 버튼 */}
