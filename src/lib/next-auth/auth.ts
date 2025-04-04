@@ -38,17 +38,18 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             body: JSON.stringify(loginData),
           });
 
-          //비밀번호나 이메일이 틀릴시 401응답을 보내는게 정상
-          if (res.status >= 400 && res.status < 500) {
-            // 서버에서 400에러로 응답시..
-            throw new Error('이메일 또는 비밀번호가 다릅니다.');
-          }
-
-          if (!res?.ok || res === null) {
-            throw new Error('서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
-          }
-
           const data = await res.json();
+
+          if (!res.ok) {
+            if (res.status === 401) {
+              throw new Error('비밀번호가 올바르지 않습니다.');
+            }
+            if (res.status === 404) {
+              throw new Error('존재하지 않는 아이디입니다.');
+            }
+            throw new Error('알 수 없는 오류가 발생했습니다.');
+          }
+
           const user = {
             id: String(data.user.id),
             email: data.user.email ?? '',
