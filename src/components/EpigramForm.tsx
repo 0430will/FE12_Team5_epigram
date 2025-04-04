@@ -209,7 +209,7 @@ export default function EpigramForm({
               id="referenceTitle"
               className="text-pre-lg font-regular text-black-950 pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
               placeholder="출저 제목 입력"
-              {...register('referenceTitle', { required: '출저를 입력해주세요' })}
+              {...register('referenceTitle')}
             />
             <div className="relative flex w-full flex-col">
               <input
@@ -217,7 +217,6 @@ export default function EpigramForm({
                 className="text-pre-lg font-regular text-black-950 pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
                 placeholder="URL (ex. https://www.website.com)"
                 {...register('referenceUrl', {
-                  required: '',
                   pattern: {
                     value: /^https:\/\/.+/,
                     message: '올바른 URL을 입력해주세요. (ex. https://www.website.com)',
