@@ -11,11 +11,11 @@ import { useEmotionContext } from '../EmotionContext';
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6B6B'];
 
 const emotionMapping: Record<string, { image: string; name: string }> = {
-  MOVED: { image: '/assets/images/heartFace.png', name: '감동' },
-  HAPPY: { image: '/assets/images/smiling.png', name: '기쁨' },
-  WORRIED: { image: '/assets/images/thinking.png', name: '고민' },
-  SAD: { image: '/assets/images/sad.png', name: '슬픔' },
-  ANGRY: { image: '/assets/images/angry.png', name: '분노' },
+  MOVED: { image: '/assets/icons/heart_face.svg', name: '감동' },
+  HAPPY: { image: '/assets/icons/smiling_face.svg', name: '기쁨' },
+  WORRIED: { image: '/assets/icons/thinking_face.svg', name: '고민' },
+  SAD: { image: '/assets/icons/sad_face.svg', name: '슬픔' },
+  ANGRY: { image: '/assets/icons/angry_face.svg', name: '분노' },
 };
 
 export default function EmotionPieChart() {

@@ -8,23 +8,23 @@ import { useEmotionContext } from '@/app/mypage/_components/EmotionContext';
 
 const EmotionData = {
   감동: {
-    image: '/assets/images/heartFace.png',
+    image: '/assets/icons/heart_face.svg',
     name: 'MOVED',
   },
   기쁨: {
-    image: '/assets/images/smiling.png',
+    image: '/assets/icons/smiling_face.svg',
     name: 'HAPPY',
   },
   고민: {
-    image: '/assets/images/thinking.png',
+    image: '/assets/icons/thinking_face.svg',
     name: 'WORRIED',
   },
   슬픔: {
-    image: '/assets/images/sad.png',
+    image: '/assets/icons/sad_face.svg',
     name: 'SAD',
   },
   분노: {
-    image: '/assets/images/angry.png',
+    image: '/assets/icons/angry_face.svg',
     name: 'ANGRY',
   },
 };

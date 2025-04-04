@@ -4,13 +4,13 @@ import Image from 'next/image';
 
 export const EmotionData = {
   MOVED: {
-    image: '/assets/images/heartFace.png',
+    image: '/assets/icons/heart_face.svg',
     name: '감동',
   },
-  HAPPY: { image: '/assets/images/smiling.png', name: '기쁨' },
-  WORRIED: { image: '/assets/images/thinking.png', name: '걱정' },
-  SAD: { image: '/assets/images/sad.png', name: '슬픔' },
-  ANGRY: { image: '/assets/images/angry.png', name: '화남' },
+  HAPPY: { image: '/assets/icons/smiling_face.svg', name: '기쁨' },
+  WORRIED: { image: '/assets/icons/thinking_face.svg', name: '고민' },
+  SAD: { image: '/assets/icons/sad_face.svg', name: '슬픔' },
+  ANGRY: { image: '/assets/icons/angry_face.svg', name: '분노' },
 };
 
 export type EmotionKey = keyof typeof EmotionData;
