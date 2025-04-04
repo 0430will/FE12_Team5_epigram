@@ -74,8 +74,8 @@ export default function EmotionPieChart() {
             data={chartData}
             cx="50%"
             cy="50%"
-            innerRadius={40}
-            outerRadius={50}
+            innerRadius="80%"
+            outerRadius="100%"
             fill="#88884d8"
             paddingAngle={5}
             dataKey="value"
@@ -88,7 +88,7 @@ export default function EmotionPieChart() {
       </ResponsiveContainer>
       {topEmotion && (
         <div className="absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
-          <img src={topEmotion.image} alt={topEmotion.name} className="h-[24px] w-[24px]" />
+          <img src={topEmotion.image} alt={topEmotion.name} className="pc:w-[40px] pc:h-[40px] h-[24px] w-[24px]" />
           <span className="text-pre-lg font-weight-bold">{topEmotion.name}</span>
         </div>
       )}
