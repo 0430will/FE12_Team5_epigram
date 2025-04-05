@@ -45,7 +45,7 @@ export default function LoginPage() {
       } else if (res.error.includes('비밀번호가 올바르지 않습니다')) {
         setErrorPassword('비밀번호가 올바르지 않습니다.');
       } else {
-        setError('알 수 없는 오류가 발생했습니다.');
+        setError('알 수 없는 오류가 발생했습니다..');
       }
       return;
     }
