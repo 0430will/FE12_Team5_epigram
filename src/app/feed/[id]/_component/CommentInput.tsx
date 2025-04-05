@@ -24,7 +24,7 @@ export default function CommentInput({ userImage, onSubmit }: Props) {
     setIsPrivate(false);
   };
 
-  const fallbackImage = '/assets/icons/comment-user.svg';
+  const fallbackImage = '/assets/images/defaultUser.png';
   const profileImage = userImage?.trim() !== '' ? userImage! : fallbackImage;
 
   return (
