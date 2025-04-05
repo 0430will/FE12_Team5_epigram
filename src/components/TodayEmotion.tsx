@@ -80,11 +80,9 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey | null>(null);
 
   useEffect(() => {
-    if (emotionType === 'main') {
-      const storageEmotion = localStorage.getItem('todayEmotion') as EmotionKey | null;
-      if (storageEmotion && EmotionData[storageEmotion]) {
-        setSelectedEmotion(storageEmotion);
-      }
+    const storageEmotion = localStorage.getItem('todayEmotion') as EmotionKey | null;
+    if (storageEmotion && EmotionData[storageEmotion]) {
+      setSelectedEmotion(storageEmotion);
     }
   }, [emotionType]);
 
