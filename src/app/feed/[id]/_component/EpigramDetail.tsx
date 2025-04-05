@@ -1,12 +1,11 @@
-import ServerButton from '@/components/Button/ServerButton';
 import type { EpigramDetail } from '@/types/Epigram';
-import Image from 'next/image';
 // @ts-expect-error : 타입스크립트가 notFound를 오류로 인식합니다. 작동은 잘 됩니다.
 import { notFound } from 'next/navigation';
 import { GetEpigram } from '@/lib/Epigram';
 import { auth } from '@/lib/next-auth/auth';
 import EpigramLikedButton from './EpigramLikedButton';
 import EpigramDetailKebab from './EpigramDetailKebab';
+import EpigramUrlButton from './EpigramUrlButton';
 
 type PageParams = Promise<{ id: string }>;
 
@@ -47,17 +46,15 @@ export default async function EpigramDetail({ params }: { params: PageParams }) 
           </div>
           <div className="pc:gap-[23px] flex items-center justify-center gap-[16px]">
             <EpigramLikedButton isLiked={data.isLiked} likeCount={data.likeCount} />
-            <ServerButton
-              isValid
-              isRounded
-              className="bg-line-100 pc:!pl-[16px] inline-flex items-center justify-center gap-[5px] !px-[14px] !py-[6px] hover:bg-gray-100"
-              href={data.referenceUrl || `/feed/${id}`}
-            >
-              <span className="font-regular text-pre-md pc:text-pre-xl text-gray-300">왕도로 가는길</span>
-              <div className="pc:w-[36px] pc:h-[36px] relative h-[20px] w-[20px]">
-                <Image src="/assets/icons/link.svg" fill alt="출처" />
-              </div>
-            </ServerButton>
+            {data.referenceTitle ? (
+              data.referenceUrl ? (
+                <EpigramUrlButton isUrl href={data.referenceUrl} title={data.referenceTitle} />
+              ) : (
+                <EpigramUrlButton title={data.referenceTitle} />
+              )
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </div>
