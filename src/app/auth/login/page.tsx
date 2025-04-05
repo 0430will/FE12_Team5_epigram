@@ -7,13 +7,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 import SocialLogins from '../_component/SocialLogins';
+import { signinSchema } from '@/lib/validation/auth';
 
-const loginSchema = z.object({
-  email: z.string().min(1, '이메일은 필수 입력입니다.').email('유효한 이메일을 입력하세요.'),
-  password: z.string().min(1, '비밀번호는 필수 입력입니다.'),
-});
-
-type LoginFormInputs = z.infer<typeof loginSchema>;
+type LoginFormInputs = z.infer<typeof signinSchema>;
 
 export default function LoginPage() {
   const { data: session, status } = useSession(); // 현재 로그인된 세션 정보 가져오기
@@ -28,8 +24,8 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<LoginFormInputs>({
-    resolver: zodResolver(loginSchema),
-    mode: 'onBlur',
+    resolver: zodResolver(signinSchema),
+    mode: 'onChange',
   });
 
   const onSubmit = async (data: LoginFormInputs) => {
@@ -44,7 +40,7 @@ export default function LoginPage() {
     }); // 응답 로그 확인
 
     if (res?.error) {
-      if (res.error.includes('존재하지 않는 아이디')) {
+      if (res.error.includes('존재하지 않는 아이디입니다.')) {
         setErrorEmail('존재하지 않는 아이디입니다.');
       } else if (res.error.includes('비밀번호가 올바르지 않습니다')) {
         setErrorPassword('비밀번호가 올바르지 않습니다.');

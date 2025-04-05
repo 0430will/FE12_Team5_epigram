@@ -41,10 +41,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           const data = await res.json();
 
           if (!res.ok) {
-            if (res.status === 401) {
+            if (data?.message === '비밀번호가 일치하지 않습니다.') {
               throw new Error('비밀번호가 올바르지 않습니다.');
             }
-            if (res.status === 404) {
+            if (data?.message === '존재하지 않는 이메일입니다.') {
               throw new Error('존재하지 않는 아이디입니다.');
             }
             throw new Error('알 수 없는 오류가 발생했습니다.');
