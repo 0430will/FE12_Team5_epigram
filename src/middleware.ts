@@ -13,14 +13,7 @@ export const middleware = async (request: NextRequest) => {
     secret: process.env.NEXTAUTH_SECRET,
     secureCookie: process.env.NEXTAUTH_URL?.startsWith('https://'),
   });
-<<<<<<< HEAD
-  console.log('Token:', token); // token을 확인해봄
-
-  const isAuthenticated = !!(accessToken?.value || refreshToken?.value || token);
-  console.log(isAuthenticated);
-=======
   const isAuthenticated = !!(accessToken?.value || refreshToken?.value || token); // 쿠키 또는 JWT 토큰으로 인증 여부 확인
->>>>>>> develop
 
   const pathname = request.nextUrl.pathname;
 
@@ -46,9 +39,5 @@ export const middleware = async (request: NextRequest) => {
 };
 
 export const config = {
-<<<<<<< HEAD
-  matcher: ['/login', '/signup', '/mypage', '/auth/login', '/auth/signup', '/main', '/:path*'],
-=======
   matcher: ['/login', '/signup', '/mypage', '/epigrams', '/auth/login', '/auth/signup', '/main', '/feed', '/:path*'],
->>>>>>> develop
 };
