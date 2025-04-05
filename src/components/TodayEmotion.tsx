@@ -80,11 +80,9 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey | null>(null);
 
   useEffect(() => {
-    if (emotionType === 'main') {
-      const storageEmotion = localStorage.getItem('todayEmotion') as EmotionKey | null;
-      if (storageEmotion && EmotionData[storageEmotion]) {
-        setSelectedEmotion(storageEmotion);
-      }
+    const storageEmotion = localStorage.getItem('todayEmotion') as EmotionKey | null;
+    if (storageEmotion && EmotionData[storageEmotion]) {
+      setSelectedEmotion(storageEmotion);
     }
   }, [emotionType]);
 
@@ -102,7 +100,7 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
     console.log(`오늘의 감정 등록 완료: ${emotion}`);
     setSelectedEmotion(emotion);
 
-    if (emotionType === 'main') {
+    if (emotionType) {
       localStorage.setItem('todayEmotion', emotion);
     }
   };

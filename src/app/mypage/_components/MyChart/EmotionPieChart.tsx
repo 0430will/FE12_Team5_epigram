@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { GetMonthEmotion } from '@/lib/Emotionlog'; // 경로 맞게 수정
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import NonEmotionChart from './NonEmotionChart';
 // import Image from 'next/image';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6B6B'];
@@ -20,6 +21,7 @@ export default function EmotionPieChart() {
   const { data: session } = useSession();
   const [chartData, setChartData] = useState<{ name: string; value: number }[]>([]);
   const [topEmotion, setTopEmotion] = useState<{ image: string; name: string } | null>(null);
+  const [hasData, setHasData] = useState(true);
 
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -53,10 +55,16 @@ export default function EmotionPieChart() {
           prev.value > current.value ? prev : current,
         ).name;
         setTopEmotion(emotionMapping[topEmotionKey] || null);
+      } else {
+        setHasData(false);
       }
     };
     fetchData();
   }, [session]);
+
+  if (!hasData) {
+    return <NonEmotionChart message="이번달의 감정 기록이 없습니다." />;
+  }
 
   return (
     <div className="pc:h-[180px] relative flex h-[120px] w-full flex-col items-center">
@@ -66,8 +74,8 @@ export default function EmotionPieChart() {
             data={chartData}
             cx="50%"
             cy="50%"
-            innerRadius={40}
-            outerRadius={50}
+            innerRadius="80%"
+            outerRadius="100%"
             fill="#88884d8"
             paddingAngle={5}
             dataKey="value"
@@ -80,7 +88,7 @@ export default function EmotionPieChart() {
       </ResponsiveContainer>
       {topEmotion && (
         <div className="absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
-          <img src={topEmotion.image} alt={topEmotion.name} className="h-[24px] w-[24px]" />
+          <img src={topEmotion.image} alt={topEmotion.name} className="pc:w-[40px] pc:h-[40px] h-[24px] w-[24px]" />
           <span className="text-pre-lg font-weight-bold">{topEmotion.name}</span>
         </div>
       )}

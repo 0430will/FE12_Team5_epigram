@@ -13,6 +13,11 @@ body {
   font-family: "Pretendard Variable", Pretendard, sans-serif;
 }
 
+@font-face {
+  font-family: 'Iropke Batang';
+  src: url('../../public/assets/fonts/IropkeBatangM.woff');
+}
+
 @layer components {
   .custom-scrollbar::-webkit-scrollbar {
     width: 16px;

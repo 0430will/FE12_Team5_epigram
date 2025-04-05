@@ -13,22 +13,27 @@ export const middleware = async (request: NextRequest) => {
     secret: process.env.NEXTAUTH_SECRET,
     secureCookie: process.env.NEXTAUTH_URL?.startsWith('https://'),
   });
+<<<<<<< HEAD
   console.log('Token:', token); // token을 확인해봄
 
   const isAuthenticated = !!(accessToken?.value || refreshToken?.value || token);
   console.log(isAuthenticated);
+=======
+  const isAuthenticated = !!(accessToken?.value || refreshToken?.value || token); // 쿠키 또는 JWT 토큰으로 인증 여부 확인
+>>>>>>> develop
 
   const pathname = request.nextUrl.pathname;
 
   // 로그인 전 접근 가능한 경로 (로그인 전 경로에 대해서만 리디렉션을 처리)
-  const isBeforeLoginRoute = pathname === '/auth/login' || pathname === '/auth/signup';
+  const isBeforeLoginRoute = pathname === '/auth/login' || pathname === '/auth/signup' || pathname === '/';
 
   // 로그인 후 접근 가능한 경로 (로그인 후 경로에 대해서만 리디렉션을 처리)
-  const isAfterLoginRoute = pathname.startsWith('/mypage') || pathname.startsWith('/main');
+  const isAfterLoginRoute =
+    pathname.startsWith('/mypage') || pathname.startsWith('/main') || pathname.startsWith('/feed');
 
   // 로그인 전 경로에 로그인된 상태로 접근 시 홈 페이지로 리디렉션
   if (isBeforeLoginRoute && isAuthenticated) {
-    return NextResponse.redirect(new URL('/', request.nextUrl)); // 홈 페이지로 리디렉션
+    return NextResponse.redirect(new URL('/main', request.nextUrl)); // 홈 페이지로 리디렉션
   }
 
   // 로그인 후 경로에 로그인되지 않은 상태로 접근 시 로그인 페이지로 리디렉션
@@ -41,5 +46,9 @@ export const middleware = async (request: NextRequest) => {
 };
 
 export const config = {
+<<<<<<< HEAD
   matcher: ['/login', '/signup', '/mypage', '/auth/login', '/auth/signup', '/main', '/:path*'],
+=======
+  matcher: ['/login', '/signup', '/mypage', '/epigrams', '/auth/login', '/auth/signup', '/main', '/feed', '/:path*'],
+>>>>>>> develop
 };
