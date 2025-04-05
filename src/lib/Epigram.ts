@@ -4,11 +4,30 @@ import { AddEpigram } from '@/components/EpigramForm';
 import { notFound } from 'next/navigation';
 import { CommentList } from '@/types/Comment';
 
+interface EpigramRequestBody {
+  tags: string[];
+  referenceTitle: string;
+  author: string;
+  content: string;
+  referenceUrl?: string;
+}
+
 // 에피그램 post
 export async function PostEpigram(epigrams: AddEpigram, token: string) {
   const { tags, referenceUrl, referenceTitle, author, content } = epigrams;
 
   const tagslist = tags.map((item) => item.name);
+
+  const requestBody: EpigramRequestBody = {
+    tags: tagslist,
+    referenceTitle: referenceTitle,
+    author: author,
+    content: content,
+  };
+
+  if (referenceUrl) {
+    requestBody.referenceUrl = referenceUrl;
+  }
 
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams`, {
@@ -17,13 +36,7 @@ export async function PostEpigram(epigrams: AddEpigram, token: string) {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        tags: tagslist,
-        referenceUrl: referenceUrl,
-        referenceTitle: referenceTitle,
-        author: author,
-        content: content,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     if (response.status === 401) {
@@ -49,6 +62,17 @@ export async function PatchEpigram(epigrams: AddEpigram, id: number, token: stri
 
   const tagslist = tags.map((item) => item.name);
 
+  const requestBody: EpigramRequestBody = {
+    tags: tagslist,
+    referenceTitle: referenceTitle,
+    author: author,
+    content: content,
+  };
+
+  if (referenceUrl) {
+    requestBody.referenceUrl = referenceUrl;
+  }
+
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
       method: 'PATCH',
@@ -56,13 +80,7 @@ export async function PatchEpigram(epigrams: AddEpigram, id: number, token: stri
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        tags: tagslist,
-        referenceUrl: referenceUrl,
-        referenceTitle: referenceTitle,
-        author: author,
-        content: content,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     if (response.status === 401) {
