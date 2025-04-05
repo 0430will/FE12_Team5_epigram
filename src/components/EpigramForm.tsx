@@ -50,6 +50,7 @@ export default function EpigramForm({
   const { data: session, status } = useSession();
   const router = useRouter();
   const token = status === 'authenticated' ? session?.user.accessToken : null;
+  const nickName = status === 'authenticated' ? session?.user.nickname : null;
 
   const selectedOption = watch('authorSelected');
   const author = watch('author');
@@ -73,7 +74,9 @@ export default function EpigramForm({
     if (!token) return;
     const allValues = watch();
     const response = await PostEpigram(allValues, token);
-    if (!response) return;
+    if (!response) {
+      return;
+    }
     notify({ type: 'success', message: '게시물이 작성되었습니다.' });
     router.push(`/feed/${response.id}`);
   };
@@ -82,7 +85,9 @@ export default function EpigramForm({
     if (!initialValue?.id || !token) return;
     const allValues = watch();
     const response = await PatchEpigram(allValues, initialValue.id, token);
-    if (!response) return;
+    if (!response) {
+      return;
+    }
     notify({ type: 'success', message: '게시물이 수정되었습니다.' });
     router.push(`/feed/${response.id}`);
   };
@@ -90,8 +95,11 @@ export default function EpigramForm({
   const SelectForm = submitType === '작성하기' ? SubmitPostForm : SubmitPatchForm;
 
   useEffect(() => {
-    if (selectedOption === '알 수 없음' || selectedOption === '본인') {
+    if (selectedOption === '알 수 없음') {
       setValue('author', selectedOption);
+    } else if (selectedOption === '본인') {
+      if (!nickName) return;
+      setValue('author', nickName);
     } else {
       setValue('author', initialValue?.author || '');
     }
@@ -208,7 +216,7 @@ export default function EpigramForm({
             <input
               id="referenceTitle"
               className="text-pre-lg font-regular text-black-950 pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
-              placeholder="출저 제목 입력"
+              placeholder="출처 제목 입력"
               {...register('referenceTitle')}
             />
             <div className="relative flex w-full flex-col">
