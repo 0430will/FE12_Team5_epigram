@@ -23,6 +23,6 @@
     },
     "types": ["node", "next"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/mypage/_components/Emotion"],
   "exclude": ["node_modules"]
 }

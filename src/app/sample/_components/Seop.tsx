@@ -18,7 +18,6 @@ export default function EmotionPieChart() {
 
   useEffect(() => {
     if (!session?.user) return;
-
     const fetchData = async () => {
       console.log('User ID:', session.user);
       const userId = Number(session.user.id);

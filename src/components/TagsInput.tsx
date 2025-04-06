@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { EpigramTag } from '@/types/Epigram';
+import { z } from 'zod';
 
 interface TagsInputProps {
   onAddTag: (tag: EpigramTag) => void; // 부모로부터 태그 추가 함수 받기
@@ -11,9 +12,15 @@ interface TagsInputProps {
 export function TagsInput({ onAddTag, tags }: TagsInputProps) {
   const [inputValue, setInputValue] = useState<string>('');
 
+  const tagSchema = z
+    .string()
+    .max(10, '최대 10자까지 입력할 수 있습니다.')
+    .transform((value) => value.replace(/[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]/g, ''));
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length <= 10) {
-      setInputValue(e.target.value);
+    const result = tagSchema.safeParse(e.target.value);
+    if (result.success) {
+      setInputValue(result.data);
     }
   };
 

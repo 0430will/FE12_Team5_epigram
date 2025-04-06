@@ -2,28 +2,29 @@
 
 import { PostTodayEmotion } from '@/lib/Emotionlog';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { useEmotionContext } from '@/app/mypage/_components/EmotionContext';
 
 const EmotionData = {
   감동: {
-    image: '/assets/images/heartFace.png',
+    image: '/assets/icons/heart_face.svg',
     name: 'MOVED',
   },
   기쁨: {
-    image: '/assets/images/smiling.png',
+    image: '/assets/icons/smiling_face.svg',
     name: 'HAPPY',
   },
   고민: {
-    image: '/assets/images/thinking.png',
+    image: '/assets/icons/thinking_face.svg',
     name: 'WORRIED',
   },
   슬픔: {
-    image: '/assets/images/sad.png',
+    image: '/assets/icons/sad_face.svg',
     name: 'SAD',
   },
   분노: {
-    image: '/assets/images/angry.png',
+    image: '/assets/icons/angry_face.svg',
     name: 'ANGRY',
   },
 };
@@ -42,9 +43,12 @@ interface EmotionProps {
   emotionType: string;
 }
 
-function Emotion({ emotion, isSelected, onClick, emotionType }: EmotionProps) {
+function Emotion({ emotion, isSelected, isDisabled, onClick, emotionType }: EmotionProps) {
   return (
-    <div className="flex cursor-pointer flex-col items-center gap-[8px]" onClick={onClick}>
+    <div
+      className={`flex cursor-pointer flex-col items-center gap-[8px] ${isDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
+      onClick={isDisabled ? undefined : onClick}
+    >
       <div
         className={`tablet:h-[64px] tablet:w-[64px] pc:w-[96px] pc:h-[96px] flex h-[56px] w-[56px] items-center justify-center rounded-[16px] ${isSelected ? `relative` : `bg-[#AFBACD]/15`}`}
       >
@@ -75,39 +79,33 @@ function Emotion({ emotion, isSelected, onClick, emotionType }: EmotionProps) {
 export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
   const { data: session } = useSession();
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionKey | null>(null);
-  const [isEmotionLogged, setIsEmotionLogged] = useState(false);
-
-  const getTodayDate = () => new Date().toISOString().split('T')[0];
+  const { setTodayEmotion } = useEmotionContext();
 
   useEffect(() => {
-    const savedEmotion = localStorage.getItem('todayEmtion');
-
-    if (savedEmotion) {
-      const { date, emotion } = JSON.parse(savedEmotion);
-      if (date === getTodayDate()) {
-        setSelectedEmotion(emotion);
-        setIsEmotionLogged(true);
-      } else {
-        localStorage.removeItem('todayEmotion');
-      }
+    const storageEmotion = localStorage.getItem('todayEmotion') as EmotionKey | null;
+    if (storageEmotion && EmotionData[storageEmotion]) {
+      setSelectedEmotion(storageEmotion);
     }
-  }, []);
+  }, [emotionType]);
 
   const OnClickEmotion = async (emotion: EmotionKey) => {
-    if (isEmotionLogged) return;
-    if (!session?.accessToken) {
+    if (!session?.user.accessToken) {
       console.error('Access token is undefined');
       return;
     }
 
-    const response = await PostTodayEmotion(EmotionData[emotion].name, session.accessToken);
+    if (emotionType === 'main' && selectedEmotion) return;
+
+    const response = await PostTodayEmotion(EmotionData[emotion].name, session.user.accessToken);
     if (!response) return;
 
     console.log(`오늘의 감정 등록 완료: ${emotion}`);
     setSelectedEmotion(emotion);
-    setIsEmotionLogged(true);
 
-    localStorage.setItem('todayEmotion', JSON.stringify({ data: getTodayDate(), emotion }));
+    if (emotionType) {
+      localStorage.setItem('todayEmotion', emotion);
+    }
+    setTodayEmotion(EmotionData[emotion].name);
   };
 
   return (
@@ -118,7 +116,7 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
           emotion={emotion as EmotionKey}
           emotionType={emotionType}
           isSelected={selectedEmotion === emotion}
-          isDisabled={isEmotionLogged}
+          isDisabled={emotionType === 'main' ? !!selectedEmotion : false}
           onClick={() => OnClickEmotion(emotion as EmotionKey)}
         />
       ))}
