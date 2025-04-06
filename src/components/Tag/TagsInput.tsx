@@ -16,7 +16,7 @@ export function TagsInput({ onAddTag, tags }: TagsInputProps) {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && inputValue.trim().length > 0 && inputValue.length <= 10) {
+    if (e.key === 'Enter' && e.nativeEvent.isComposing === false) {
       const isDuplicate = tags.some((tag) => tag.name === inputValue.trim());
       if (isDuplicate) {
         alert('이 태그는 이미 존재합니다.');
