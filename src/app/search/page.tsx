@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Tags } from '@/components/Tag/Tags'
 
 interface Tag {
   name: string;
@@ -33,10 +34,10 @@ export default function SearchPage() {
 
   // 로컬 스토리지에서 최근 검색어 불러오기
   useEffect(() => {
-    console.log('✅ useEffect 실행됨!');
+    console.log('useEffect 실행됨!');
   
     const savedSearches = localStorage.getItem('recentSearches');
-    console.log('📦 저장된 검색어:', savedSearches);
+    console.log('저장된 검색어:', savedSearches);
   
     if (savedSearches) {
       setRecentSearches(JSON.parse(savedSearches));
@@ -103,7 +104,12 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen bg-blue-100 text-black-700">
-      <div className="container max-w-[630px] mx-auto pl-[26px] pr-[16px] py-[32px]">
+      <div className="container mx-auto px-[16px] py-[32px]
+      min-w-[368px] max-w-[1200px]
+      sm:min-w-[368px] sm:max-w-[744px]
+      md:min-w-[744px] md:max-w-[1200px]
+      lg:min-w-[1200px]">
+
         {/* 검색창 */}
         <div className="mb-[32px] relative">
           <input
@@ -112,7 +118,7 @@ export default function SearchPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSearch(searchTerm)}
             placeholder="검색어를 입력하세요"
-            className="w-full py-[12px] focus:outline-none focus:ring-2 focus:ring-blue bg-blue-100 text-[24px] text-black-700 placeholder-gray-300 pr-[48px] border-b-[4px] border-blue-800"
+            className="w-full py-[12px] focus:outline-none bg-blue-100 text-[24px] text-black-700 placeholder-gray-300 pr-[48px] border-b-[4px] border-blue-800"
           />
           <button
             onClick={() => handleSearch(searchTerm)}
@@ -151,53 +157,20 @@ export default function SearchPage() {
               <h2 className="text-[24px] font-pretendard font-medium text-black-300">최근 검색어</h2>
               <button
                 onClick={clearRecentSearches}
-                className="text-state-error text-[16px] font-semibold hover:text-red"
+                className="text-state-error text-[16px] font-semibold hover:text-red cursor-pointer"
               >
                 모두 지우기
               </button>
             </div>
-            <div className="flex flex-wrap gap-[16px]">
-              {recentSearches.map((term, index) => (
-                <div
-                  key={index}
-                  className="group flex items-center gap-[8px] px-[14px] py-[12px] bg-bg-100 rounded-[22px] font-pretendard font-medium text-[20px] text-black-300 cursor-pointer hover:bg-blue-300 transition-colors duration-200"
-                >
-                  <div
-                    onClick={() => {
-                      setSearchTerm(term);
-                      handleSearch(term);
-                    }}
-                    className="flex-1"
-                  >
-                    {term}
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteSearchTerm(term);
-                    }}
-                    className="transition-opacity duration-200"
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="text-black-300 hover:text-black-600"
-                    >
-                      <path
-                        d="M12 4L4 12M4 4L12 12"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              ))}
-            </div>
+
+            <Tags
+              tags={recentSearches.map((term, idx) => ({ id: idx, name: term }))}
+              onRemoveTag={(tag) => deleteSearchTerm(tag.name)}
+              onClickTag={(tag) => {
+                setSearchTerm(tag.name);
+                handleSearch(tag.name);
+              }}
+            />
           </div>
         )}
 
