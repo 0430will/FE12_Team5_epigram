@@ -42,7 +42,7 @@ export default function MyTabMenu() {
           cursor: commentData.list.length > 0 ? commentData.list[commentData.list.length - 1].id : undefined,
           totalCount: commentData.totalCount,
         });
-      })();
+      })(); // () 즉시실행
     }
   }, [status, token, userId]);
 
