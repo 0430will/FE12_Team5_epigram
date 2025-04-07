@@ -34,14 +34,14 @@ export default function CommentInput({ userImage, onSubmit }: Props) {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           maxLength={100}
-          className="custom-scrollbar border-line-200 text-pre-sm tablet:text-pre-md pc:text-pre-lg font-regular focus:border-black-600 tablet:h-[80px] pc:h-[104px] h-[66px] w-full resize-none rounded-md border px-3 py-2 outline-none"
+          className="custom-scrollbar border-line-200 text-pre-lg leading-text-pre-lg font-regular text-black-700 pc:text-pre-xl pc:leading-text-pre-xl w-full resize-none rounded-md border px-3 py-2 placeholder-blue-400 outline-none focus:border-blue-600"
         />
 
         <div className="flex items-center justify-between">
           {/* 공개/비공개 토글 */}
           <div className="flex items-center gap-2">
-            <span className="text-pre-xs tablet:text-pre-md pc:text-pre-lg leading-text-iro-xs tablet:leading-text-iro-md pc:leading-text-iro-lg text-black-600 font-semibold">
-              공개
+            <span className="text-pre-xs tablet:text-pre-md pc:text-pre-lg w-12 text-center text-gray-400">
+              {isPrivate ? '비공개' : '공개'}
             </span>
             <button
               onClick={() => setIsPrivate((prev) => !prev)}
@@ -51,7 +51,7 @@ export default function CommentInput({ userImage, onSubmit }: Props) {
             >
               <div
                 className={`h-4 w-4 transform rounded-full bg-blue-100 shadow transition-transform duration-200 ${
-                  isPrivate ? 'translate-x-0' : 'translate-x-5'
+                  isPrivate ? 'translate-x-1' : 'translate-x-5'
                 }`}
               />
             </button>
