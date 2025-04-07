@@ -15,8 +15,8 @@ export default function MyTabMenu() {
   const token = session?.user.accessToken;
   const userId = session?.user.id ? Number(session.user.id) : undefined;
 
-  const { totalCount: epigramCount, setState: setFeedState } = useMyFeedStore();
-  const { totalCount: commentCount, setState: setCommentState } = useMyCommentStore();
+  const { totalCount: epigramCount } = useMyFeedStore();
+  const { totalCount: commentCount } = useMyCommentStore();
 
   const menuArr = [
     { name: `내 에피그램(${epigramCount ?? 0})`, content: <MyEpigrams /> },
