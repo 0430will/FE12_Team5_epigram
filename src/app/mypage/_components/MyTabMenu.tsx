@@ -25,24 +25,29 @@ export default function MyTabMenu() {
 
   useEffect(() => {
     if (status === 'authenticated' && token && userId) {
-      (async () => {
-        const epigramData = await getEpigramsList(token, 3, 0, undefined, userId);
-        const commentData = await getUserComments(token, userId, 4, 0);
+      if (useMyFeedStore.getState().items.length === 0) {
+        (async () => {
+          const epigramData = await getEpigramsList(token, 3, 0, undefined, userId);
+          useMyFeedStore.getState().setState({
+            items: epigramData.list,
+            hasMore: epigramData.list.length > 0,
+            cursor: epigramData.list.length > 0 ? epigramData.list[epigramData.list.length - 1].id : undefined,
+            totalCount: epigramData.totalCount,
+          });
+        })();
+      }
 
-        setFeedState({
-          items: epigramData.list,
-          hasMore: epigramData.list.length > 0,
-          cursor: epigramData.list.length > 0 ? epigramData.list[epigramData.list.length - 1].id : undefined,
-          totalCount: epigramData.totalCount,
-        });
-
-        setCommentState({
-          items: commentData.list,
-          hasMore: commentData.list.length > 0,
-          cursor: commentData.list.length > 0 ? commentData.list[commentData.list.length - 1].id : undefined,
-          totalCount: commentData.totalCount,
-        });
-      })(); // () 즉시실행
+      if (useMyCommentStore.getState().items.length === 0) {
+        (async () => {
+          const commentData = await getUserComments(token, userId, 4, 0);
+          useMyCommentStore.getState().setState({
+            items: commentData.list,
+            hasMore: commentData.list.length > 0,
+            cursor: commentData.list.length > 0 ? commentData.list[commentData.list.length - 1].id : undefined,
+            totalCount: commentData.totalCount,
+          });
+        })();
+      }
     }
   }, [status, token, userId]);
 
