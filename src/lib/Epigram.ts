@@ -3,12 +3,40 @@ import { AddEpigram } from '@/components/EpigramForm';
 // @ts-expect-error : 타입스크립트가 notFound를 오류로 인식합니다. 작동은 잘 됩니다.
 import { notFound } from 'next/navigation';
 import { CommentList } from '@/types/Comment';
+import { notify } from '@/util/toast';
+
+interface EpigramRequestBody {
+  tags: string[];
+  referenceTitle: string;
+  author: string;
+  content: string;
+  referenceUrl?: string;
+}
+
+interface EpigramRequestBody {
+  tags: string[];
+  referenceTitle: string;
+  author: string;
+  content: string;
+  referenceUrl?: string;
+}
 
 // 에피그램 post
 export async function PostEpigram(epigrams: AddEpigram, token: string) {
   const { tags, referenceUrl, referenceTitle, author, content } = epigrams;
 
   const tagslist = tags.map((item) => item.name);
+
+  const requestBody: EpigramRequestBody = {
+    tags: tagslist,
+    referenceTitle: referenceTitle,
+    author: author,
+    content: content,
+  };
+
+  if (referenceUrl) {
+    requestBody.referenceUrl = referenceUrl;
+  }
 
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams`, {
@@ -17,13 +45,7 @@ export async function PostEpigram(epigrams: AddEpigram, token: string) {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        tags: tagslist,
-        referenceUrl: referenceUrl,
-        referenceTitle: referenceTitle,
-        author: author,
-        content: content,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     if (response.status === 401) {
@@ -37,9 +59,9 @@ export async function PostEpigram(epigrams: AddEpigram, token: string) {
     return data;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error(`${error.message}`);
+      notify({ type: 'error', message: error.message });
     } else {
-      console.error('에피그램을 등록하는데 실패했습니다.');
+      notify({ type: 'error', message: '에피그램을 등록하는데 실패했습니다.' });
     }
   }
 }
@@ -49,6 +71,17 @@ export async function PatchEpigram(epigrams: AddEpigram, id: number, token: stri
 
   const tagslist = tags.map((item) => item.name);
 
+  const requestBody: EpigramRequestBody = {
+    tags: tagslist,
+    referenceTitle: referenceTitle,
+    author: author,
+    content: content,
+  };
+
+  if (referenceUrl) {
+    requestBody.referenceUrl = referenceUrl;
+  }
+
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
       method: 'PATCH',
@@ -56,13 +89,7 @@ export async function PatchEpigram(epigrams: AddEpigram, id: number, token: stri
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        tags: tagslist,
-        referenceUrl: referenceUrl,
-        referenceTitle: referenceTitle,
-        author: author,
-        content: content,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     if (response.status === 401) {
@@ -76,9 +103,9 @@ export async function PatchEpigram(epigrams: AddEpigram, id: number, token: stri
     return data;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error(`${error.message}`);
+      notify({ type: 'error', message: error.message });
     } else {
-      console.error('에피그램을 등록하는데 실패했습니다.');
+      notify({ type: 'error', message: '에피그램을 수정하는데 실패했습니다.' });
     }
   }
 }
@@ -224,25 +251,33 @@ export async function LikeEpigram(method: string, id: number, token: string) {
     return data;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error(`${error.message}`);
+      notify({ type: 'error', message: '좋아요에 실패했습니다.' });
+    } else {
+      notify({ type: 'error', message: '좋아요에 실패했습니다.' });
     }
   }
 }
 
 export async function DeleteEpigram(id: number, token: string) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) {
-    if (response.status == 404) {
-      notFound();
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      console.error('서버 오류가 발생했습니다.');
+      return null;
     }
-    return null;
+    const data = await response.json();
+    return data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      notify({ type: 'error', message: error.message });
+    } else {
+      notify({ type: 'error', message: '좋아요에 실패했습니다.' });
+    }
   }
-  const data = await response.json();
-  return data;
 }

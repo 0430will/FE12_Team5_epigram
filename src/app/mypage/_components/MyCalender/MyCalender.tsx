@@ -5,10 +5,12 @@ import CustomCalender from './CustomCalender';
 import { useEffect, useState } from 'react';
 import { GetMonthEmotion } from '@/lib/Emotionlog';
 import moment from 'moment';
+import { useEmotionContext } from '../EmotionContext';
 
 export default function MyCalender({ writerId }: { writerId: string }) {
   const [data, setData] = useState<EmotionLog[]>();
   const [displayMonth, setDisplayMonth] = useState<Date>(new Date());
+  const { todayEmotion } = useEmotionContext();
 
   const getData = async () => {
     const response = await GetMonthEmotion(
@@ -23,7 +25,7 @@ export default function MyCalender({ writerId }: { writerId: string }) {
 
   useEffect(() => {
     getData();
-  }, [displayMonth]);
+  }, [displayMonth, todayEmotion]);
 
   if (!data) return;
 

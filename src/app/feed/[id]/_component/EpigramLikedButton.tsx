@@ -22,7 +22,6 @@ export default function EpigramLikedButton({ isLiked, likeCount }: { isLiked: bo
     if (islike) {
       const response = await LikeEpigram('DELETE', Number(id), token);
       if (!response) {
-        alert('좋아요를 취소하는데 오류가 발생했습니다.');
         return;
       }
       setCount((pre) => pre - 1);
@@ -30,7 +29,6 @@ export default function EpigramLikedButton({ isLiked, likeCount }: { isLiked: bo
     } else {
       const response = await LikeEpigram('POST', Number(id), token);
       if (!response) {
-        alert('좋아요를 누르는데 오류가 발생했습니다.');
         return;
       }
       setCount((pre) => pre + 1);
