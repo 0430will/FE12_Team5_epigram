@@ -9,7 +9,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import ClientButton from '../Button/ClientButton';
 import ModalLayout from '../Modal/ModalLayout';
-import ModalUSerProfile from '../Modal/ModalUserProfile';
+import ModalUserProfile from '../Modal/ModalUserProfile';
 
 interface Props {
   comment: Comment;
@@ -179,7 +179,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
       </CommentCard>
       {isProfileOpen && (
         <ModalLayout type="content" onClose={() => setIsProfileOpen(false)}>
-          <ModalUSerProfile nickname={comment.writer.nickname} />
+          <ModalUserProfile nickname={comment.writer.nickname} image={comment.writer.image} />
         </ModalLayout>
       )}
 
