@@ -4,11 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useState, useRef } from 'react';
+import Kebab from '../Kebab';
 
 export default function MainHeader() {
   const { data: session } = useSession();
   const [isSidebar, setIsSidebar] = useState(false);
-  const [isDropdown, setIsDropdown] = useState(false);
+  const [isKebab, setIsKebab] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null); //사이드바 & 드롭다운 감지
 
   return (
@@ -17,7 +18,7 @@ export default function MainHeader() {
       onClick={(e) => {
         //사이드바 & 드롭다운 바깥 클릭 감지 후 닫기)
         if (containerRef.current?.contains(e.target as Node)) return;
-        setIsDropdown(false);
+        setIsKebab(false);
         setIsSidebar(false);
       }}
     >
@@ -76,7 +77,7 @@ export default function MainHeader() {
               onClick={(e) => {
                 // 드롭다운버튼 열기
                 e.stopPropagation();
-                setIsDropdown(!isDropdown);
+                setIsKebab(!isKebab);
               }}
             >
               <Image
@@ -88,20 +89,17 @@ export default function MainHeader() {
               />
               <span className="text-pre-md tablet:inline text-[var(--color-black-500)]">{session?.user.nickname}</span>
             </div>
-            {isDropdown && ( //드롭다운
-              <div className="absolute right-0 z-1 w-[90px] rounded-md border border-gray-100 bg-white text-center shadow-lg">
-                <div className="text-pre-md font-weight-regular cursor-pointer border-b border-gray-100 p-2 hover:bg-gray-200">
-                  <Link href="/mypage" onClick={() => setIsDropdown(false)}>
-                    마이 프로필
-                  </Link>
-                </div>
-                <div
-                  className="text-pre-md font-weight-regular cursor-pointer p-2 hover:bg-gray-200"
-                  onClick={() => signOut({ callbackUrl: '/' })} //로그아웃
-                >
-                  로그아웃
-                </div>
-              </div>
+            {isKebab && (
+              <Kebab
+                label1="마이 페이지"
+                onCLick1={() => {
+                  window.location.href = '/mypage';
+                }}
+                label2="로그아웃"
+                onClick2={() => {
+                  signOut();
+                }}
+              />
             )}
           </div>
         </div>
