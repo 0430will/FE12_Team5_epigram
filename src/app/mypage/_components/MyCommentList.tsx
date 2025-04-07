@@ -60,6 +60,7 @@ export default function MyCommentList() {
             useMyCommentStore.getState().setState({ items: comments.map((c) => (c.id === updated.id ? updated : c)) })
           }
           writerId={userId}
+          onClick={() => router.push(`/feed/${comment.epigramId}`)}
         />
       ))}
 

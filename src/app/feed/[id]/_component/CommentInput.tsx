@@ -24,12 +24,9 @@ export default function CommentInput({ userImage, onSubmit }: Props) {
     setIsPrivate(false);
   };
 
-  const fallbackImage = '/assets/images/defaultUser.png';
-  const profileImage = userImage?.trim() !== '' ? userImage! : fallbackImage;
-
   return (
     <div className="tablet:mb-8 pc:mb-10 bg-bg-100 tablet:px-0 pc:px-0 mb-3 flex items-start gap-4 rounded-md px-6 py-4">
-      <Avatar src={profileImage} alt="프로필 이미지" className="h-12 w-12" />
+      <Avatar src={userImage ?? ''} alt="프로필 이미지" className="h-12 w-12" />
 
       <div className="flex-1">
         <textarea

@@ -17,9 +17,10 @@ interface Props {
   writerId?: number;
   onDelete: (id: number) => void;
   onSave: (updated: Comment) => void;
+  onClick?: () => void;
 }
 
-export function CommentItem({ comment, token, writerId, onDelete, onSave }: Props) {
+export function CommentItem({ comment, token, writerId, onDelete, onSave, onClick }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const [isPrivate, setIsPrivate] = useState(comment.isPrivate);
@@ -74,16 +75,35 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
 
   return (
     <>
-      <CommentCard className="border-line-200 bg-bg-100 tablet:py-6 pc:py-[35px] flex items-start border-t px-6 py-4">
-        <button onClick={() => setIsProfileOpen(true)}>
-          <Avatar src={comment.writer.image} alt={comment.writer.nickname} className="mr-4 h-12 w-12 cursor-pointer" />
+      <CommentCard
+        onClick={() => {
+          if (!isEditing && onClick) {
+            onClick();
+          }
+        }}
+        className="border-line-200 bg-bg-100 tablet:py-6 pc:py-[35px] flex cursor-pointer items-start border-t px-6 py-4"
+      >
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsProfileOpen(true);
+          }}
+        >
+          <Avatar
+            src={comment.writer.image}
+            alt={comment.writer.nickname}
+            className="mr-4 h-12 w-12 cursor-pointer rounded-full transition-transform duration-200 hover:scale-105 hover:shadow-md"
+          />
         </button>
         <div className="flex-1">
           <div className="tablet:mb-3 pc:mb-4 mb-2 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <button
-                onClick={() => setIsProfileOpen(true)}
-                className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-300 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsProfileOpen(true);
+                }}
+                className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-300 cursor-pointer hover:underline"
               >
                 {comment.writer.nickname}
               </button>
@@ -105,13 +125,19 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
               <div className="flex gap-4 text-xs">
                 <span
                   className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-600 cursor-pointer hover:underline"
-                  onClick={() => setIsEditing(true)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsEditing(true);
+                  }}
                 >
                   수정
                 </span>
                 <span
                   className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular cursor-pointer text-[color:var(--color-state-error)] hover:underline"
-                  onClick={() => setIsDeleteModalOpen(true)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsDeleteModalOpen(true);
+                  }}
                 >
                   삭제
                 </span>

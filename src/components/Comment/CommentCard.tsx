@@ -3,8 +3,13 @@
 interface CardProps {
   children: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 }
 
-export function CommentCard({ children, className }: CardProps) {
-  return <div className={`${className}`}>{children}</div>;
+export function CommentCard({ children, className, onClick }: CardProps) {
+  return (
+    <div className={`${className}`} onClick={onClick}>
+      {children}
+    </div>
+  );
 }

@@ -16,6 +16,8 @@ export function usePaginatedList<T extends { id: number }>({ store, fetchFn }: U
     setLoading(true);
     const { list, totalCount } = await fetchFn(store.cursor);
 
+    store.setState({ totalCount });
+
     if (list.length === 0 || store.items.length + list.length >= totalCount) {
       store.setState({ hasMore: false });
     }
