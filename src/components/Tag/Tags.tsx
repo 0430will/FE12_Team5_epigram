@@ -19,7 +19,7 @@ export function Tags({ tags, onRemoveTag, onClickTag }: TagsProps) {
             text-black-300 bg-bg-100 flex items-center gap-2 rounded-[18px] cursor-pointer hover:bg-blue-300 transition-colors duration-200"
           onClick={() => onClickTag?.(tag)} // 클릭 시 실행
         >
-          <span className="text-[16px] font-normal leading-[26px]">
+          <span className="mobile:text-[16px] mobile:leading-[26px] tablet:text-[20px] tablet:leading-[32px] pc:text-[24px] pc:leading-[32px] text-black-300 text-[16px] font-normal leading-[26px]">
             {tag.name}
           </span>
           <button
