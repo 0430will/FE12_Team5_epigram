@@ -40,13 +40,7 @@ export default function LoginPage() {
     }); // 응답 로그 확인
 
     if (res?.error) {
-      if (res.error.includes('존재하지 않는 아이디입니다.')) {
-        setErrorEmail('존재하지 않는 아이디입니다.');
-      } else if (res.error.includes('비밀번호가 올바르지 않습니다')) {
-        setErrorPassword('비밀번호가 올바르지 않습니다.');
-      } else {
-        setError('알 수 없는 오류가 발생했습니다..');
-      }
+      setError('이메일 또는 비밀번호가 다릅니다.'); // NextAuth에서 받은 에러 메시지를 그대로 사용
       return;
     }
 
