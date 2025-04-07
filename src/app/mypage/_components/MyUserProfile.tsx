@@ -66,6 +66,13 @@ export default function MyUserProfile() {
     }
   };
 
+  const handleCancel = () => {
+    setNickname(user.nickname); // 원래 닉네임으로 초기화
+    setPreviewImage(null); // 미리보기 이미지 제거
+    setSelectedImageFile(null); // 선택한 파일 제거
+    setEditMode(false); // 수정모드 해제
+  };
+
   return (
     <section className="pc:mb-[96px] mb-[56px] flex flex-col items-center">
       <div
@@ -96,7 +103,6 @@ export default function MyUserProfile() {
       {editMode ? (
         <input
           type="text"
-          placeholder="닉네임을 입력하시오"
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
           className="mb-[16px] rounded px-4 py-2"
@@ -115,7 +121,7 @@ export default function MyUserProfile() {
               저장
             </button>
             <button
-              onClick={() => setEditMode(false)}
+              onClick={handleCancel}
               className="text-pre-md font-weight-regular pc:font-weight-medium pc:text-pre-xl pc:h-[48px] pc:w-[100px] bg-line-100 h-[38px] w-[77px] cursor-pointer items-center justify-center rounded-[100px] text-blue-400 hover:bg-gray-200 hover:text-black"
             >
               취소
@@ -123,7 +129,10 @@ export default function MyUserProfile() {
           </>
         ) : (
           <button
-            onClick={() => setEditMode(true)}
+            onClick={() => {
+              setEditMode(true);
+              setNickname(user.nickname);
+            }}
             className="text-pre-md font-weight-regular pc:font-weight-medium pc:text-pre-xl pc:h-[48px] pc:w-[100px] bg-line-100 h-[38px] w-[77px] cursor-pointer items-center justify-center rounded-[100px] text-blue-400 hover:bg-gray-200 hover:text-black"
           >
             수정하기
