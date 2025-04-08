@@ -41,5 +41,5 @@ export default function useFetchUser() {
     fetchUser();
   }, [status, session]);
 
-  return userData;
+  return { ...userData, setUser: (user: User) => setUserData({ isLoading: false, user }) };
 }

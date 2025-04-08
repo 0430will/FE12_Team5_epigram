@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 const ScrollInMotion = {
@@ -35,12 +34,12 @@ export default function Home() {
             </motion.div>
             <motion.div initial="hidden" whileInView="visible" variants={DampingMotion} viewport={{ once: true }}>
               <motion.div {...DampingMotion}>
-                <Link
-                  href={'/main'}
+                <button
+                  onClick={() => (window.location.href = '/main')}
                   className="bg-black-500 text-pre-lg pc:text-pre-xl pc:px-[108px] pc:py-[16px] rounded-[12px] px-[28px] py-[11px] font-semibold text-blue-100"
                 >
                   시작하기
-                </Link>
+                </button>
               </motion.div>
             </motion.div>
           </div>
@@ -91,7 +90,7 @@ export default function Home() {
                 width={744}
                 height={388}
                 quality={100}
-                className="tablet:w-[384px] pc:w-[744px] pc:h-[388px] tablet:h-[240px] tablet:rounded-[16px] mb-[40px] h-[209px] w-[312px] object-contain"
+                className="tablet:w-[384px] pc:w-[744px] pc:h-[388px] tablet:h-[240px] tablet:rounded-[16px] mb-[20px] h-[209px] w-[312px] object-contain"
               />
               <div className="pc:justify-start pc:w-[371px] tablet:ml-[75px] pc:ml-[0px] flex h-[106px] w-[312px] flex-col justify-center text-right">
                 <h5 className="text-pre-2xl pc:text-pre-3xl text-right font-bold">
@@ -231,12 +230,12 @@ export default function Home() {
             </motion.div>
             <motion.div initial="hidden" whileInView="visible" variants={ScrollInMotion} viewport={{ once: true }}>
               <motion.div {...DampingMotion}>
-                <Link
-                  href={'/main'}
+                <button
+                  onClick={() => (window.location.href = '/main')}
                   className="pc:text-pre-xl pc:px-[108px] pc:py-[16px] bg-black-500 text-pre-lg rounded-[12px] px-[28px] py-[11px] font-semibold text-blue-100"
                 >
                   시작하기
-                </Link>
+                </button>
               </motion.div>
             </motion.div>
           </div>
