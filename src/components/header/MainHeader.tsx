@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { useState, useRef } from 'react';
 import Kebab from '../Kebab';
 import useFetchUser from '@/hooks/useFetchdata';
