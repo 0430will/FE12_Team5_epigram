@@ -25,6 +25,9 @@ export function TagsInput({ onAddTag, tags }: TagsInputProps) {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter' || e.nativeEvent.isComposing) return;
+    e.preventDefault();
+
     if (e.key === 'Enter' && inputValue.trim().length > 0 && inputValue.length <= 10) {
       const isDuplicate = tags.some((tag) => tag.name === inputValue.trim());
       if (isDuplicate) {
