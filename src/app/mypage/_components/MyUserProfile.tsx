@@ -44,7 +44,11 @@ export default function MyUserProfile() {
 
       // 1. 이미지가 변경됐으면 업로드
       if (selectedImageFile) {
-        imageUrl = await uploadImage(selectedImageFile, user.accessToken);
+        if (!token) {
+          console.error('access Token이 없습니다.');
+          return;
+        }
+        imageUrl = await uploadImage(selectedImageFile, token);
         console.log(imageUrl);
       }
 
