@@ -3,6 +3,7 @@
 import { GetMonthEmotion } from '@/lib/Emotionlog';
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useEmotionContext } from '../EmotionContext';
 // import Image from 'next/image';
 
 interface EmotionData {
@@ -11,16 +12,20 @@ interface EmotionData {
 }
 
 const emotionMapping: Record<string, { image: string; name: string }> = {
-  MOVED: { image: '/assets/images/heartFace.png', name: '감동' },
-  HAPPY: { image: '/assets/images/smiling.png', name: '기쁨' },
-  WORRIED: { image: '/assets/images/thinking.png', name: '고민' },
-  SAD: { image: '/assets/images/sad.png', name: '슬픔' },
-  ANGRY: { image: '/assets/images/angry.png', name: '분노' },
+  MOVED: {
+    image: '/assets/icons/heart_face.svg',
+    name: '감동',
+  },
+  HAPPY: { image: '/assets/icons/smiling_face.svg', name: '기쁨' },
+  WORRIED: { image: '/assets/icons/thinking_face.svg', name: '고민' },
+  SAD: { image: '/assets/icons/sad_face.svg', name: '슬픔' },
+  ANGRY: { image: '/assets/icons/angry_face.svg', name: '분노' },
 };
 
 export default function EmotionList() {
   const [emotions, setEmotions] = useState<EmotionData[]>([]);
   const { data: session } = useSession();
+  const { todayEmotion } = useEmotionContext();
 
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -57,7 +62,7 @@ export default function EmotionList() {
     };
 
     fetchEmotions();
-  }, [session]);
+  }, [session, todayEmotion]);
 
   return (
     <div className="flex h-full w-full flex-col justify-center gap-[8px] empty:hidden">

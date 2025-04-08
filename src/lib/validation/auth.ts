@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // 이메일 검증 스키마 (공용)
-const emailSchema = z.string().email('이메일 형식으로 작성해 주세요.');
+const emailSchema = z.string().min(1, '이메일은 필수 입력입니다.').email('이메일 형식으로 작성해 주세요');
 
 // 비밀번호 검증 스키마 (공용)
 // - 특수문자 (!@#$%^&* 만 허용

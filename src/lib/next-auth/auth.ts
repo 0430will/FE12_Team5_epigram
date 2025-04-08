@@ -49,6 +49,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           }
 
           const data = await res.json();
+
           const user = {
             id: String(data.user.id),
             email: data.user.email ?? '',

@@ -32,7 +32,7 @@ export default function EpigramForm({
   const {
     register,
     handleSubmit,
-    formState: { isValid },
+    formState: { isValid, errors },
     watch,
     setValue,
   } = useForm<AddEpigram>({
@@ -50,6 +50,7 @@ export default function EpigramForm({
   const { data: session, status } = useSession();
   const router = useRouter();
   const token = status === 'authenticated' ? session?.user.accessToken : null;
+  const nickName = status === 'authenticated' ? session?.user.nickname : null;
 
   const selectedOption = watch('authorSelected');
   const author = watch('author');
@@ -73,7 +74,9 @@ export default function EpigramForm({
     if (!token) return;
     const allValues = watch();
     const response = await PostEpigram(allValues, token);
-    if (!response) return;
+    if (!response) {
+      return;
+    }
     notify({ type: 'success', message: '게시물이 작성되었습니다.' });
     router.push(`/feed/${response.id}`);
   };
@@ -82,7 +85,9 @@ export default function EpigramForm({
     if (!initialValue?.id || !token) return;
     const allValues = watch();
     const response = await PatchEpigram(allValues, initialValue.id, token);
-    if (!response) return;
+    if (!response) {
+      return;
+    }
     notify({ type: 'success', message: '게시물이 수정되었습니다.' });
     router.push(`/feed/${response.id}`);
   };
@@ -90,8 +95,11 @@ export default function EpigramForm({
   const SelectForm = submitType === '작성하기' ? SubmitPostForm : SubmitPatchForm;
 
   useEffect(() => {
-    if (selectedOption === '알 수 없음' || selectedOption === '본인') {
+    if (selectedOption === '알 수 없음') {
       setValue('author', selectedOption);
+    } else if (selectedOption === '본인') {
+      if (!nickName) return;
+      setValue('author', nickName);
     } else {
       setValue('author', initialValue?.author || '');
     }
@@ -110,7 +118,7 @@ export default function EpigramForm({
         <div className="pc:gap-[54px] flex flex-col gap-[40px]">
           <div className="pc:gap-[24px] flex flex-col gap-[8px]">
             <div className="flex justify-between">
-              <div className="flex gap-[4px]">
+              <div className="flex justify-center gap-[4px]">
                 <label
                   htmlFor="content"
                   className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
@@ -118,7 +126,7 @@ export default function EpigramForm({
                   내용
                 </label>
                 <div className="relative">
-                  <span className="text-pre-lg text-state-error tablet:text-pre-lg pc:text-pre-xl absolute top-[2px] font-medium">
+                  <span className="text-pre-lg text-state-error tablet:text-pre-lg pc:text-pre-xl pc:top-[2px] absolute top-[1px] font-medium">
                     *
                   </span>
                 </div>
@@ -145,7 +153,7 @@ export default function EpigramForm({
                 저자
               </label>
               <div className="relative">
-                <span className="text-pre-lg text-state-error tablet:text-pre-lg pc:text-pre-xl absolute top-[2px] font-medium">
+                <span className="text-pre-lg text-state-error tablet:text-pre-lg pc:text-pre-xl pc:top-[2px] absolute top-[1px] font-medium">
                   *
                 </span>
               </div>
@@ -192,24 +200,43 @@ export default function EpigramForm({
             </div>
           </div>
           <div className="pc:gap-[16px] flex flex-col gap-[8px]">
-            <label
-              htmlFor="referenceTitle"
-              className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
-            >
-              출처
-            </label>
+            <div className="flex gap-[4px]">
+              <label
+                htmlFor="referenceTitle"
+                className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
+              >
+                출처
+              </label>
+              <div className="relative">
+                <span className="text-pre-lg text-state-error tablet:text-pre-lg pc:text-pre-xl pc:top-[2px] absolute top-[1px] font-medium">
+                  *
+                </span>
+              </div>
+            </div>
             <input
               id="referenceTitle"
               className="text-pre-lg font-regular text-black-950 pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
-              placeholder="출저 제목 입력"
+              placeholder="출처 제목 입력"
               {...register('referenceTitle')}
             />
-            <input
-              id="referenceUrl"
-              className="text-pre-lg font-regular text-black-950 pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
-              placeholder="URL (ex. https://www.website.com)"
-              {...register('referenceUrl')}
-            />
+            <div className="relative flex w-full flex-col">
+              <input
+                id="referenceUrl"
+                className="text-pre-lg font-regular text-black-950 pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
+                placeholder="URL (ex. https://www.website.com)"
+                {...register('referenceUrl', {
+                  pattern: {
+                    value: /^https:\/\/.+/,
+                    message: '올바른 URL을 입력해주세요. (ex. https://www.website.com)',
+                  },
+                })}
+              />
+              {errors?.referenceUrl && (
+                <p className="text-state-error text-pre-xs font-regular tablet:text-pre-md pc:text-pre-lg absolute top-[70px] left-0">
+                  {errors.referenceUrl?.message}
+                </p>
+              )}
+            </div>
           </div>
           <div className="flex flex-col gap-[8px]">
             <label

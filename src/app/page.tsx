@@ -90,7 +90,7 @@ export default function Home() {
                 width={744}
                 height={388}
                 quality={100}
-                className="tablet:w-[384px] pc:w-[744px] pc:h-[388px] tablet:h-[240px] tablet:rounded-[16px] mb-[40px] h-[209px] w-[312px] object-contain"
+                className="tablet:w-[384px] pc:w-[744px] pc:h-[388px] tablet:h-[240px] tablet:rounded-[16px] mb-[20px] h-[209px] w-[312px] object-contain"
               />
               <div className="pc:justify-start pc:w-[371px] tablet:ml-[75px] pc:ml-[0px] flex h-[106px] w-[312px] flex-col justify-center text-right">
                 <h5 className="text-pre-2xl pc:text-pre-3xl text-right font-bold">

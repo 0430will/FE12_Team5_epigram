@@ -7,18 +7,16 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 import SocialLogins from '../_component/SocialLogins';
+import { signinSchema } from '@/lib/validation/auth';
 
-const loginSchema = z.object({
-  email: z.string().min(1, '이메일은 필수 입력입니다.').email('유효한 이메일을 입력하세요.'),
-  password: z.string().min(1, '비밀번호는 필수 입력입니다.'),
-});
-
-type LoginFormInputs = z.infer<typeof loginSchema>;
+type LoginFormInputs = z.infer<typeof signinSchema>;
 
 export default function LoginPage() {
   const { data: session, status } = useSession(); // 현재 로그인된 세션 정보 가져오기
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string>('');
+  const [errorEmail, setErrorEmail] = useState<string>('');
+  const [errorPassword, setErrorPassword] = useState<string>('');
   const router = useRouter();
 
   const {
@@ -26,12 +24,14 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<LoginFormInputs>({
-    resolver: zodResolver(loginSchema),
-    mode: 'onBlur',
+    resolver: zodResolver(signinSchema),
+    mode: 'onChange',
   });
 
   const onSubmit = async (data: LoginFormInputs) => {
     setError(''); // 기존 에러 초기화
+    setErrorEmail('');
+    setErrorPassword('');
 
     const res = await signIn('credentials', {
       email: data.email,
@@ -69,6 +69,7 @@ export default function LoginPage() {
               }`}
             />
             {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+            {errorEmail && <p className="text-sm text-red-500">{errorEmail}</p>}
           </div>
 
           {/* 비밀번호 입력 */}
@@ -97,6 +98,7 @@ export default function LoginPage() {
             </div>
 
             {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+            {errorPassword && <p className="text-sm text-red-500">{errorPassword}</p>}
           </div>
 
           {/* 로그인 버튼 */}
