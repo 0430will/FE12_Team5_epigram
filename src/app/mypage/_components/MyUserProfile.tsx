@@ -116,10 +116,7 @@ export default function MyUserProfile() {
         {editMode ? (
           <>
             <button
-              onClick={() => {
-                notify({ type: 'success', message: '프로필 변경에 성공하였습니다!' });
-                handleSave();
-              }}
+              onClick={handleSave}
               className="text-pre-md font-weight-regular pc:font-weight-medium pc:text-pre-xl pc:h-[48px] pc:w-[100px] bg-line-100 h-[38px] w-[77px] cursor-pointer items-center justify-center rounded-[100px] text-blue-400 hover:bg-gray-200 hover:text-black"
             >
               저장
