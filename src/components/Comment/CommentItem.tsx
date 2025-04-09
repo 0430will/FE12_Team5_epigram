@@ -9,7 +9,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import ClientButton from '../Button/ClientButton';
 import ModalLayout from '../Modal/ModalLayout';
-import ModalUSerProfile from '../Modal/ModalUserProfile';
+import ModalUserProfile from '../Modal/ModalUserProfile';
 
 interface Props {
   comment: Comment;
@@ -17,9 +17,10 @@ interface Props {
   writerId?: number;
   onDelete: (id: number) => void;
   onSave: (updated: Comment) => void;
+  onClick?: () => void;
 }
 
-export function CommentItem({ comment, token, writerId, onDelete, onSave }: Props) {
+export function CommentItem({ comment, token, writerId, onDelete, onSave, onClick }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const [isPrivate, setIsPrivate] = useState(comment.isPrivate);
@@ -74,16 +75,35 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
 
   return (
     <>
-      <CommentCard className="border-line-200 bg-bg-100 tablet:py-6 pc:py-[35px] flex items-start border-t px-6 py-4">
-        <button onClick={() => setIsProfileOpen(true)}>
-          <Avatar src={comment.writer.image} alt={comment.writer.nickname} className="mr-4 h-12 w-12 cursor-pointer" />
+      <CommentCard
+        onClick={() => {
+          if (!isEditing && onClick) {
+            onClick();
+          }
+        }}
+        className="border-line-200 bg-bg-100 tablet:py-6 pc:py-[35px] flex cursor-pointer items-start border-t px-6 py-4"
+      >
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsProfileOpen(true);
+          }}
+        >
+          <Avatar
+            src={comment.writer.image}
+            alt={comment.writer.nickname}
+            className="mr-4 h-12 w-12 cursor-pointer rounded-full transition-transform duration-200 hover:scale-105 hover:shadow-md"
+          />
         </button>
         <div className="flex-1">
           <div className="tablet:mb-3 pc:mb-4 mb-2 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <button
-                onClick={() => setIsProfileOpen(true)}
-                className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-300 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsProfileOpen(true);
+                }}
+                className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-300 cursor-pointer hover:underline"
               >
                 {comment.writer.nickname}
               </button>
@@ -105,13 +125,19 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
               <div className="flex gap-4 text-xs">
                 <span
                   className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-600 cursor-pointer hover:underline"
-                  onClick={() => setIsEditing(true)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsEditing(true);
+                  }}
                 >
                   수정
                 </span>
                 <span
                   className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular cursor-pointer text-[color:var(--color-state-error)] hover:underline"
-                  onClick={() => setIsDeleteModalOpen(true)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsDeleteModalOpen(true);
+                  }}
                 >
                   삭제
                 </span>
@@ -122,7 +148,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
           {isEditing ? (
             <>
               <textarea
-                className="custom-scrollbar border-line-200 text-pre-lg leading-text-pre-lg font-regular text-black-700 pc:text-pre-xl pc:leading-text-pre-xl focus:border-black-600 w-full resize-none rounded-md border px-3 py-2 outline-none"
+                className="custom-scrollbar border-line-200 text-pre-lg leading-text-pre-lg font-regular text-black-700 pc:text-pre-xl pc:leading-text-pre-xl w-full resize-none rounded-md border px-3 py-2 outline-none focus:border-blue-600"
                 value={editedContent}
                 onChange={(e) => setEditedContent(e.target.value)}
               />
@@ -130,8 +156,8 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
               <div className="flex items-center justify-between">
                 {/* 공개/비공개 토글 */}
                 <div className="flex items-center gap-2">
-                  <span className="text-pre-xs tablet:text-pre-md pc:text-pre-lg leading-text-iro-xs tablet:leading-text-iro-md pc:leading-text-iro-lg text-black-600 font-semibold">
-                    공개
+                  <span className="text-pre-xs tablet:text-pre-md pc:text-pre-lg w-12 text-center text-gray-400">
+                    {isPrivate ? '비공개' : '공개'}
                   </span>
                   <button
                     onClick={() => setIsPrivate(!isPrivate)}
@@ -141,7 +167,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
                   >
                     <div
                       className={`h-4 w-4 transform rounded-full bg-blue-100 shadow transition-transform duration-200 ${
-                        isPrivate ? 'translate-x-0' : 'translate-x-5'
+                        isPrivate ? 'translate-x-1' : 'translate-x-5'
                       }`}
                     />
                   </button>
@@ -179,7 +205,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave }: Prop
       </CommentCard>
       {isProfileOpen && (
         <ModalLayout type="content" onClose={() => setIsProfileOpen(false)}>
-          <ModalUSerProfile nickname={comment.writer.nickname} />
+          <ModalUserProfile nickname={comment.writer.nickname} image={comment.writer.image} />
         </ModalLayout>
       )}
 

@@ -5,6 +5,7 @@ export interface PaginatedListState<T> {
   hasMore: boolean;
   isGridView: boolean;
   cursor?: number;
+  totalCount: number;
   setState: (state: Partial<PaginatedListState<T>>) => void;
   reset: () => void;
 }
@@ -16,6 +17,7 @@ export function createPaginatedListStore<T extends { id: number }>() {
       hasMore: true,
       isGridView: true,
       cursor: undefined,
+      totalCount: 0,
 
       setState: (state) => set((prev) => ({ ...prev, ...state })),
 
@@ -35,6 +37,7 @@ export function createPaginatedListStore<T extends { id: number }>() {
           hasMore: true,
           isGridView: true,
           cursor: undefined,
+          totalCount: 0,
         }),
     }),
   );

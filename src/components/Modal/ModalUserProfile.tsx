@@ -1,20 +1,17 @@
 'use client';
 
-import Image from 'next/image';
+import { Avatar } from '../Comment/Avatar';
 
-interface ModalUSerProfileProps {
+interface ModalUserProfileProps {
   nickname: string;
-  avatarUrl?: string;
+  image?: string;
 }
 
-export default function ModalUSerProfile({ nickname, avatarUrl }: ModalUSerProfileProps) {
-  const fallbackSrc = '/assets/images/defaultUser.png';
-  const imageSrc = avatarUrl && avatarUrl.trim() !== '' ? avatarUrl : fallbackSrc;
-
+export default function ModalUserProfile({ nickname, image }: ModalUserProfileProps) {
   return (
     <div className="flex flex-col items-center justify-center space-y-3">
       <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray-100">
-        <Image src={imageSrc} alt="아바타" width={48} height={48} unoptimized />
+        <Avatar src={image ?? ''} alt="프로필 이미지" className="h-12 w-12" />
       </div>
       <p className="text-pre-md tablet:text-pre-lg pc:text-pre-xl text-black-800 font-semibold">{nickname}</p>
     </div>

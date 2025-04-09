@@ -49,6 +49,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           }
 
           const data = await res.json();
+
           const user = {
             id: String(data.user.id),
             email: data.user.email ?? '',
@@ -152,7 +153,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return session;
     },
     async redirect() {
-      return 'http://localhost:3000/main';
+      return `${process.env.NEXTAUTH_URL}/main`;
     },
   },
 });
