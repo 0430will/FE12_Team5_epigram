@@ -1,18 +1,18 @@
 'use client';
 
 import useFetchUser from '@/hooks/useFetchdata';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { uploadImage } from '@/lib/UploadImage';
 import { patchUserInfo } from '@/lib/patchUserInfo';
-import { useSession } from 'next-auth/react';
 import { notify } from '@/util/toast';
 
+
 export default function MyUserProfile() {
+  const { isLoading, user, refetchUser } = useFetchUser();
   const { data: session } = useSession();
   const token = session?.user.accessToken;
-  const { isLoading, user, setUser } = useFetchUser();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [editMode, setEditMode] = useState(false);
@@ -46,19 +46,20 @@ export default function MyUserProfile() {
 
       // 1. 이미지가 변경됐으면 업로드
       if (selectedImageFile) {
+        if (!token) {
+          console.error('access Token이 없습니다.');
+          return;
+        }
         imageUrl = await uploadImage(selectedImageFile, token);
         console.log(imageUrl);
       }
 
       // 2. 유저 정보 수정
-      await patchUserInfo({ nickname: nickname || user.nickname, image: imageUrl, token });
+      await patchUserInfo({ nickname: nickname || user.nickname, image: imageUrl, token: token });
 
-      // 3. 상태 초기화
-      setUser({
-        ...user,
-        nickname: nickname || user.nickname,
-        image: imageUrl,
-      });
+      // 저장 후 새로 서버에서 유저 정보 가져오기
+      await refetchUser();
+
       setEditMode(false);
       setPreviewImage(null);
       setSelectedImageFile(null);
@@ -77,7 +78,7 @@ export default function MyUserProfile() {
   return (
     <section className="pc:mb-[96px] mb-[56px] flex flex-col items-center">
       <div
-        className="mb-[16px] h-[120px] w-[120px] cursor-none cursor-pointer overflow-hidden rounded-full"
+        className="mb-[16px] h-[120px] w-[120px] cursor-pointer overflow-hidden rounded-full"
         onClick={handleImageClick}
       >
         <Image
