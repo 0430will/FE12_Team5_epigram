@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { uploadImage } from '@/lib/UploadImage';
 import { patchUserInfo } from '@/lib/patchUserInfo';
-import { useSession } from 'next-auth/react';
 import { notify } from '@/util/toast';
 
 
