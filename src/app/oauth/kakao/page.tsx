@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react'; // next-auth를 통해 세션 관리
+import { signIn } from 'next-auth/react';
 
 export default function KakaoRedirection() {
   const [code, setCode] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    // 카카오톡 로그인시 redirect uri에서 ?뒤에 있는 인가코드를 받아옴
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const codeFromUrl = params.get('code');
@@ -20,18 +19,17 @@ export default function KakaoRedirection() {
     }
   }, []);
 
-  // code가 있을 때 signIn 함수 호출
   useEffect(() => {
     if (code) {
-      handleSignInWithCode(code); // signIn 호출
+      handleSignInWithCode(code);
     }
   }, [code]);
 
   // 카카오 인가 코드를 signIn으로 넘기기
   const handleSignInWithCode = async (code: string) => {
     const result = await signIn('kakao', {
-      code: code, // 인가 코드를 signIn에 넘김
-      redirect: false, // 리디렉션을 수동으로 처리
+      code: code,
+      redirect: false,
     });
 
     if (result?.error) {
