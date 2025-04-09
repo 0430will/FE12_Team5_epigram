@@ -7,6 +7,7 @@ import { useRef, useState } from 'react';
 import { uploadImage } from '@/lib/UploadImage';
 import { patchUserInfo } from '@/lib/patchUserInfo';
 import { useSession } from 'next-auth/react';
+import { notify } from '@/util/toast';
 
 export default function MyUserProfile() {
   const { data: session } = useSession();
@@ -121,7 +122,10 @@ export default function MyUserProfile() {
               저장
             </button>
             <button
-              onClick={handleCancel}
+              onClick={() => {
+                notify({ type: 'info', message: '프로필 변경이 취소되었습니다!' });
+                handleCancel();
+              }}
               className="text-pre-md font-weight-regular pc:font-weight-medium pc:text-pre-xl pc:h-[48px] pc:w-[100px] bg-line-100 h-[38px] w-[77px] cursor-pointer items-center justify-center rounded-[100px] text-blue-400 hover:bg-gray-200 hover:text-black"
             >
               취소
