@@ -24,7 +24,7 @@ export default function EmotionPieChart() {
       if (isNaN(userId)) {
         console.error('userId가 유효하지 않습니다.');
         return;
-      }
+      } //리차트
       const response = await GetMonthEmotion(userId, currentYear, currentMonth);
       if (response.length > 0) {
         const emotionCount: Record<string, number> = {};
