@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { Modal, ModalHandle } from '@/components/Modal';
 import { notify } from '@/util/toast';
-import dynamic from 'next/dynamic';
+import Spinner from '@/components/Spinner';
 
 export default function Sol() {
   const modalRef = useRef<ModalHandle | null>(null);
@@ -12,8 +12,6 @@ export default function Sol() {
     console.log('⚡⚡⚡액션 수행⚡⚡⚡');
     modalRef.current?.close();
   }
-
-  const Loader = dynamic(() => import('@/components/Loader'), { ssr: false });
 
   return (
     <>
@@ -91,27 +89,16 @@ export default function Sol() {
         </div>
       </div>
       <div className="mt-[15px] border border-gray-200 bg-gray-50 p-5">
-        <h3 className="mb-5 text-xl font-bold">3. Loader</h3>
+        <h3 className="mb-5 text-xl font-bold">3. Spinner</h3>
         <p className="mb-5 leading-7">
           <b>✅ Props</b>
           <br />
           1️⃣ size : number;
           <br />
-          2️⃣ {`align : 'left' | 'center' | 'right';`}
-          <br />
-          <b>✨ 주의사항 :</b>
-          <br />
-          <b>
-            lottie-react는 내부적으로 document나 window 객체를 사용하는 브라우저 전용 라이브러리이기 때문에, 서버 사이드
-            렌더링 중에 오류가 발생하여 다음과 같이 import 해야 됩니다.{' '}
-          </b>
-          <br />
-          {`import dynamic from 'next/dynamic';`}
-          <br />
-          {`const Loader = dynamic(() => import('@/components/Loader'), { ssr: false });`}
+          3️⃣ className? : string;
         </p>
         <div className="bg-white p-5">
-          <Loader size={85} align="center" />
+          <Spinner size={60} className="tablet:w-[90px]" />
         </div>
       </div>
     </>
