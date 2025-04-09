@@ -15,7 +15,6 @@ export default async function Page({ params }: { params: PageParams }) {
 
   if (!token) return;
   const data = await GetEpigram(Number(id), token);
-  if (!data) return <div>오류가 발생했습니다.</div>;
 
   return <EpigramForm initialValue={data} submitType="수정하기" />;
 }

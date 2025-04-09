@@ -186,19 +186,12 @@ export default function EpigramForm({
             </div>
           </div>
           <div className="pc:gap-[16px] flex flex-col gap-[8px]">
-            <div className="flex gap-[4px]">
-              <label
-                htmlFor="referenceTitle"
-                className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
-              >
-                출처
-              </label>
-              <div className="relative">
-                <span className="text-pre-lg text-state-error tablet:text-pre-lg pc:text-pre-xl pc:top-[2px] absolute top-[1px] font-medium">
-                  *
-                </span>
-              </div>
-            </div>
+            <label
+              htmlFor="referenceTitle"
+              className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
+            >
+              출처
+            </label>
             <input
               id="referenceTitle"
               className="text-pre-lg font-regular text-black-950 pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
