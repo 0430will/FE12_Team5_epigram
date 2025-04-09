@@ -2,21 +2,12 @@
 
 import { TagsInputWithList } from '@/components/TagsInputWithList';
 import { PatchEpigram, PostEpigram } from '@/lib/Epigram';
-import { EpigramTag } from '@/types/Epigram';
+import { AddEpigram } from '@/types/Epigram';
 import { notify } from '@/util/toast';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-
-export interface AddEpigram {
-  tags: EpigramTag[];
-  referenceUrl: string;
-  referenceTitle: string;
-  author: string;
-  content: string;
-  authorSelected: string;
-}
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface EpigramData extends AddEpigram {
   id: number;
@@ -70,29 +61,24 @@ export default function EpigramForm({
     }
   };
 
-  const SubmitPostForm = async () => {
-    if (!token) return;
-    const allValues = watch();
-    const response = await PostEpigram(allValues, token);
-    if (!response) {
-      return;
-    }
-    notify({ type: 'success', message: '게시물이 작성되었습니다.' });
-    router.push(`/feed/${response.id}`);
-  };
-
-  const SubmitPatchForm = async () => {
+  const submitEpigram = async (type: 'post' | 'patch') => {
     if (!initialValue?.id || !token) return;
     const allValues = watch();
-    const response = await PatchEpigram(allValues, initialValue.id, token);
-    if (!response) {
-      return;
-    }
-    notify({ type: 'success', message: '게시물이 수정되었습니다.' });
+    return type === 'patch'
+      ? await PatchEpigram(allValues, initialValue.id, token)
+      : await PostEpigram(allValues, token);
+  };
+
+  const handleSubmitForm = async (type: 'post' | 'patch') => {
+    const response = await submitEpigram(type);
+    if (!response) return;
+
+    notify({ type: 'success', message: type === 'patch' ? '게시물이 수정되었습니다.' : '게시물이 작성되었습니다.' });
     router.push(`/feed/${response.id}`);
   };
 
-  const SelectForm = submitType === '작성하기' ? SubmitPostForm : SubmitPatchForm;
+  const SelectForm: SubmitHandler<AddEpigram> = async () =>
+    await handleSubmitForm(submitType === '작성하기' ? 'post' : 'patch');
 
   useEffect(() => {
     if (selectedOption === '알 수 없음') {

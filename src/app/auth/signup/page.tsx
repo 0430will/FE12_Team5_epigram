@@ -63,6 +63,7 @@ export default function Page() {
 
       // 로그인 성공 시 홈으로 이동
       router.push('/');
+      notify({ type: 'success', message: '회원가입 되었습니다.' });
     } catch (error) {
       console.error(error);
     }
