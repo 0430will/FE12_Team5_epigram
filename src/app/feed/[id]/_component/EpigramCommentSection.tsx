@@ -122,7 +122,7 @@ export default function EpigramCommentSection() {
   }
 
   return (
-    <div className="rounded-md bg-[#F5F7FA] px-4 py-6">
+    <div className="tablet:max-w-[384px] tablet:pt-[40px] tablet:pb-[173px] pc:max-w-[640px] pc:pt-[63px] pc:pb-[163px] mx-auto w-full rounded-md bg-[#F5F7FA] pt-[32px]">
       <CommentCount count={totalCount} />
 
       <CommentInput userImage={userImage} onSubmit={handleCreate} />
