@@ -11,6 +11,7 @@ import { useSession } from 'next-auth/react';
 export default function MyUserProfile() {
   const { data: session } = useSession();
   const token = session?.user.accessToken;
+  console.log(token);
   const { isLoading, user, setUser } = useFetchUser();
 
   const fileInputRef = useRef<HTMLInputElement>(null);

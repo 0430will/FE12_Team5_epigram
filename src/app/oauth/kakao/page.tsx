@@ -1,8 +1,9 @@
-'use client'; // 이 파일은 클라이언트 전용 코드입니다.
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { signIn } from 'next-auth/react'; // next-auth를 통해 세션 관리
 
 export default function KakaoRedirection() {
   const [code, setCode] = useState<string | null>(null);
@@ -30,7 +31,6 @@ export default function KakaoRedirection() {
   // 액세스 토큰 요청 함수
   const fetchAccessToken = async (code: string) => {
     const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
-    console.log(redirectUri);
     const provider = 'KAKAO';
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const url = `${apiUrl}/auth/signIn/${provider}`;
@@ -53,8 +53,20 @@ export default function KakaoRedirection() {
       }
 
       const data = await response.json();
+      console.log(data);
 
       const { accessToken, refreshToken, user } = data;
+
+      const result = await signIn('credentials', {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        id: user.id,
+        email: user.email,
+        nickname: user.nickname,
+        image: user.image,
+      });
+      console.log('SignIn Result:', result); // 결과를 로그로 출력
+
       const nickname = user.nickname;
       const userId = user.id;
       Cookies.set('accessToken', accessToken, { expires: 7, path: '/' });
@@ -65,7 +77,7 @@ export default function KakaoRedirection() {
       localStorage.setItem('id', userId);
       console.log('Redirecting to /epigrams');
 
-      router.push('/epigrams');
+      router.push('/main');
     } catch (error) {
       console.error('액세스 토큰 요청 중 에러 발생:', error);
       router.push('/auth/login?error=AccessTokenRequestFailed');

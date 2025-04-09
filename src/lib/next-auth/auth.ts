@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { signinSchema, signupSchema } from '@/lib/validation/auth';
+import { User } from '@/types/Oauth';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   session: {
@@ -96,6 +97,36 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         }
 
         return null; // 우선 로그인/회원가입 실패시 null을 반환
+      },
+    }),
+    CredentialsProvider({
+      id: 'kakao',
+      name: 'Kakao Login',
+      credentials: {
+        accessToken: { label: 'Access Token', type: 'text' },
+        refreshToken: { label: 'Refresh Token', type: 'text' },
+        id: { label: 'ID', type: 'text' },
+        email: { label: 'Email', type: 'text' },
+        nickname: { label: 'Nickname', type: 'text' },
+        image: { label: 'Image', type: 'text' },
+      },
+      async authorize(credentials): Promise<User | null> {
+        console.log('Received credentials:', credentials); // credentials 로그 확인
+        if (credentials) {
+          const user: User = {
+            id: credentials.id as string, // credentials의 필드 값이 문자열임을 명확히 지정
+            email: credentials.email as string, // credentials의 필드 값이 문자열임을 명확히 지정
+            nickname: credentials.nickname as string, // credentials의 필드 값이 문자열임을 명확히 지정
+            image: credentials.image as string | null, // credentials의 필드 값이 이미지 URL일 경우, 문자열 또는 null
+            accessToken: credentials.accessToken as string, // accessToken을 문자열로 지정
+            refreshToken: credentials.refreshToken as string, // refreshToken을 문자열로 지정
+          };
+
+          // 반환된 user 객체는 이제 `User` 타입임을 보장합니다.
+          return user;
+        }
+
+        return null;
       },
     }),
   ],
