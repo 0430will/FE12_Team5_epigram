@@ -135,13 +135,13 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               refreshToken: data.refreshToken,
             };
 
-            return user; // 로그인 성공 시 user 객체 반환
+            return user;
           } catch (error) {
             console.error('카카오 로그인 오류:', error);
-            return null; // 로그인 실패 시 null 반환
+            return null;
           }
         }
-        return null; // 인가 코드가 없으면 null 반환
+        return null;
       },
     }),
   ],
