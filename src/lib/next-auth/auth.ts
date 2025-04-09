@@ -103,30 +103,46 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       id: 'kakao',
       name: 'Kakao Login',
       credentials: {
-        accessToken: { label: 'Access Token', type: 'text' },
-        refreshToken: { label: 'Refresh Token', type: 'text' },
-        id: { label: 'ID', type: 'text' },
-        email: { label: 'Email', type: 'text' },
-        nickname: { label: 'Nickname', type: 'text' },
-        image: { label: 'Image', type: 'text' },
+        code: { label: 'Authorization Code', type: 'text' }, // 인가 코드 받기
       },
-      async authorize(credentials): Promise<User | null> {
-        console.log('Received credentials:', credentials); // credentials 로그 확인
-        if (credentials) {
-          const user: User = {
-            id: credentials.id as string, // credentials의 필드 값이 문자열임을 명확히 지정
-            email: credentials.email as string, // credentials의 필드 값이 문자열임을 명확히 지정
-            nickname: credentials.nickname as string, // credentials의 필드 값이 문자열임을 명확히 지정
-            image: credentials.image as string | null, // credentials의 필드 값이 이미지 URL일 경우, 문자열 또는 null
-            accessToken: credentials.accessToken as string, // accessToken을 문자열로 지정
-            refreshToken: credentials.refreshToken as string, // refreshToken을 문자열로 지정
-          };
+      async authorize(credentials) {
+        if (credentials?.code) {
+          try {
+            // 카카오 액세스 토큰을 얻기 위한 백엔드 API 호출
+            const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signIn/KAKAO`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                redirectUri: redirectUri,
+                token: credentials.code,
+              }),
+            });
 
-          // 반환된 user 객체는 이제 `User` 타입임을 보장합니다.
-          return user;
+            if (!response.ok) {
+              throw new Error('액세스 토큰 요청 실패');
+            }
+
+            const data = await response.json();
+
+            const user = {
+              id: String(data.user.id),
+              email: data.user.email ?? '',
+              nickname: data.user.nickname ?? '',
+              image: data.user.image ?? null,
+              accessToken: data.accessToken,
+              refreshToken: data.refreshToken,
+            };
+
+            return user; // 로그인 성공 시 user 객체 반환
+          } catch (error) {
+            console.error('카카오 로그인 오류:', error);
+            return null; // 로그인 실패 시 null 반환
+          }
         }
-
-        return null;
+        return null; // 인가 코드가 없으면 null 반환
       },
     }),
   ],

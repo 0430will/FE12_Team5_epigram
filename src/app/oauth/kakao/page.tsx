@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 import { signIn } from 'next-auth/react'; // next-auth를 통해 세션 관리
 
 export default function KakaoRedirection() {
@@ -10,77 +9,36 @@ export default function KakaoRedirection() {
   const router = useRouter();
 
   useEffect(() => {
-    //카카오톡 로그인시 redirect uri에서 ?뒤에있는 인가코드를 받아옴
+    // 카카오톡 로그인시 redirect uri에서 ?뒤에 있는 인가코드를 받아옴
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const codeFromUrl = params.get('code');
+      console.log(codeFromUrl);
       if (codeFromUrl) {
         setCode(codeFromUrl);
       }
     }
   }, []);
 
-  // code가 있을 때 액세스 토큰을 요청하는 함수 호출
+  // code가 있을 때 signIn 함수 호출
   useEffect(() => {
     if (code) {
-      fetchAccessToken(code); // 액세스 토큰 요청
-      console.log(code);
+      handleSignInWithCode(code); // signIn 호출
     }
   }, [code]);
 
-  // 액세스 토큰 요청 함수
-  const fetchAccessToken = async (code: string) => {
-    const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
-    const provider = 'KAKAO';
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const url = `${apiUrl}/auth/signIn/${provider}`;
+  // 카카오 인가 코드를 signIn으로 넘기기
+  const handleSignInWithCode = async (code: string) => {
+    const result = await signIn('kakao', {
+      code: code, // 인가 코드를 signIn에 넘김
+      redirect: false, // 리디렉션을 수동으로 처리
+    });
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          redirectUri: redirectUri,
-          token: code,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('액세스 토큰 요청 실패');
-      }
-
-      const data = await response.json();
-      console.log(data);
-
-      const { accessToken, refreshToken, user } = data;
-
-      const result = await signIn('credentials', {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        id: user.id,
-        email: user.email,
-        nickname: user.nickname,
-        image: user.image,
-      });
-      console.log('SignIn Result:', result); // 결과를 로그로 출력
-
-      const nickname = user.nickname;
-      const userId = user.id;
-      Cookies.set('accessToken', accessToken, { expires: 7, path: '/' });
-      Cookies.set('refreshToken', refreshToken, { expires: 7, path: '/' });
-
-      console.log(data);
-      localStorage.setItem('nickname', nickname);
-      localStorage.setItem('id', userId);
-      console.log('Redirecting to /epigrams');
-
+    if (result?.error) {
+      console.error('로그인 실패:', result.error);
+      router.push('/auth/login?error=LoginFailed');
+    } else {
       router.push('/main');
-    } catch (error) {
-      console.error('액세스 토큰 요청 중 에러 발생:', error);
-      router.push('/auth/login?error=AccessTokenRequestFailed');
     }
   };
 
@@ -91,49 +49,3 @@ export default function KakaoRedirection() {
     </div>
   );
 }
-
-// export async function kakaoExchangeCode(authorizationCode: string) {
-//   try {
-//     // Kakao의 token endpoint에 POST 요청을 보내 액세스 토큰을 요청합니다.
-//     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signIn/KAKAO`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: new URLSearchParams({
-//         redirect_uri: process.env.KAKAO_REDIRECT_URI!,
-//         code: authorizationCode,
-//       }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to exchange authorization code');
-//     }
-
-//     const data = await response.json();
-//     const { access_token, refresh_token } = data;
-
-//     // 액세스 토큰을 사용해 Kakao 사용자 프로필 정보를 가져옵니다.
-//     const userProfileResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
-//       method: 'GET',
-//       headers: {
-//         Authorization: `Bearer ${access_token}`,
-//       },
-//     });
-
-//     if (!userProfileResponse.ok) {
-//       throw new Error('Failed to fetch user profile');
-//     }
-
-//     const userProfile = await userProfileResponse.json();
-
-//     return {
-//       user: userProfile,
-//       accessToken: access_token,
-//       refreshToken: refresh_token,
-//     };
-//   } catch (error) {
-//     console.error('Error during Kakao authentication:', error);
-//     throw new Error('Failed to exchange Kakao code');
-//   }
-// }
