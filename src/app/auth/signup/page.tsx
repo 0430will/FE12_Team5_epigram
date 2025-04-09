@@ -8,6 +8,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema, SignupInput } from '@/lib/validation/auth';
+import { notify } from '@/util/toast';
 
 export default function Page() {
   const [isPwVisible, setIsPwVisible] = useState(false);
@@ -43,8 +44,12 @@ export default function Page() {
       if (!response.ok) {
         const errorData = await response.json();
         setError(errorData.error || '회원가입에 실패하셨습니다.');
+        //회원가입 실패
+        notify({ type: 'error', message: '회원가입에 실패했습니다.' });
         return;
       }
+      //회원가입 성공
+      notify({ type: 'success', message: '회원가입에 성공하셨습니다.' });
       // 회원가입 후 바로 로그인 처리
       const signInResponse = await signIn('credentials', {
         redirect: false, // 페이지 이동을 방지

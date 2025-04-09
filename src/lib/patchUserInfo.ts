@@ -1,3 +1,5 @@
+import { notify } from '@/util/toast';
+
 interface PatchUserInfoArgs {
   nickname?: string;
   image?: string;
@@ -23,10 +25,15 @@ export async function patchUserInfo({ nickname, image, token }: PatchUserInfoArg
   const resText = await response.text();
   console.log('서버 응답:', resText);
 
+  if (response.ok) {
+    notify({ type: 'success', message: '프로필 변경에 성공하였습니다!' });
+  }
+
   if (!response.ok) {
     if (response.status === 400) {
-      alert('이미 사용중인 닉네임 입니다');
+      notify({ type: 'error', message: '중복된 닉네임 입니다!' });
     }
+
     throw new Error('유저 정보 수정 실패');
   }
 }

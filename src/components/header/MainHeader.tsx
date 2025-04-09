@@ -2,16 +2,18 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { useState, useRef } from 'react';
 import Kebab from '../Kebab';
+import useFetchUser from '@/hooks/useFetchdata';
 
 export default function MainHeader() {
-  const { data: session } = useSession();
+  const { user, isLoading } = useFetchUser();
   const [isSidebar, setIsSidebar] = useState(false);
   const [isKebab, setIsKebab] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null); //사이드바 & 드롭다운 감지
 
+  if (isLoading) return null;
   return (
     <div
       className="relative w-full"
@@ -81,13 +83,13 @@ export default function MainHeader() {
               }}
             >
               <Image
-                src="/assets/icons/user.svg"
-                width={16}
-                height={16}
+                src={user?.image || '/assets/icons/user.svg'}
+                width={24}
+                height={24}
                 alt="User Icon"
-                className="h-6 w-6 text-[var(--color-black-600)]"
+                className="pc:h-6 pc:w-6 h-4 w-4 rounded-full object-cover"
               />
-              <span className="text-pre-md tablet:inline text-[var(--color-black-500)]">{session?.user.nickname}</span>
+              <span className="text-pre-sm pc:text-pre-md text-gray-300">{user?.nickname}</span>
             </div>
             {isKebab && (
               <Kebab

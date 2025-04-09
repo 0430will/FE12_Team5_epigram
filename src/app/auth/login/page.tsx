@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 import SocialLogins from '../_component/SocialLogins';
 import { signinSchema } from '@/lib/validation/auth';
+import { notify } from '@/util/toast';
 
 type LoginFormInputs = z.infer<typeof signinSchema>;
 
@@ -41,9 +42,11 @@ export default function LoginPage() {
 
     if (res?.error) {
       setError('이메일 또는 비밀번호가 다릅니다.'); // NextAuth에서 받은 에러 메시지를 그대로 사용
+      notify({ type: 'error', message: '로그인에 실패했습니다.' });
       return;
     }
 
+    notify({ type: 'success', message: '로그인에 성공하였습니다.' });
     router.push('/');
   };
 

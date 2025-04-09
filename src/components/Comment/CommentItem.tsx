@@ -10,6 +10,7 @@ import { ko } from 'date-fns/locale';
 import ClientButton from '../Button/ClientButton';
 import ModalLayout from '../Modal/ModalLayout';
 import ModalUserProfile from '../Modal/ModalUserProfile';
+import { notify } from '@/util/toast';
 
 interface Props {
   comment: Comment;
@@ -58,9 +59,11 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
       await deleteComment(token, comment.id);
       onDelete(comment.id); // 삭제 후 부모에 알림
       setIsDeleteModalOpen(false);
+
+      notify({ message: '댓글이 삭제되었습니다.', type: 'success' });
     } catch (error) {
       console.error('댓글 삭제 실패:', error);
-      alert('댓글 삭제 중 오류가 발생했습니다.');
+      notify({ message: '댓글 삭제에 실패했습니다.', type: 'error' });
     }
   };
 

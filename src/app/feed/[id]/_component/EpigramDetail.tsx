@@ -23,7 +23,7 @@ export default async function EpigramDetail({ params }: { params: PageParams }) 
 
   return (
     <div>
-      <div className="border-line-100 relative flex w-full items-center justify-center border-b-[1px] bg-blue-100 bg-[repeating-linear-gradient(0deg,#ffffff_0px,#ffffff_24px,#F2F2F2_24px,#F2F2F2_25px)]">
+      <div className="border-line-100 flex w-full items-center justify-center border-b-[1px] bg-blue-100 bg-[repeating-linear-gradient(0deg,#ffffff_0px,#ffffff_24px,#F2F2F2_24px,#F2F2F2_25px)]">
         <div className="tablet:max-w-[384px] tablet:px-0 pc:max-w-[640px] tablet:pb-[40px] flex w-full flex-col gap-[32px] px-[24px] pt-[40px] pb-[16px]">
           <div className="tablet:gap-[24px] pc:gap-[32px] flex flex-col gap-[16px]">
             <div className="flex w-full items-start justify-between">
