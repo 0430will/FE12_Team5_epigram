@@ -36,7 +36,7 @@ export default function Home() {
               <motion.div {...DampingMotion}>
                 <button
                   onClick={() => (window.location.href = '/main')}
-                  className="bg-black-500 text-pre-lg pc:text-pre-xl pc:px-[108px] pc:py-[16px] rounded-[12px] px-[28px] py-[11px] font-semibold text-blue-100"
+                  className="bg-black-500 text-pre-lg pc:text-pre-xl pc:px-[108px] pc:py-[16px] cursor-pointer rounded-[12px] px-[28px] py-[11px] font-semibold text-blue-100"
                 >
                   시작하기
                 </button>
@@ -56,7 +56,7 @@ export default function Home() {
       </section>
 
       <section className="bg-bg-100">
-        <div className="pc:gap-[184px] pc:mt-[240px] mx-auto mt-[124px] mb-[200px] flex min-h-screen w-full max-w-[1316px] flex-col items-center justify-center">
+        <div className="pc:gap-[184px] pc:mt-[240px] mx-auto mt-[124px] flex min-h-screen w-full max-w-[1316px] flex-col items-center justify-center">
           <motion.div initial="hidden" whileInView="visible" variants={ScrollInMotion} viewport={{ once: true }}>
             <div className="pc:flex-row pc:gap-[80px] mx-[24px] mb-[196px] flex flex-col items-start justify-center">
               <Image
@@ -232,7 +232,7 @@ export default function Home() {
               <motion.div {...DampingMotion}>
                 <button
                   onClick={() => (window.location.href = '/main')}
-                  className="pc:text-pre-xl pc:px-[108px] pc:py-[16px] bg-black-500 text-pre-lg rounded-[12px] px-[28px] py-[11px] font-semibold text-blue-100"
+                  className="pc:text-pre-xl pc:px-[108px] pc:py-[16px] bg-black-500 text-pre-lg cursor-pointer rounded-[12px] px-[28px] py-[11px] font-semibold text-blue-100"
                 >
                   시작하기
                 </button>
