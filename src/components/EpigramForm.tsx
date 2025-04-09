@@ -6,8 +6,9 @@ import { AddEpigram } from '@/types/Epigram';
 import { notify } from '@/util/toast';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import Spinner from './Spinner';
 
 interface EpigramData extends AddEpigram {
   id: number;
@@ -37,6 +38,7 @@ export default function EpigramForm({
       authorSelected: initialValue?.authorSelected || '직접 입력',
     },
   });
+  const [isLoading, setIsloading] = useState(false);
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -63,6 +65,7 @@ export default function EpigramForm({
 
   const submitEpigram = async (type: 'post' | 'patch') => {
     if (!initialValue?.id || !token) return;
+    setIsloading(true);
     const allValues = watch();
     return type === 'patch'
       ? await PatchEpigram(allValues, initialValue.id, token)
@@ -72,6 +75,7 @@ export default function EpigramForm({
   const handleSubmitForm = async (type: 'post' | 'patch') => {
     const response = await submitEpigram(type);
     if (!response) return;
+    setIsloading(false);
 
     notify({ type: 'success', message: type === 'patch' ? '게시물이 수정되었습니다.' : '게시물이 작성되었습니다.' });
     router.push(`/feed/${response.id}`);
@@ -235,6 +239,13 @@ export default function EpigramForm({
           {submitType === '작성하기' ? '작성 완료' : '수정 완료'}
         </button>
       </form>
+      {isLoading && (
+        <div className="bg-black-600/20 fixed inset-0 z-2 flex items-center justify-center">
+          <div className="bg-bg-100 flex h-[100px] w-[100px] items-center justify-center rounded-[16px]">
+            <Spinner size={60} className="h-[56px] w-[90px]" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

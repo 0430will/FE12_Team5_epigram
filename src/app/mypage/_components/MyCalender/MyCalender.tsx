@@ -34,7 +34,7 @@ export default function MyCalender({ writerId }: { writerId: string }) {
         <span className="text-pre-lg text-black-600 pc:text-pre-2xl font-semibold">
           {moment(displayMonth).format('YYYY년 M월')}
         </span>
-        <div className="flex h-[548px] w-[637px] items-center justify-center">
+        <div className="pc:h-[548px] tablet:h-[326px] flex h-[264px] items-center justify-center">
           <Spinner size={60} className="h-[56px] w-[90px]" />
         </div>
       </div>
