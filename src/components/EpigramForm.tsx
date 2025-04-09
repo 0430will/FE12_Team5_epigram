@@ -241,8 +241,8 @@ export default function EpigramForm({
       </form>
       {isLoading && (
         <div className="bg-black-600/20 fixed inset-0 z-2 flex items-center justify-center">
-          <div className="bg-bg-100 flex h-[100px] w-[100px] items-center justify-center rounded-[16px]">
-            <Spinner size={60} className="h-[56px] w-[90px]" />
+          <div className="bg-bg-100 pc:h-[100px] pc:w-[100px] flex h-[80px] w-[80px] items-center justify-center rounded-[16px]">
+            <Spinner size={60} className="pc:h-[56px] pc:w-[90px] h-[30px]" />
           </div>
         </div>
       )}
