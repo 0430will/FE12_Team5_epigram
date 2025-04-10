@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import Spinner from '@/components/Spinner';
 
 export default function KakaoRedirection() {
   const [code, setCode] = useState<string | null>(null);
@@ -42,8 +43,9 @@ export default function KakaoRedirection() {
 
   return (
     <div>
-      <h1>카카오 로그인 중...</h1>
-      <p>로그인 처리 중입니다. 잠시만 기다려 주세요.</p>
+      <div className="flex items-center justify-center">
+        <Spinner size={100} className="pc:h-[76px] pc:w-[150px] pc:mt-[20%] tablet:mt-[40%] mt-[80%] h-[50px]" />
+      </div>
     </div>
   );
 }
