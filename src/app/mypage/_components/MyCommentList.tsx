@@ -9,6 +9,7 @@ import { usePaginatedList } from '@/hooks/usePaginatedList';
 import Image from 'next/image';
 import EmptyState from '@/components/EmptyState';
 import { useRouter } from 'next/navigation';
+import SkeletonCommentCard from '@/components/skeletons/SkeletonCommentCard';
 
 export default function MyCommentList() {
   const { data: session, status } = useSession();
@@ -64,6 +65,8 @@ export default function MyCommentList() {
     </div>
   ) : (
     <>
+      <SkeletonCommentCard count={4} />
+
       {comments.map((comment) => (
         <CommentItem
           key={comment.id}
