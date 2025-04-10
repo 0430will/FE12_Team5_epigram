@@ -32,6 +32,7 @@ export default function SearchPage() {
   const [epigrams, setEpigrams] = useState<Epigram[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // 로컬 스토리지에서 최근 검색어 불러오기
   useEffect(() => {
     const savedSearches = localStorage.getItem('recentSearches');
     console.log('저장된 검색어:', savedSearches);
@@ -40,7 +41,8 @@ export default function SearchPage() {
       setRecentSearches(JSON.parse(savedSearches));
     }
   }, []);
-
+  
+  // 검색어 저장 함수
   const saveSearchTerm = (term: string) => {
     if (term.trim() === '') return;
     const updatedSearches = [term, ...recentSearches.filter(s => s !== term)].slice(0, 10);
@@ -48,17 +50,20 @@ export default function SearchPage() {
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
 
+  // 최근 검색어 모두 지우기
   const clearRecentSearches = () => {
     setRecentSearches([]);
     localStorage.removeItem('recentSearches');
   };
-
+  
+  // 개별 검색어 삭제 함수
   const deleteSearchTerm = (termToDelete: string) => {
     const updatedSearches = recentSearches.filter(term => term !== termToDelete);
     setRecentSearches(updatedSearches);
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
-
+  
+  // 검색어로 에피그램 검색
   const handleSearch = async (term: string) => {
     if (term.trim() === '') return;
     setIsLoading(true);
@@ -68,6 +73,7 @@ export default function SearchPage() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams?limit=300`);
       const data: ApiResponse = await response.json();
 
+      // 검색어로 필터링
       const filteredEpigrams = data.list.filter(epigram => {
         const contentMatch = epigram.content.toLowerCase().includes(term.toLowerCase());
         const authorMatch = epigram.author.toLowerCase().includes(term.toLowerCase());
@@ -82,7 +88,8 @@ export default function SearchPage() {
       setIsLoading(false);
     }
   };
-
+  
+  // 검색어 하이라이트 처리
   const highlightSearchTerm = (text: string) => {
     if (!searchTerm) return text;
     const regex = new RegExp(`(${searchTerm})`, 'gi');
@@ -170,6 +177,7 @@ export default function SearchPage() {
                 <div key={epigram.id}
                 onClick={() => router.push(`/feed/${epigram.id}`)}
                 className="p-[24px] border-b border-line-100 rounded-[22px] bg-blue-100 cursor-pointer">
+                  {/* 에피그램 내용 */}
                   <div className="font-iropke mb-[24px] text-iro-xl text-black-600">
                     {highlightSearchTerm(epigram.content)}
                   </div>
