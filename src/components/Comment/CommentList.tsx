@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CommentItem } from './CommentItem';
 import { useSession } from 'next-auth/react';
 import { useCommentStore } from '@/stores/pageStores';
@@ -8,6 +8,7 @@ import { getComments } from '@/lib/Comment';
 import { usePaginatedList } from '@/hooks/usePaginatedList';
 import Image from 'next/image';
 import { Comment } from '@/types/Comment';
+import { fetchUserProfile } from '@/lib/User';
 
 export default function CommentList() {
   const { data: session, status } = useSession();
@@ -16,6 +17,8 @@ export default function CommentList() {
   const writerId = session?.user.id ? Number(session.user.id) : undefined;
 
   const { items: comments, hasMore } = useCommentStore();
+  const [userImage, setUserImage] = useState<string | null>(null);
+  const [userNickname, setUserNickname] = useState<string | null>(null);
 
   const fetchComments = async (cursor?: number) => {
     if (!token) return { list: [], totalCount: 0 };
@@ -28,6 +31,23 @@ export default function CommentList() {
     store: useCommentStore.getState(),
     fetchFn: fetchComments,
   });
+
+  useEffect(() => {
+    if (status === 'authenticated' && token) {
+      // 프로필 정보를 가져와서 상태로 저장
+      const fetchProfile = async () => {
+        try {
+          const profile = await fetchUserProfile(token);
+          setUserImage(profile.image);
+          setUserNickname(profile.nickname);
+        } catch (error) {
+          console.error('프로필을 가져오는 데 실패했습니다.', error);
+        }
+      };
+
+      fetchProfile();
+    }
+  }, [status, token]);
 
   useEffect(() => {
     if (status === 'authenticated' && token && comments.length === 0) {
@@ -54,6 +74,8 @@ export default function CommentList() {
             useCommentStore.getState().updateItem(updated); // 수정 반영
           }}
           writerId={writerId}
+          userImage={userImage}
+          userNickname={userNickname}
         />
       ))}
 

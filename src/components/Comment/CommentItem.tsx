@@ -19,9 +19,11 @@ interface Props {
   onDelete: (id: number) => void;
   onSave: (updated: Comment) => void;
   onClick?: () => void;
+  userImage?: string | null;
+  userNickname?: string | null;
 }
 
-export function CommentItem({ comment, token, writerId, onDelete, onSave, onClick }: Props) {
+export function CommentItem({ comment, token, writerId, onDelete, onSave, onClick, userImage, userNickname }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const [isPrivate, setIsPrivate] = useState(comment.isPrivate);
@@ -93,8 +95,8 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
           }}
         >
           <Avatar
-            src={comment.writer.image}
-            alt={comment.writer.nickname}
+            src={userImage ?? comment.writer.image}
+            alt={'프로필 이미지'}
             className="mr-4 h-12 w-12 cursor-pointer rounded-full transition-transform duration-200 hover:scale-105 hover:shadow-md"
           />
         </button>
@@ -108,7 +110,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
                 }}
                 className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-300 cursor-pointer hover:underline"
               >
-                {comment.writer.nickname}
+                {userNickname ?? comment.writer.nickname}
               </button>
               <span className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-300">
                 {formatTime(comment.createdAt)}
@@ -208,7 +210,10 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
       </CommentCard>
       {isProfileOpen && (
         <ModalLayout type="content" onClose={() => setIsProfileOpen(false)}>
-          <ModalUserProfile nickname={comment.writer.nickname} image={comment.writer.image} />
+          <ModalUserProfile
+            nickname={userNickname ?? comment.writer.nickname}
+            image={userImage ?? comment.writer.image}
+          />
         </ModalLayout>
       )}
 
