@@ -9,10 +9,12 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema, SignupInput } from '@/lib/validation/auth';
 import { notify } from '@/util/toast';
+import Spinner from '@/components/Spinner';
 
 export default function Page() {
   const [isPwVisible, setIsPwVisible] = useState(false);
   const [isPwConfirmVisible, setIsPwConfirmVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
   const {
@@ -31,6 +33,7 @@ export default function Page() {
   });
 
   const SubmitForm = async (data: SignupInput) => {
+    setIsLoading(true);
     setError('');
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signUp`, {
@@ -48,8 +51,6 @@ export default function Page() {
         notify({ type: 'error', message: '회원가입에 실패했습니다.' });
         return;
       }
-      //회원가입 성공
-      notify({ type: 'success', message: '회원가입에 성공하셨습니다.' });
       // 회원가입 후 바로 로그인 처리
       const signInResponse = await signIn('credentials', {
         redirect: false, // 페이지 이동을 방지
@@ -63,8 +64,11 @@ export default function Page() {
 
       // 로그인 성공 시 홈으로 이동
       router.push('/');
+      notify({ type: 'success', message: '회원가입 되었습니다.' });
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -167,19 +171,26 @@ export default function Page() {
           </div>
         </div>
         <button
-          className={`text-pre-lg pc:text-pre-xl pc:py-[16px] rounded-[12px] px-[16px] py-[9px] font-semibold text-blue-100 ${isValid ? `bg-black-500 cursor-pointer` : `bg-blue-300`}`}
+          className={`text-pre-lg pc:text-pre-xl pc:py-[16px] relative rounded-[12px] px-[16px] py-[9px] font-semibold text-blue-100 ${isValid ? `bg-black-500 cursor-pointer` : `bg-blue-300`}`}
           type="submit"
           disabled={!isValid}
         >
           가입하기
+          {error && (
+            <p className="text-state-error text-pre-xs font-regular tablet:text-pre-md pc:text-pre-lg absolute top-[50px] left-[0px]">
+              {error}
+            </p>
+          )}
         </button>
-        {error && (
-          <p className="text-state-error text-pre-xs font-regular tablet:text-pre-md pc:text-pre-lg tablet:bottom-[-26px] pc:bottom-[-28px] bottom-[-22px]">
-            {error}
-          </p>
-        )}
       </form>
       <SocialLogins authType={'SIGNUP'} />
+      {isLoading && (
+        <div className="bg-black-600/20 fixed inset-0 z-2 flex items-center justify-center">
+          <div className="bg-bg-100 pc:h-[100px] pc:w-[100px] flex h-[80px] w-[80px] items-center justify-center rounded-[16px]">
+            <Spinner size={60} className="pc:h-[56px] pc:w-[90px] h-[30px]" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

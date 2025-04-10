@@ -60,3 +60,12 @@ export interface EpigramCommentList {
   nextCursor: number;
   list: EpigramComment[];
 }
+
+export interface AddEpigram {
+  tags: EpigramTag[];
+  referenceUrl: string;
+  referenceTitle: string;
+  author: string;
+  content: string;
+  authorSelected: string;
+}

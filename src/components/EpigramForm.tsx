@@ -2,21 +2,13 @@
 
 import { TagsInputWithList } from '@/components/TagsInputWithList';
 import { PatchEpigram, PostEpigram } from '@/lib/Epigram';
-import { EpigramTag } from '@/types/Epigram';
+import { AddEpigram } from '@/types/Epigram';
 import { notify } from '@/util/toast';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-
-export interface AddEpigram {
-  tags: EpigramTag[];
-  referenceUrl: string;
-  referenceTitle: string;
-  author: string;
-  content: string;
-  authorSelected: string;
-}
+import { ChangeEvent, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import Spinner from './Spinner';
 
 interface EpigramData extends AddEpigram {
   id: number;
@@ -46,6 +38,7 @@ export default function EpigramForm({
       authorSelected: initialValue?.authorSelected || '직접 입력',
     },
   });
+  const [isLoading, setIsloading] = useState(false);
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -70,29 +63,26 @@ export default function EpigramForm({
     }
   };
 
-  const SubmitPostForm = async () => {
-    if (!token) return;
-    const allValues = watch();
-    const response = await PostEpigram(allValues, token);
-    if (!response) {
-      return;
-    }
-    notify({ type: 'success', message: '게시물이 작성되었습니다.' });
-    router.push(`/feed/${response.id}`);
-  };
-
-  const SubmitPatchForm = async () => {
+  const submitEpigram = async (type: 'post' | 'patch') => {
     if (!initialValue?.id || !token) return;
+    setIsloading(true);
     const allValues = watch();
-    const response = await PatchEpigram(allValues, initialValue.id, token);
-    if (!response) {
-      return;
-    }
-    notify({ type: 'success', message: '게시물이 수정되었습니다.' });
+    return type === 'patch'
+      ? await PatchEpigram(allValues, initialValue.id, token)
+      : await PostEpigram(allValues, token);
+  };
+
+  const handleSubmitForm = async (type: 'post' | 'patch') => {
+    const response = await submitEpigram(type);
+    if (!response) return;
+    setIsloading(false);
+
+    notify({ type: 'success', message: type === 'patch' ? '게시물이 수정되었습니다.' : '게시물이 작성되었습니다.' });
     router.push(`/feed/${response.id}`);
   };
 
-  const SelectForm = submitType === '작성하기' ? SubmitPostForm : SubmitPatchForm;
+  const SelectForm: SubmitHandler<AddEpigram> = async () =>
+    await handleSubmitForm(submitType === '작성하기' ? 'post' : 'patch');
 
   useEffect(() => {
     if (selectedOption === '알 수 없음') {
@@ -200,19 +190,12 @@ export default function EpigramForm({
             </div>
           </div>
           <div className="pc:gap-[16px] flex flex-col gap-[8px]">
-            <div className="flex gap-[4px]">
-              <label
-                htmlFor="referenceTitle"
-                className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
-              >
-                출처
-              </label>
-              <div className="relative">
-                <span className="text-pre-lg text-state-error tablet:text-pre-lg pc:text-pre-xl pc:top-[2px] absolute top-[1px] font-medium">
-                  *
-                </span>
-              </div>
-            </div>
+            <label
+              htmlFor="referenceTitle"
+              className="text-pre-md text-black-600 tablet:text-pre-lg pc:text-pre-xl font-semibold"
+            >
+              출처
+            </label>
             <input
               id="referenceTitle"
               className="text-pre-lg font-regular text-black-950 pc:text-pre-xl pc:h-[64px] h-[44px] rounded-[12px] border border-blue-300 px-[16px] placeholder:text-blue-400 focus:outline-blue-600"
@@ -256,6 +239,13 @@ export default function EpigramForm({
           {submitType === '작성하기' ? '작성 완료' : '수정 완료'}
         </button>
       </form>
+      {isLoading && (
+        <div className="bg-black-600/20 fixed inset-0 z-2 flex items-center justify-center">
+          <div className="bg-bg-100 pc:h-[100px] pc:w-[100px] flex h-[80px] w-[80px] items-center justify-center rounded-[16px]">
+            <Spinner size={60} className="pc:h-[56px] pc:w-[90px] h-[30px]" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

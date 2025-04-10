@@ -6,11 +6,12 @@ export const EmotionData = {
   MOVED: {
     image: '/assets/icons/heart_face.svg',
     name: '감동',
+    hover: 'border-yellow',
   },
-  HAPPY: { image: '/assets/icons/smiling_face.svg', name: '기쁨' },
-  WORRIED: { image: '/assets/icons/thinking_face.svg', name: '고민' },
-  SAD: { image: '/assets/icons/sad_face.svg', name: '슬픔' },
-  ANGRY: { image: '/assets/icons/angry_face.svg', name: '분노' },
+  HAPPY: { image: '/assets/icons/smiling_face.svg', name: '기쁨', hover: 'border-green' },
+  WORRIED: { image: '/assets/icons/thinking_face.svg', name: '고민', hover: 'border-purple' },
+  SAD: { image: '/assets/icons/sad_face.svg', name: '슬픔', hover: 'border-blue' },
+  ANGRY: { image: '/assets/icons/angry_face.svg', name: '분노', hover: 'border-red' },
 };
 
 export type EmotionKey = keyof typeof EmotionData;
@@ -40,7 +41,7 @@ function Emotion({
         </div>
         {isSelected && (
           <div
-            className={`border-yellow pc:border-[4px] absolute top-0 right-0 bottom-0 left-0 rounded-[8px] border-[3px]`}
+            className={`${EmotionData[emotion].hover} pc:border-[4px] absolute top-0 right-0 bottom-0 left-0 rounded-[8px] border-[3px]`}
           ></div>
         )}
       </div>
