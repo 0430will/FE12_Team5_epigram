@@ -1,10 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Avatar } from '@/components/Comment/Avatar';
 import ClientButton from '@/components/Button/ClientButton';
-import { useSession } from 'next-auth/react';
-import { createComment } from '@/lib/Comment';
 
 interface Props {
   onSubmit: (content: string, isPrivate: boolean) => void;
