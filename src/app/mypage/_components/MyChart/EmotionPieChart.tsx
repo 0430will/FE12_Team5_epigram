@@ -2,7 +2,6 @@
 
 import { useMonthEmotion } from '@/hooks/useMonthEmotion';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import NonEmotionChart from './NonEmotionChart';
 // import Image from 'next/image';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6B6B'];
@@ -16,11 +15,7 @@ const emotionMapping: Record<string, { image: string; name: string }> = {
 };
 
 export default function EmotionPieChart() {
-  const { chartData, hasData, isLoading } = useMonthEmotion();
-
-  if (!hasData && !isLoading) {
-    return <NonEmotionChart message="이번달의 감정 기록이 없습니다." />;
-  }
+  const { chartData } = useMonthEmotion();
 
   const topEmotionName = chartData.reduce((prev, curr) => (prev.value > curr.value ? prev : curr), {
     name: '',
