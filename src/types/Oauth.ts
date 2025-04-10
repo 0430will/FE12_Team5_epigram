@@ -12,3 +12,12 @@ export interface OauthApp {
 export interface KakaoCredentials {
   code: string;
 }
+
+export interface User {
+  id: string;
+  email: string;
+  nickname: string;
+  image: string | null;
+  accessToken: string;
+  refreshToken: string;
+}
