@@ -15,7 +15,6 @@ const backgroundColors: Record<string, string> = {
 
 export default function PageBackground({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  // const bgColor = backgroundColors[pathname] || 'bg-bg-100';
   const bgColor = backgroundColors[pathname] || (pathname.startsWith('/addepigram/') ? 'bg-white' : 'bg-bg-100');
 
   return <div className={`${bgColor} min-h-screen`}>{children}</div>;

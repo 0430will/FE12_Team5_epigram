@@ -12,7 +12,7 @@ export default function Page() {
             <TodayEpirams />
           </div>
           <div className="pc:gap-[40px] pc:mb-[140px] mb-[56px] grid gap-[24px]">
-            <div className="text-pre-lg pc:text-iro-2xl">오늘의 감정은 어떤가요?</div>
+            <div className="text-pre-lg pc:text-iro-2xl font-semibold">오늘의 감정은 어떤가요?</div>
             <TodayEmotion emotionType="main" />
           </div>
           <div className="pc:mb-[140px] mb-[56px]">

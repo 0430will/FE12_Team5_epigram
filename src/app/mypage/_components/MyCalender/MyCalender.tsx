@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { GetMonthEmotion } from '@/lib/Emotionlog';
 import moment from 'moment';
 import { useEmotionContext } from '../EmotionContext';
+import Spinner from '@/components/Spinner';
 
 export default function MyCalender({ writerId }: { writerId: string }) {
   const [data, setData] = useState<EmotionLog[]>();
@@ -27,7 +28,17 @@ export default function MyCalender({ writerId }: { writerId: string }) {
     getData();
   }, [displayMonth, todayEmotion]);
 
-  if (!data) return;
+  if (!data)
+    return (
+      <div className="flex flex-col">
+        <span className="text-pre-lg text-black-600 pc:text-pre-2xl font-semibold">
+          {moment(displayMonth).format('YYYY년 M월')}
+        </span>
+        <div className="pc:h-[548px] tablet:h-[326px] flex h-[264px] items-center justify-center">
+          <Spinner size={60} className="h-[56px] w-[90px]" />
+        </div>
+      </div>
+    );
 
   return <CustomCalender data={data} displayMonth={displayMonth} setDisplayMonth={setDisplayMonth} />;
 }

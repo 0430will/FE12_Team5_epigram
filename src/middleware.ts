@@ -41,5 +41,5 @@ export const middleware = async (request: NextRequest) => {
 
 // matcher 설정: 모든 경로에 대해 middleware가 동작하도록 설정
 export const config = {
-  matcher: ['/login', '/signup', '/mypage', '/epigrams', '/auth/login', '/auth/signup', '/main', '/feed', '/:path*'],
+  matcher: ['/login', '/signup', '/mypage', '/auth/login', '/auth/signup', '/main', '/feed', '/:path*'],
 };
