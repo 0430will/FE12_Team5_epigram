@@ -5,7 +5,6 @@ import MyUserProfile from './_components/MyUserProfile';
 import TodayEmotionHeader from './_components/TodayEmotionHeader';
 import { auth } from '@/lib/next-auth/auth';
 import { EmotionProvider } from './_components/EmotionContext';
-import SkeletonMyCalender from '@/components/skeletons/SkeletonMyCalender';
 import EmotionChartSection from './_components/MyChart/EmotionChartSection';
 
 export default async function MyPage() {
@@ -26,7 +25,6 @@ export default async function MyPage() {
               <TodayEmotion emotionType="mypage" />
             </div>
             <MyCalender writerId={writerId} />
-            <SkeletonMyCalender />
             <div className="pc:gap-[48px] flex flex-col gap-[16px]">
               <EmotionChartSection />
             </div>
