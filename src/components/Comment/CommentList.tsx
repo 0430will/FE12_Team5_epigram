@@ -74,8 +74,8 @@ export default function CommentList() {
             useCommentStore.getState().updateItem(updated); // 수정 반영
           }}
           writerId={writerId}
-          userImage={userImage}
-          userNickname={userNickname}
+          userImage={comment.writer.id === writerId ? userImage : undefined}
+          userNickname={comment.writer.id === writerId ? userNickname : undefined}
         />
       ))}
 
