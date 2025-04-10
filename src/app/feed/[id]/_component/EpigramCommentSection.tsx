@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 // @ts-expect-error : 타입스크립트가 notFound를 오류로 인식합니다. 작동은 잘 됩니다.
 import { useParams } from 'next/navigation';
 import { getEpigramComments } from '@/lib/Epigram';
+import { fetchUserProfile } from '@/lib/User';
 
 export default function EpigramCommentSection() {
   const { data: session, status } = useSession();
@@ -18,6 +19,7 @@ export default function EpigramCommentSection() {
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [userImage, setUserImage] = useState<string | null>(null);
 
   const [cursor, setCursor] = useState<number | null>(null); // 마지막 댓글 id
   const [hasMore, setHasMore] = useState(true); // 더 불러올 댓글이 있는지 여부
@@ -27,7 +29,21 @@ export default function EpigramCommentSection() {
   const observer = useRef<IntersectionObserver | null>(null);
 
   const token = session?.user.accessToken;
-  const userImage = session?.user?.image;
+
+  useEffect(() => {
+    if (!epigramId || !token) return;
+
+    const fetchData = async () => {
+      try {
+        const userProfile = await fetchUserProfile(token); // API 호출 함수 사용
+        setUserImage(userProfile.image); // 사용자 이미지 설정
+      } catch (err) {
+        console.error('사용자 프로필 가져오기 실패:', err);
+      }
+    };
+
+    fetchData();
+  }, [epigramId, token]); // epigramId와 token이 변경될 때마다 실행
 
   useEffect(() => {
     if (!token || !epigramId || Number.isNaN(epigramId)) return;
@@ -125,7 +141,7 @@ export default function EpigramCommentSection() {
     <div className="tablet:max-w-[384px] tablet:pt-[40px] tablet:pb-[173px] pc:max-w-[640px] pc:pt-[63px] pc:pb-[163px] mx-auto w-full rounded-md bg-[#F5F7FA] pt-[32px]">
       <CommentCount count={totalCount} />
 
-      <CommentInput userImage={userImage} onSubmit={handleCreate} />
+      <CommentInput onSubmit={handleCreate} userImage={userImage} />
 
       <EpigramCommentList
         epigramId={epigramId}

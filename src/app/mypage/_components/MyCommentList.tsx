@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CommentItem } from '@/components/Comment/CommentItem';
-import { getUserComments } from '@/lib/User';
+import { fetchUserProfile, getUserComments } from '@/lib/User';
 import { useSession } from 'next-auth/react';
 import { useMyCommentStore } from '@/stores/pageStores';
 import { usePaginatedList } from '@/hooks/usePaginatedList';
@@ -28,11 +28,25 @@ export default function MyCommentList() {
     fetchFn: fetchMyComments,
   });
 
-  useEffect(() => {
-    if (status === 'authenticated' && token && userId && comments.length === 0) {
-      loadMore();
+  const [userImage, setUserImage] = useState<string | null>(null);
+  const [userNickname, setUserNickname] = useState<string | null>(null);
+
+  const updateUserProfile = async () => {
+    if (!token) return;
+    try {
+      const data = await fetchUserProfile(token);
+      setUserImage(data?.image || '');
+      setUserNickname(data?.nickname || '');
+    } catch (error) {
+      console.error('프로필 정보를 불러오는 데 실패했습니다.', error);
     }
-  }, [status, token, userId, comments.length]);
+  };
+
+  useEffect(() => {
+    if (status === 'authenticated' && token && userId) {
+      updateUserProfile();
+    }
+  }, [status, token, userId]);
 
   if (status === 'loading') return <div>로딩 중...</div>;
   if (!session) return <div>로그인이 필요합니다.</div>;
@@ -55,6 +69,8 @@ export default function MyCommentList() {
           key={comment.id}
           comment={comment}
           token={token!}
+          userImage={userImage}
+          userNickname={userNickname}
           onDelete={(id) => useMyCommentStore.getState().setState({ items: comments.filter((c) => c.id !== id) })}
           onSave={(updated) =>
             useMyCommentStore.getState().setState({ items: comments.map((c) => (c.id === updated.id ? updated : c)) })
