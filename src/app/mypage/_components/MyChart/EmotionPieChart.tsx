@@ -1,11 +1,8 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import { GetMonthEmotion } from '@/lib/Emotionlog'; // 경로 맞게 수정
+import { useMonthEmotion } from '@/hooks/useMonthEmotion';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import NonEmotionChart from './NonEmotionChart';
-import { useEmotionContext } from '../EmotionContext';
 // import Image from 'next/image';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6B6B'];
@@ -19,54 +16,18 @@ const emotionMapping: Record<string, { image: string; name: string }> = {
 };
 
 export default function EmotionPieChart() {
-  const { data: session } = useSession();
-  const [chartData, setChartData] = useState<{ name: string; value: number }[]>([]);
-  const [topEmotion, setTopEmotion] = useState<{ image: string; name: string } | null>(null);
-  const [hasData, setHasData] = useState(true);
-  const { todayEmotion } = useEmotionContext();
+  const { chartData, hasData, isLoading } = useMonthEmotion();
 
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1;
-  //현재년도와 월 가져오기
-
-  useEffect(() => {
-    if (!session?.user) return;
-
-    const fetchData = async () => {
-      const userId = Number(session.user.id);
-      if (isNaN(userId)) {
-        console.error('userId가 유효하지 않습니다.');
-        return;
-      }
-      const response = await GetMonthEmotion(userId, currentYear, currentMonth);
-      if (response.length > 0) {
-        const emotionCount: Record<string, number> = {};
-        //감정 데이터 개수 카운트
-        response.forEach((log: { emotion: string }) => {
-          emotionCount[log.emotion] = (emotionCount[log.emotion] || 0) + 1;
-        });
-        // 차트 데이터 변환
-        const formattedData = Object.keys(emotionCount).map((emotion) => ({
-          name: emotion,
-          value: emotionCount[emotion],
-        }));
-        setChartData(formattedData);
-        //퍼센트가 가장 높은 감정(chartData에서 value가 가장 높은 값)
-        const topEmotionKey = formattedData.reduce((prev, current) =>
-          prev.value > current.value ? prev : current,
-        ).name;
-        setTopEmotion(emotionMapping[topEmotionKey] || null);
-      } else {
-        setHasData(false);
-      }
-    };
-    fetchData();
-  }, [session, todayEmotion]);
-
-  if (!hasData) {
+  if (!hasData && !isLoading) {
     return <NonEmotionChart message="이번달의 감정 기록이 없습니다." />;
   }
+
+  const topEmotionName = chartData.reduce((prev, curr) => (prev.value > curr.value ? prev : curr), {
+    name: '',
+    value: 0,
+  }).name;
+
+  const topEmotion = emotionMapping[topEmotionName];
 
   return (
     <div className="pc:h-[180px] relative flex h-[120px] w-full flex-col items-center">
