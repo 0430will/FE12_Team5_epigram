@@ -44,7 +44,7 @@ export default function KakaoRedirection() {
   return (
     <div>
       <div className="flex items-center justify-center">
-        <Spinner size={100} className="pc:h-[76px] pc:w-[150px] mt-[30%] h-[50px]" />
+        <Spinner size={100} className="pc:h-[76px] pc:w-[150px] pc:mt-[20%] tablet:mt-[40%] mt-[80%] h-[50px]" />
       </div>
     </div>
   );
