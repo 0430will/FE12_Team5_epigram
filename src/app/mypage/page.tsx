@@ -7,6 +7,7 @@ import MyUserProfile from './_components/MyUserProfile';
 import TodayEmotionHeader from './_components/TodayEmotionHeader';
 import { auth } from '@/lib/next-auth/auth';
 import { EmotionProvider } from './_components/EmotionContext';
+import SkeletonMyCart from '@/components/skeletons/SkeletonMyCart';
 
 export default async function MyPage() {
   const session = await auth();
@@ -32,6 +33,7 @@ export default async function MyPage() {
                 <EmotionPieChart />
                 <EmotionRankList />
               </div>
+              <SkeletonMyCart />
             </div>
           </div>
         </EmotionProvider>
