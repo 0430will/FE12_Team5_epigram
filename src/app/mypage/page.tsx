@@ -8,6 +8,7 @@ import TodayEmotionHeader from './_components/TodayEmotionHeader';
 import { auth } from '@/lib/next-auth/auth';
 import { EmotionProvider } from './_components/EmotionContext';
 import SkeletonMyCart from '@/components/skeletons/SkeletonMyCart';
+import SkeletonMyCalender from '@/components/skeletons/SkeletonMyCalender';
 
 export default async function MyPage() {
   const session = await auth();
@@ -27,6 +28,7 @@ export default async function MyPage() {
               <TodayEmotion emotionType="mypage" />
             </div>
             <MyCalender writerId={writerId} />
+            <SkeletonMyCalender />
             <div className="pc:gap-[48px] flex flex-col gap-[16px]">
               <h1 className="pc:text-pre-2xl text-pre-lg font-semibold">감정 차트</h1>
               <div className="border-line-100 pc:h-[264px] tablet:h-[230px] flex h-full w-full items-center justify-between rounded-lg border p-[30px]">
