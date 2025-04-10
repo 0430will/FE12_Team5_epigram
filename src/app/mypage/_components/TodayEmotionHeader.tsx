@@ -5,8 +5,8 @@ export default function TodayEmotionHeader() {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-[22px]">
       <div className="flex w-full items-center justify-between">
-        <p className="text-pre-lg font-weight-semibold pc:text-pre-2xl">오늘의 감정</p>
-        <p className="text-pre-lg font-weight-regular pc:text-mon-sm text-blue-400">{formattedDate}</p>
+        <p className="text-pre-lg pc:text-pre-2xl font-semibold">오늘의 감정</p>
+        <p className="text-pre-lg font-regular pc:text-mon-sm text-blue-400">{formattedDate}</p>
       </div>
     </div>
   );

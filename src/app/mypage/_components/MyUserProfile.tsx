@@ -8,10 +8,9 @@ import { uploadImage } from '@/lib/UploadImage';
 import { patchUserInfo } from '@/lib/patchUserInfo';
 import { notify } from '@/util/toast';
 
-
 export default function MyUserProfile() {
   const { isLoading, user, refetchUser } = useFetchUser();
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const token = session?.user.accessToken;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -59,6 +58,9 @@ export default function MyUserProfile() {
 
       // 저장 후 새로 서버에서 유저 정보 가져오기
       await refetchUser();
+
+      // 세션도 수동으로 새로고침
+      await update(); // 세션 갱신
 
       setEditMode(false);
       setPreviewImage(null);

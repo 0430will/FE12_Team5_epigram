@@ -1,5 +1,4 @@
-import { Epigram } from '@/types/Epigram';
-import { AddEpigram } from '@/components/EpigramForm';
+import { AddEpigram, Epigram } from '@/types/Epigram';
 // @ts-expect-error : 타입스크립트가 notFound를 오류로 인식합니다. 작동은 잘 됩니다.
 import { notFound } from 'next/navigation';
 import { CommentList } from '@/types/Comment';

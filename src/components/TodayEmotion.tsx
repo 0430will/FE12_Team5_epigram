@@ -5,27 +5,33 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useEmotionContext } from '@/app/mypage/_components/EmotionContext';
+import { notify } from '@/util/toast';
 
 const EmotionData = {
   감동: {
     image: '/assets/icons/heart_face.svg',
     name: 'MOVED',
+    hover: 'border-yellow',
   },
   기쁨: {
     image: '/assets/icons/smiling_face.svg',
     name: 'HAPPY',
+    hover: 'border-green',
   },
   고민: {
     image: '/assets/icons/thinking_face.svg',
     name: 'WORRIED',
+    hover: 'border-purple',
   },
   슬픔: {
     image: '/assets/icons/sad_face.svg',
     name: 'SAD',
+    hover: 'border-blue',
   },
   분노: {
     image: '/assets/icons/angry_face.svg',
     name: 'ANGRY',
+    hover: 'border-red',
   },
 };
 
@@ -40,10 +46,9 @@ interface EmotionProps {
   isSelected: boolean;
   isDisabled: boolean;
   onClick: () => void;
-  emotionType: string;
 }
 
-function Emotion({ emotion, isSelected, isDisabled, onClick, emotionType }: EmotionProps) {
+function Emotion({ emotion, isSelected, isDisabled, onClick }: EmotionProps) {
   return (
     <div
       className={`flex cursor-pointer flex-col items-center gap-[8px] ${isDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
@@ -63,7 +68,7 @@ function Emotion({ emotion, isSelected, isDisabled, onClick, emotionType }: Emot
         </div>
         {isSelected && (
           <div
-            className={`${emotionType === 'main' ? 'border-yellow' : 'border-green'} pc:border-[4px] absolute top-0 right-0 bottom-0 left-0 rounded-[16px] border-[3px]`}
+            className={`${EmotionData[emotion].hover} pc:border-[4px] absolute top-0 right-0 bottom-0 left-0 rounded-[16px] border-[3px]`}
           ></div>
         )}
       </div>
@@ -90,7 +95,7 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
 
   const OnClickEmotion = async (emotion: EmotionKey) => {
     if (!session?.user.accessToken) {
-      console.error('Access token is undefined');
+      notify({ type: 'error', message: '토큰이 유효하지 않습니다.' });
       return;
     }
 
@@ -99,7 +104,6 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
     const response = await PostTodayEmotion(EmotionData[emotion].name, session.user.accessToken);
     if (!response) return;
 
-    console.log(`오늘의 감정 등록 완료: ${emotion}`);
     setSelectedEmotion(emotion);
 
     if (emotionType) {
@@ -114,7 +118,6 @@ export default function TodayEmotion({ emotionType }: TodayEmotionProps) {
         <Emotion
           key={emotion}
           emotion={emotion as EmotionKey}
-          emotionType={emotionType}
           isSelected={selectedEmotion === emotion}
           isDisabled={emotionType === 'main' ? !!selectedEmotion : false}
           onClick={() => OnClickEmotion(emotion as EmotionKey)}

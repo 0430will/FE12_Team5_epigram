@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import FeedCard from '@/components/FeedCard';
+import SkeletonFeedCard from '@/components/skeletons/SkeletonFeedCard';
 import Image from 'next/image';
 import EmptyState from '@/components/EmptyState';
 import { getEpigramsList } from '@/lib/Epigram';
@@ -43,9 +44,7 @@ export default function FeedList() {
     <>
       <div className="pc:gap-[32px] grid gap-[16px]">
         {initialLoading ? (
-          <div className={`pc:h-[200px] flex h-[150px] items-center justify-center`}>
-            <Spinner size={60} className="tablet:w-[90px]" />
-          </div>
+          <SkeletonFeedCard count={3} />
         ) : epigrams.length === 0 ? (
           <EmptyState message={`아직 작성한 에피그램이 없어요!<br/>에피그램을 작성하고 감정을 공유해보세요.`} />
         ) : (

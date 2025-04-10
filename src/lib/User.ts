@@ -34,6 +34,27 @@ export interface UserCommentList {
   list: UserComment[];
 }
 
+// 사용자 정보 조회 api
+export const fetchUserProfile = async (token: string) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('사용자 정보를 가져오는 데 실패했습니다.');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('API 요청 실패:', error);
+    throw error;
+  }
+};
+
 export async function GetUserInfo(id: number) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {

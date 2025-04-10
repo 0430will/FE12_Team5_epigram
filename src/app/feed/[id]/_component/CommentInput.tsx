@@ -5,23 +5,29 @@ import { Avatar } from '@/components/Comment/Avatar';
 import ClientButton from '@/components/Button/ClientButton';
 
 interface Props {
-  userImage?: string;
   onSubmit: (content: string, isPrivate: boolean) => void;
+  userImage: string | null;
 }
 
-export default function CommentInput({ userImage, onSubmit }: Props) {
+export default function CommentInput({ onSubmit, userImage }: Props) {
   const [content, setContent] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (content.trim() === '') {
       alert('댓글 내용을 입력해주세요.');
       return;
     }
 
-    onSubmit(content, isPrivate);
-    setContent('');
-    setIsPrivate(false);
+    try {
+      // 댓글 작성 API 호출
+      onSubmit(content, isPrivate);
+      setContent('');
+      setIsPrivate(false);
+    } catch (error) {
+      console.error('댓글 작성 실패:', error);
+      alert('댓글 작성 중 오류가 발생했습니다.');
+    }
   };
 
   return (
