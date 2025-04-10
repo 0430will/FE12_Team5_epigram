@@ -34,7 +34,6 @@ export default function CommentList() {
 
   useEffect(() => {
     if (status === 'authenticated' && token) {
-      // 프로필 정보를 가져와서 상태로 저장
       const fetchProfile = async () => {
         try {
           const profile = await fetchUserProfile(token);
