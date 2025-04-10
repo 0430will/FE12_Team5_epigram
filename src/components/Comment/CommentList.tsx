@@ -34,7 +34,6 @@ export default function CommentList() {
 
   useEffect(() => {
     if (status === 'authenticated' && token) {
-      // 프로필 정보를 가져와서 상태로 저장
       const fetchProfile = async () => {
         try {
           const profile = await fetchUserProfile(token);
@@ -74,8 +73,8 @@ export default function CommentList() {
             useCommentStore.getState().updateItem(updated); // 수정 반영
           }}
           writerId={writerId}
-          userImage={userImage}
-          userNickname={userNickname}
+          userImage={comment.writer.id === writerId ? userImage : undefined}
+          userNickname={comment.writer.id === writerId ? userNickname : undefined}
         />
       ))}
 
