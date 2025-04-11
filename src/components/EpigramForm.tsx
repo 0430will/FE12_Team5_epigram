@@ -64,11 +64,14 @@ export default function EpigramForm({
   };
 
   const submitEpigram = async (type: 'post' | 'patch') => {
-    if (!initialValue?.id || !token) return;
+    if (!token) return;
+    if (type === 'patch' && !initialValue?.id) {
+      return;
+    }
     setIsloading(true);
     const allValues = watch();
     return type === 'patch'
-      ? await PatchEpigram(allValues, initialValue.id, token)
+      ? await PatchEpigram(allValues, initialValue!.id, token)
       : await PostEpigram(allValues, token);
   };
 
@@ -81,8 +84,9 @@ export default function EpigramForm({
     router.push(`/feed/${response.id}`);
   };
 
-  const SelectForm: SubmitHandler<AddEpigram> = async () =>
-    await handleSubmitForm(submitType === '작성하기' ? 'post' : 'patch');
+  const SelectForm: SubmitHandler<AddEpigram> = async () => {
+    handleSubmitForm(submitType === '작성하기' ? 'post' : 'patch');
+  };
 
   useEffect(() => {
     if (selectedOption === '알 수 없음') {
