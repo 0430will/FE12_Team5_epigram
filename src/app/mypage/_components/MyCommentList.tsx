@@ -9,7 +9,7 @@ import { usePaginatedList } from '@/hooks/usePaginatedList';
 import Image from 'next/image';
 import EmptyState from '@/components/EmptyState';
 import { useRouter } from 'next/navigation';
-import SkeletonCommentCard from '@/components/skeletons/SkeletonCommentCard';
+import { SkeletonCommentCard } from '@/components/skeletons/SkeletonComment';
 
 export default function MyCommentList() {
   const { data: session, status } = useSession();

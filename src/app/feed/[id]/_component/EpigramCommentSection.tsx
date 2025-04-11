@@ -11,6 +11,7 @@ import { useSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
 import { getEpigramComments } from '@/lib/Epigram';
 import { fetchUserProfile } from '@/lib/User';
+import { SkeletonCommentCard, SkeletonCommentInput } from '@/components/skeletons/SkeletonComment';
 
 export default function EpigramCommentSection() {
   const { data: session, status } = useSession();
@@ -23,7 +24,7 @@ export default function EpigramCommentSection() {
 
   const [cursor, setCursor] = useState<number | null>(null); // 마지막 댓글 id
   const [hasMore, setHasMore] = useState(true); // 더 불러올 댓글이 있는지 여부
-  const [isLoading, setIsLoading] = useState(false); // 중복 요청 방지
+  const [isLoading, setIsLoading] = useState(true); // 중복 요청 방지
 
   const observerRef = useRef<HTMLDivElement | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
@@ -49,6 +50,7 @@ export default function EpigramCommentSection() {
     if (!token || !epigramId || Number.isNaN(epigramId)) return;
 
     const fetchInital = async () => {
+      setIsLoading(true);
       try {
         const res = await getEpigramComments(token, epigramId, 3);
 
@@ -63,6 +65,8 @@ export default function EpigramCommentSection() {
         }
       } catch (err) {
         console.error('댓글 초기 불러오기 실패', err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -129,26 +133,25 @@ export default function EpigramCommentSection() {
     }
   };
 
-  if (status === 'loading') {
-    return <div>로딩 중...</div>;
-  }
-
-  if (!session || !token) {
-    return <div>로그인이 필요합니다.</div>;
-  }
+  const isInputLoading = userImage === null;
+  const isInitialLoading = comments.length === 0 && !cursor && isLoading;
 
   return (
     <div className="tablet:max-w-[384px] tablet:pt-[40px] tablet:pb-[173px] pc:max-w-[640px] pc:pt-[63px] pc:pb-[163px] mx-auto w-full rounded-md bg-[#F5F7FA] pt-[32px]">
       <CommentCount count={totalCount} />
 
-      <CommentInput onSubmit={handleCreate} userImage={userImage} />
+      {isInputLoading ? <SkeletonCommentInput /> : <CommentInput onSubmit={handleCreate} userImage={userImage} />}
 
-      <EpigramCommentList
-        epigramId={epigramId}
-        comments={comments}
-        setComments={setComments}
-        setTotalCount={setTotalCount}
-      />
+      {isInitialLoading ? (
+        <SkeletonCommentCard count={4} />
+      ) : (
+        <EpigramCommentList
+          epigramId={epigramId}
+          comments={comments}
+          setComments={setComments}
+          setTotalCount={setTotalCount}
+        />
+      )}
       <div ref={observerRef} className="h-4" />
       {isLoading && <div className="text-center text-sm text-gray-500">댓글 불러오는 중...</div>}
     </div>

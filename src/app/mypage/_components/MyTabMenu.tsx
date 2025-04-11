@@ -19,7 +19,7 @@ export default function MyTabMenu() {
   const { totalCount: commentCount } = useMyCommentStore();
 
   const menuArr = [
-    // { name: `내 에피그램(${epigramCount ?? 0})`, content: <MyEpigrams /> },
+    { name: `내 에피그램(${epigramCount ?? 0})`, content: <MyEpigrams /> },
     { name: `내 댓글(${commentCount ?? 0})`, content: <MyComments /> },
   ];
 
