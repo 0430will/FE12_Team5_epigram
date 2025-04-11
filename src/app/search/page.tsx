@@ -34,15 +34,14 @@ export default function SearchPage() {
 
   // 로컬 스토리지에서 최근 검색어 불러오기
   useEffect(() => {
-  
     const savedSearches = localStorage.getItem('recentSearches');
     console.log('저장된 검색어:', savedSearches);
-  
+
     if (savedSearches) {
       setRecentSearches(JSON.parse(savedSearches));
     }
   }, []);
-
+  
   // 검색어 저장 함수
   const saveSearchTerm = (term: string) => {
     if (term.trim() === '') return;
@@ -56,24 +55,24 @@ export default function SearchPage() {
     setRecentSearches([]);
     localStorage.removeItem('recentSearches');
   };
-
+  
   // 개별 검색어 삭제 함수
   const deleteSearchTerm = (termToDelete: string) => {
     const updatedSearches = recentSearches.filter(term => term !== termToDelete);
     setRecentSearches(updatedSearches);
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
-
+  
   // 검색어로 에피그램 검색
   const handleSearch = async (term: string) => {
     if (term.trim() === '') return;
     setIsLoading(true);
     saveSearchTerm(term);
-    
+
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams?limit=20`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/epigrams?limit=300`);
       const data: ApiResponse = await response.json();
-      
+
       // 검색어로 필터링
       const filteredEpigrams = data.list.filter(epigram => {
         const contentMatch = epigram.content.toLowerCase().includes(term.toLowerCase());
@@ -81,7 +80,7 @@ export default function SearchPage() {
         const tagMatch = epigram.tags.some(tag => tag.name.toLowerCase().includes(term.toLowerCase()));
         return contentMatch || authorMatch || tagMatch;
       });
-      
+
       setEpigrams(filteredEpigrams);
     } catch (error) {
       console.error('검색 중 오류가 발생했습니다:', error);
@@ -89,12 +88,12 @@ export default function SearchPage() {
       setIsLoading(false);
     }
   };
-
+  
   // 검색어 하이라이트 처리
   const highlightSearchTerm = (text: string) => {
     if (!searchTerm) return text;
     const regex = new RegExp(`(${searchTerm})`, 'gi');
-    return text.split(regex).map((part, i) => 
+    return text.split(regex).map((part, i) =>
       regex.test(part) ? <span key={i} className="text-blue">{part}</span> : part
     );
   };
@@ -103,12 +102,7 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen bg-blue-100 text-black-700">
-      <div className="container mx-auto px-[16px] py-[32px]
-      min-w-[368px] max-w-[1200px]
-      sm:min-w-[368px] sm:max-w-[744px]
-      md:min-w-[744px] md:max-w-[1200px]
-      lg:min-w-[1200px]">
-
+      <div className="mx-auto px-[20px] py-[32px] max-w-[680px]">
         {/* 검색창 */}
         <div className="mb-[32px] relative">
           <input
@@ -117,7 +111,7 @@ export default function SearchPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSearch(searchTerm)}
             placeholder="검색어를 입력하세요"
-            className="w-full py-[12px] focus:outline-none bg-blue-100 text-[24px] text-black-700 placeholder-gray-300 pr-[48px] border-b-[4px] border-blue-800"
+            className="w-full py-[12px] focus:outline-none bg-blue-100 font-iropke text-iro-xl text-black-700 placeholder-gray-300 pr-[48px] border-b-[4px] border-blue-800"
           />
           <button
             onClick={() => handleSearch(searchTerm)}
@@ -153,10 +147,10 @@ export default function SearchPage() {
         {recentSearches.length > 0 && (
           <div className="mb-[32px]">
             <div className="flex justify-between items-center mb-[40px]">
-              <h2 className="text-[24px] font-pretendard font-medium text-black-300">최근 검색어</h2>
+              <h2 className="text-iro-xl font-iropke font-medium text-black-300">최근 검색어</h2>
               <button
                 onClick={clearRecentSearches}
-                className="text-state-error text-[16px] font-semibold hover:text-red cursor-pointer"
+                className="text-state-error text-iro-lg font-iropke font-semibold hover:text-red cursor-pointer"
               >
                 모두 지우기
               </button>
@@ -177,25 +171,25 @@ export default function SearchPage() {
         {searchTerm && (
           <div className="space-y-[16px]">
             {isLoading ? (
-              <div className="text-center py-[16px] text-pre-lg text-black-300">검색 중...</div>
+              <div className="text-center py-[16px] text-iro-lg text-black-300">검색 중...</div>
             ) : epigrams.length > 0 ? (
               epigrams.map((epigram) => (
                 <div key={epigram.id}
                 onClick={() => router.push(`/feed/${epigram.id}`)}
                 className="p-[24px] border-b border-line-100 rounded-[22px] bg-blue-100 cursor-pointer">
                   {/* 에피그램 내용 */}
-                  <div className="mb-[24px] text-[20px] text-black-600">
+                  <div className="font-iropke mb-[24px] text-iro-xl text-black-600">
                     {highlightSearchTerm(epigram.content)}
                   </div>
                   <div className="mb-[24px]">
-                    <span className="font-pretendard font-normal text-[20px] text-blue-400">
+                    <span className="font-iropke font-normal text-iro-xl text-blue-400">
                       - {highlightSearchTerm(epigram.author)} -
                     </span>
                   </div>
                   {epigram.tags.length > 0 && (
-                    <div className="flex gap-[8px] justify-end">
+                    <div className="font-iropke flex gap-[8px] justify-end">
                       {epigram.tags.map(tag => (
-                        <span key={tag.id} className="text-[20px] text-blue-400">
+                        <span key={tag.id} className="text-iro-xl text-blue-400">
                           #{highlightSearchTerm(tag.name)}
                         </span>
                       ))}
@@ -204,13 +198,12 @@ export default function SearchPage() {
                 </div>
               ))
             ) : (
-              <div className="text-center py-[16px] text-pre-lg text-black-300">
+              <div className="text-center py-[16px] text-iro-lg text-black-300">
                 검색 결과가 없습니다.
               </div>
             )}
           </div>
         )}
-
       </div>
     </div>
   );
