@@ -14,7 +14,7 @@ import { fetchUserProfile } from '@/lib/User';
 import { SkeletonCommentCard, SkeletonCommentInput } from '@/components/skeletons/SkeletonComment';
 
 export default function EpigramCommentSection() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const { id } = useParams();
   const epigramId = Number(id);
 
