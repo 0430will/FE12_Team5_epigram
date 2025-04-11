@@ -5,12 +5,20 @@ import { Avatar } from './Avatar';
 import { CommentCard } from './CommentCard';
 import { deleteComment, updateComment } from '@/lib/Comment';
 import type { Comment } from '@/types/Comment';
-import { formatDistanceToNow } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import ClientButton from '../Button/ClientButton';
 import ModalLayout from '../Modal/ModalLayout';
 import ModalUserProfile from '../Modal/ModalUserProfile';
 import { notify } from '@/util/toast';
+import moment from 'moment';
+import 'moment/locale/ko';
+
+moment.updateLocale('ko', {
+  relativeTime: {
+    d: '1일',
+    dd: '%d일',
+  },
+});
+moment.locale('ko');
 
 interface Props {
   comment: Comment;
@@ -69,14 +77,11 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
     }
   };
 
-  function formatTime(createdAt: string) {
-    return formatDistanceToNow(new Date(createdAt), {
-      addSuffix: true,
-      locale: ko,
-    }).replace(/^약 /, '');
-  }
-
   const isMyComment = writerId === comment.writer.id;
+
+  function formatTime(createdAt: string) {
+    return moment(createdAt).fromNow();
+  }
 
   return (
     <>
