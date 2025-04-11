@@ -26,6 +26,7 @@ export default async function MyPage() {
             </div>
             <MyCalender writerId={writerId} />
             <div className="pc:gap-[48px] flex flex-col gap-[16px]">
+              <h1 className="pc:text-pre-2xl text-pre-lg font-semibold">감정 차트</h1>
               <EmotionChartSection />
             </div>
           </div>

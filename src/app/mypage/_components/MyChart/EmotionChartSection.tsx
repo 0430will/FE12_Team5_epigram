@@ -18,7 +18,6 @@ export default function EmotionChartSection() {
   }
   return (
     <div>
-      <h1 className="pc:text-pre-2xl text-pre-lg font-semibold">감정 차트</h1>
       <div className="border-line-100 pc:h-[264px] tablet:h-[230px] flex h-full w-full items-center justify-between rounded-lg border p-[30px]">
         <EmotionPieChart />
         <EmotionList />
