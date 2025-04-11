@@ -86,7 +86,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
             onClick();
           }
         }}
-        className="border-line-200 bg-bg-100 tablet:py-6 pc:py-[35px] flex cursor-pointer items-start border-t px-6 py-4"
+        className={`border-line-200 bg-bg-100 tablet:py-6 pc:py-[35px] flex items-start border-t px-6 py-4 ${onClick && !isEditing ? 'cursor-pointer' : ''}`}
       >
         <button
           onClick={(e) => {
