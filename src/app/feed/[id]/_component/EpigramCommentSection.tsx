@@ -37,9 +37,10 @@ export default function EpigramCommentSection() {
     const fetchData = async () => {
       try {
         const userProfile = await fetchUserProfile(token); // API 호출 함수 사용
-        setUserImage(userProfile.image); // 사용자 이미지 설정
+        setUserImage(userProfile.image || '/assets/images/defaultUser.png'); // 사용자 이미지 설정
       } catch (err) {
         console.error('사용자 프로필 가져오기 실패:', err);
+        setUserImage('/assets/images/defaultUser.png');
       }
     };
 

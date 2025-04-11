@@ -69,10 +69,10 @@ export default function CommentList() {
           onDelete={(id) => {
             console.log('removeItem:', useCommentStore.getState().removeItem);
             console.log('store keys:', Object.keys(useCommentStore.getState()));
-            useCommentStore.getState().removeItem(id); // store에서 제거
+            useCommentStore.getState().removeItem(id);
           }}
           onSave={(updated) => {
-            useCommentStore.getState().updateItem(updated); // 수정 반영
+            useCommentStore.getState().updateItem(updated);
           }}
           writerId={writerId}
           userImage={comment.writer.id === writerId ? userImage : undefined}
