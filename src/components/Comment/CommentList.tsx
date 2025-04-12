@@ -9,6 +9,7 @@ import { usePaginatedList } from '@/hooks/usePaginatedList';
 import Image from 'next/image';
 import { Comment } from '@/types/Comment';
 import { fetchUserProfile } from '@/lib/User';
+import { SkeletonCommentCard } from '../skeletons/SkeletonComment';
 
 export default function CommentList() {
   const { data: session, status } = useSession();
@@ -27,14 +28,13 @@ export default function CommentList() {
     return await getComments(token, 4, realCursor);
   };
 
-  const { loadMore, loading } = usePaginatedList<Comment>({
+  const { loadMore, loading, initialLoading } = usePaginatedList<Comment>({
     store: useCommentStore.getState(),
     fetchFn: fetchComments,
   });
 
   useEffect(() => {
     if (status === 'authenticated' && token) {
-      // 프로필 정보를 가져와서 상태로 저장
       const fetchProfile = async () => {
         try {
           const profile = await fetchUserProfile(token);
@@ -55,11 +55,12 @@ export default function CommentList() {
     }
   }, [status, token, comments.length]);
 
-  if (status === 'loading') return <div>로딩 중...</div>;
+  if (status === 'loading') return <SkeletonCommentCard count={4} />;
   if (!session) return <div>로그인이 필요합니다.</div>;
 
   return (
     <div className="w-full space-y-4">
+      {comments.length === 0 && (initialLoading || loading) && <SkeletonCommentCard count={4} />}
       {comments.map((comment) => (
         <CommentItem
           key={comment.id}
@@ -74,8 +75,8 @@ export default function CommentList() {
             useCommentStore.getState().updateItem(updated); // 수정 반영
           }}
           writerId={writerId}
-          userImage={userImage}
-          userNickname={userNickname}
+          userImage={comment.writer.id === writerId ? userImage : undefined}
+          userNickname={comment.writer.id === writerId ? userNickname : undefined}
         />
       ))}
 
