@@ -1,7 +1,7 @@
 import TodayEmotion from '@/components/TodayEmotion';
-import TodayEpirams from './_conponents/todayEpigrams';
-import LatestEpigrams from './_conponents/LatestEpigrams';
-import LatestCommentSection from './_conponents/LatestCommentSection';
+import TodayEpirams from './_components/todayEpigrams';
+import LatestEpigrams from './_components/LatestEpigrams';
+import LatestCommentSection from './_components/LatestCommentSection';
 
 export default function Page() {
   return (
