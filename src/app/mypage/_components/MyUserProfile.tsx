@@ -33,31 +33,25 @@ export default function MyUserProfile() {
       reader.onloadend = () => setPreviewImage(reader.result as string);
       reader.readAsDataURL(file);
     }
-    console.log(file);
   };
 
   const handleSave = async () => {
     try {
       let imageUrl = user.image;
 
-      // 1. 이미지가 변경됐으면 업로드
       if (selectedImageFile) {
         if (!token) {
           console.error('access Token이 없습니다.');
           return;
         }
         imageUrl = await uploadImage(selectedImageFile, token);
-        console.log(imageUrl);
       }
 
-      // 2. 유저 정보 수정
       await patchUserInfo({ nickname: nickname || user.nickname, image: imageUrl, token: token });
 
-      // 저장 후 새로 서버에서 유저 정보 가져오기
       await refetchUser();
 
-      // 세션도 수동으로 새로고침
-      await update(); // 세션 갱신
+      await update();
 
       setEditMode(false);
       setPreviewImage(null);
@@ -68,10 +62,10 @@ export default function MyUserProfile() {
   };
 
   const handleCancel = () => {
-    setNickname(user.nickname); // 원래 닉네임으로 초기화
-    setPreviewImage(null); // 미리보기 이미지 제거
-    setSelectedImageFile(null); // 선택한 파일 제거
-    setEditMode(false); // 수정모드 해제
+    setNickname(user.nickname);
+    setPreviewImage(null);
+    setSelectedImageFile(null);
+    setEditMode(false);
   };
 
   return (

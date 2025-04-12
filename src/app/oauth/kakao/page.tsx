@@ -13,7 +13,6 @@ export default function KakaoRedirection() {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const codeFromUrl = params.get('code');
-      console.log(codeFromUrl);
       if (codeFromUrl) {
         setCode(codeFromUrl);
       }
@@ -26,7 +25,6 @@ export default function KakaoRedirection() {
     }
   }, [code]);
 
-  // 카카오 인가 코드를 signIn으로 넘기기
   const handleSignInWithCode = async (code: string) => {
     const result = await signIn('kakao', {
       code: code,
@@ -34,7 +32,6 @@ export default function KakaoRedirection() {
     });
 
     if (result?.error) {
-      console.error('로그인 실패:', result.error);
       router.push('/auth/login?error=LoginFailed');
     } else {
       router.push('/main');
