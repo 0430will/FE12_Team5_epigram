@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Tags } from '@/components/Tag/Tags'
+import { Tags } from '@/components/Tag/Tags';
 
 interface Tag {
   name: string;
@@ -41,11 +41,11 @@ export default function SearchPage() {
       setRecentSearches(JSON.parse(savedSearches));
     }
   }, []);
-  
+
   // 검색어 저장 함수
   const saveSearchTerm = (term: string) => {
     if (term.trim() === '') return;
-    const updatedSearches = [term, ...recentSearches.filter(s => s !== term)].slice(0, 10);
+    const updatedSearches = [term, ...recentSearches.filter((s) => s !== term)].slice(0, 10);
     setRecentSearches(updatedSearches);
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
@@ -55,14 +55,14 @@ export default function SearchPage() {
     setRecentSearches([]);
     localStorage.removeItem('recentSearches');
   };
-  
+
   // 개별 검색어 삭제 함수
   const deleteSearchTerm = (termToDelete: string) => {
-    const updatedSearches = recentSearches.filter(term => term !== termToDelete);
+    const updatedSearches = recentSearches.filter((term) => term !== termToDelete);
     setRecentSearches(updatedSearches);
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
-  
+
   // 검색어로 에피그램 검색
   const handleSearch = async (term: string) => {
     if (term.trim() === '') return;
@@ -74,10 +74,10 @@ export default function SearchPage() {
       const data: ApiResponse = await response.json();
 
       // 검색어로 필터링
-      const filteredEpigrams = data.list.filter(epigram => {
+      const filteredEpigrams = data.list.filter((epigram) => {
         const contentMatch = epigram.content.toLowerCase().includes(term.toLowerCase());
         const authorMatch = epigram.author.toLowerCase().includes(term.toLowerCase());
-        const tagMatch = epigram.tags.some(tag => tag.name.toLowerCase().includes(term.toLowerCase()));
+        const tagMatch = epigram.tags.some((tag) => tag.name.toLowerCase().includes(term.toLowerCase()));
         return contentMatch || authorMatch || tagMatch;
       });
 
@@ -88,34 +88,40 @@ export default function SearchPage() {
       setIsLoading(false);
     }
   };
-  
+
   // 검색어 하이라이트 처리
   const highlightSearchTerm = (text: string) => {
     if (!searchTerm) return text;
     const regex = new RegExp(`(${searchTerm})`, 'gi');
     return text.split(regex).map((part, i) =>
-      regex.test(part) ? <span key={i} className="text-blue">{part}</span> : part
+      regex.test(part) ? (
+        <span key={i} className="text-blue">
+          {part}
+        </span>
+      ) : (
+        part
+      ),
     );
   };
 
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-blue-100 text-black-700">
-      <div className="mx-auto px-[20px] py-[32px] max-w-[680px]">
+    <div className="text-black-700 min-h-screen bg-blue-100">
+      <div className="mx-auto max-w-[680px] px-[20px] py-[32px]">
         {/* 검색창 */}
-        <div className="mb-[32px] relative">
+        <div className="relative mb-[32px]">
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSearch(searchTerm)}
             placeholder="검색어를 입력하세요"
-            className="w-full py-[12px] focus:outline-none bg-blue-100 font-iropke text-iro-xl text-black-700 placeholder-gray-300 pr-[48px] border-b-[4px] border-blue-800"
+            className="text-pre-lg tablet:text-pre-xl pc:text-pre-2xl font-regular text-black-700 w-full border-b-[4px] border-blue-800 bg-blue-100 py-[12px] pr-[48px] placeholder-gray-300 focus:outline-none"
           />
           <button
             onClick={() => handleSearch(searchTerm)}
-            className="absolute right-[16px] top-1/2 -translate-y-1/2 p-[8px] hover:bg-blue-200 rounded-full transition-colors duration-200"
+            className="absolute top-1/2 right-[16px] -translate-y-1/2 rounded-full p-[8px] transition-colors duration-200 hover:bg-blue-200"
           >
             <svg
               width="24"
@@ -146,11 +152,11 @@ export default function SearchPage() {
         {/* 최근 검색어 */}
         {recentSearches.length > 0 && (
           <div className="mb-[32px]">
-            <div className="flex justify-between items-center mb-[40px]">
-              <h2 className="text-iro-xl font-iropke font-medium text-black-300">최근 검색어</h2>
+            <div className="mb-[40px] flex items-center justify-between">
+              <h2 className="text-pre-lg tablet:text-pre-xl pc:text-pre-2xl text-black-300 font-medium">최근 검색어</h2>
               <button
                 onClick={clearRecentSearches}
-                className="text-state-error text-iro-lg font-iropke font-semibold hover:text-red cursor-pointer"
+                className="text-state-error text-pre-xs tablet:text-pre-lg hover:text-red cursor-pointer font-semibold"
               >
                 모두 지우기
               </button>
@@ -171,24 +177,26 @@ export default function SearchPage() {
         {searchTerm && (
           <div className="space-y-[16px]">
             {isLoading ? (
-              <div className="text-center py-[16px] text-iro-lg text-black-300">검색 중...</div>
+              <div className="text-iro-lg text-black-300 py-[16px] text-center">검색 중...</div>
             ) : epigrams.length > 0 ? (
               epigrams.map((epigram) => (
-                <div key={epigram.id}
-                onClick={() => router.push(`/feed/${epigram.id}`)}
-                className="p-[24px] border-b border-line-100 rounded-[22px] bg-blue-100 cursor-pointer">
+                <div
+                  key={epigram.id}
+                  onClick={() => router.push(`/feed/${epigram.id}`)}
+                  className="border-line-100 cursor-pointer rounded-[22px] border-b bg-blue-100 p-[24px]"
+                >
                   {/* 에피그램 내용 */}
-                  <div className="font-iropke mb-[24px] text-iro-xl text-black-600">
+                  <div className="font-iropke text-iro-xl text-black-600 mb-[24px]">
                     {highlightSearchTerm(epigram.content)}
                   </div>
                   <div className="mb-[24px]">
-                    <span className="font-iropke font-normal text-iro-xl text-blue-400">
+                    <span className="font-iropke text-iro-xl font-normal text-blue-400">
                       - {highlightSearchTerm(epigram.author)} -
                     </span>
                   </div>
                   {epigram.tags.length > 0 && (
-                    <div className="font-iropke flex gap-[8px] justify-end">
-                      {epigram.tags.map(tag => (
+                    <div className="flex justify-end gap-[8px]">
+                      {epigram.tags.map((tag) => (
                         <span key={tag.id} className="text-iro-xl text-blue-400">
                           #{highlightSearchTerm(tag.name)}
                         </span>
@@ -198,9 +206,7 @@ export default function SearchPage() {
                 </div>
               ))
             ) : (
-              <div className="text-center py-[16px] text-iro-lg text-black-300">
-                검색 결과가 없습니다.
-              </div>
+              <div className="text-iro-lg text-black-300 py-[16px] text-center">검색 결과가 없습니다.</div>
             )}
           </div>
         )}

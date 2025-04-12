@@ -15,7 +15,6 @@ export default function Page() {
   const [isPwVisible, setIsPwVisible] = useState(false);
   const [isPwConfirmVisible, setIsPwConfirmVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
   const router = useRouter();
   const {
     register,
@@ -34,7 +33,6 @@ export default function Page() {
 
   const SubmitForm = async (data: SignupInput) => {
     setIsLoading(true);
-    setError('');
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signUp`, {
         method: 'POST',
@@ -46,9 +44,8 @@ export default function Page() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setError(errorData.error || '회원가입에 실패하셨습니다.');
         //회원가입 실패
-        notify({ type: 'error', message: '회원가입에 실패했습니다.' });
+        notify({ type: 'error', message: errorData.error || '회원가입에 실패하셨습니다.' });
         return;
       }
       // 회원가입 후 바로 로그인 처리
@@ -176,11 +173,6 @@ export default function Page() {
           disabled={!isValid}
         >
           가입하기
-          {error && (
-            <p className="text-state-error text-pre-xs font-regular tablet:text-pre-md pc:text-pre-lg absolute top-[50px] left-[0px]">
-              {error}
-            </p>
-          )}
         </button>
       </form>
       <SocialLogins authType={'SIGNUP'} />
