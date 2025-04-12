@@ -31,7 +31,7 @@ export function usePaginatedList<T extends { id: number }>({ store, fetchFn }: U
         });
       }
     } catch (err) {
-      console.error('susePaginatedList fetch 실패:', err);
+      console.error('usePaginatedList fetch 실패:', err);
       store.setState({ hasMore: false });
     } finally {
       setLoading(false);
