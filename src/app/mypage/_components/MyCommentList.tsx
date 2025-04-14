@@ -44,11 +44,26 @@ export default function MyCommentList() {
   };
 
   useEffect(() => {
-    if (status === 'authenticated' && token && userId) {
-      loadMore();
-      updateUserProfile();
-    }
+    const initialize = async () => {
+      if (status === 'authenticated' && token && userId) {
+        try {
+          await loadMore();
+        } catch (e) {
+          console.error('댓글 로딩 실패', e);
+        }
+        updateUserProfile();
+      }
+    };
+
+    initialize();
   }, [status, token, userId]);
+
+  useEffect(() => {
+    if (comments.length === 0 && !loading && initialLoading) {
+      loadMore(); // 비어있으면 한 번 더 로딩 시도
+    }
+  }, [comments, loading, initialLoading, loadMore]);
+
   //세션 로딩중
   if (status === 'loading') return <SkeletonCommentCard count={4} />;
   if (!session) return <div>로그인이 필요합니다.</div>;
