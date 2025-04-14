@@ -18,7 +18,6 @@ export default function FeedList() {
   const { data: session, status } = useSession();
   const token = status === 'authenticated' ? session?.user.accessToken : null;
 
-  // 경로에 따라 적절한 store 선택
   const useFeedStore = pathname.startsWith('/mypage') ? useMyFeedStore : useMainFeedStore;
   const { items: epigrams, hasMore } = useFeedStore();
 

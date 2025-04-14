@@ -13,15 +13,10 @@ export function Tags({ tags, onRemoveTag, onClickTag }: TagsProps) {
       {tags.map((tag) => (
         <div
           key={tag.id}
-          className="mobile:px-[12px] mobile:py-[8px] mobile:rounded-[20px] mobile:text-iro-lg mobile:leading-[26px] 
-            tablet:px-[12px] tablet:py-[8px] tablet:rounded-[20px] tablet:text-iro-xl tablet:leading-[32px] 
-            pc:px-[14px] pc:py-[12px] pc:rounded-[22px] pc:text-iro-2xl pc:leading-[32px] 
-            font-iropke text-black-300 bg-bg-100 flex items-center gap-2 rounded-[18px] cursor-pointer hover:bg-blue-300 transition-colors duration-200"
+          className="mobile:px-[12px] mobile:py-[8px] mobile:rounded-[20px] tablet:px-[12px] tablet:py-[8px] tablet:rounded-[20px] tablet:text-iro-xl pc:px-[14px] pc:py-[12px] pc:rounded-[22px] bg-bg-100 flex cursor-pointer items-center gap-2 rounded-[18px] transition-colors duration-200 hover:bg-blue-300"
           onClick={() => onClickTag?.(tag)} // 클릭 시 실행
         >
-          <span className="mobile:text-iro-lg mobile:leading-[26px] tablet:text-iro-xl tablet:leading-[32px] pc:text-iro-2xl pc:leading-[32px] text-black-300 text-iro-lg font-normal leading-[26px]">
-            {tag.name}
-          </span>
+          <span className="pc:text-pre-2xl tablet:text-pre-xl text-pre-lg font-regular text-black-300">{tag.name}</span>
           <button
             type="button"
             onClick={(e) => {

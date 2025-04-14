@@ -8,7 +8,6 @@ interface UsePaginatedListProps<T extends { id: number }> {
 
 export function usePaginatedList<T extends { id: number }>({ store, fetchFn }: UsePaginatedListProps<T>) {
   const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(store.items.length === 0);
 
   const loadMore = useCallback(async () => {
     if (!store.hasMore || loading) return;
@@ -24,25 +23,22 @@ export function usePaginatedList<T extends { id: number }>({ store, fetchFn }: U
         store.setState({ hasMore: false });
       }
 
-      if (list.length > 0) {
-        store.setState({
-          items: [...store.items, ...list],
-          cursor: list[list.length - 1].id,
-        });
-      }
-    } catch (err) {
-      console.error('usePaginatedList fetch 실패:', err);
-      store.setState({ hasMore: false });
-    } finally {
-      setLoading(false);
-      setInitialLoading(false);
+    if (list.length > 0) {
+      store.setState({
+        items: [...store.items, ...list],
+        cursor: list[list.length - 1].id,
+      });
     }
+
+    store.setState({ initialLoading: false });
+
+    setLoading(false);
   }, [store, fetchFn, loading]);
 
   return {
     loadMore,
     loading,
-    initialLoading,
+    initialLoading: store.initialLoading,
   };
 }
 
