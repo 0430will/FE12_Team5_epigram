@@ -47,10 +47,12 @@ export default function MyCommentList() {
   useEffect(() => {
     const initialize = async () => {
       if (status === 'authenticated' && token && userId) {
-        try {
-          await loadMore();
-        } catch (e) {
-          console.error('댓글 로딩 실패', e);
+        if (comments.length === 0) {
+          try {
+            await loadMore();
+          } catch (e) {
+            console.error('댓글 로딩 실패', e);
+          }
         }
         updateUserProfile();
       }
@@ -101,7 +103,13 @@ export default function MyCommentList() {
           token={token!}
           userImage={userImage}
           userNickname={userNickname}
-          onDelete={(id) => useMyCommentStore.getState().setState({ items: comments.filter((c) => c.id !== id) })}
+          onDelete={(id) => {
+            const store = useMyCommentStore.getState();
+            store.setState({
+              items: comments.filter((c) => c.id !== id),
+              totalCount: Math.max(0, store.totalCount - 1),
+            });
+          }}
           onSave={(updated) =>
             useMyCommentStore.getState().setState({ items: comments.map((c) => (c.id === updated.id ? updated : c)) })
           }
