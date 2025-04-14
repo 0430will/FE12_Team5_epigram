@@ -164,7 +164,6 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
               />
 
               <div className="flex items-center justify-between">
-                {/* 공개/비공개 토글 */}
                 <div className="flex items-center gap-2">
                   <span className="text-pre-xs tablet:text-pre-md pc:text-pre-lg w-12 text-center text-gray-400">
                     {isPrivate ? '비공개' : '공개'}
@@ -183,7 +182,6 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
                   </button>
                 </div>
 
-                {/* 저장/취소 버튼 */}
                 <div className="flex gap-2">
                   <ClientButton
                     isValid={true}

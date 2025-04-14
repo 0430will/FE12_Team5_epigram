@@ -17,7 +17,7 @@ export default function MyCommentList() {
   const userId = session?.user.id ? Number(session.user.id) : undefined;
   const router = useRouter();
 
-  const commentStore = useMyCommentStore(); // ✅ 변경됨 (기존: store 속성 하나하나 구조분해)
+  const commentStore = useMyCommentStore();
   const { items: comments, hasMore, initialLoading } = commentStore;
 
   const fetchMyComments = async (cursor?: number) => {
@@ -96,7 +96,7 @@ export default function MyCommentList() {
       {/* 댓글 리스트 렌더링 중 추가 로딩 시 > 스켈레톤 노출 */}
       {loading && <SkeletonCommentCard count={4} />}
 
-      {comments.map((comment) => (
+      {Array.from(new Map(comments.map((c) => [c.id, c])).values()).map((comment) => (
         <CommentItem
           key={comment.id}
           comment={comment}
