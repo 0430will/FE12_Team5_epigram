@@ -17,15 +17,16 @@ export default function MyCommentList() {
   const userId = session?.user.id ? Number(session.user.id) : undefined;
   const router = useRouter();
 
-  const { items: comments, hasMore } = useMyCommentStore();
+  const commentStore = useMyCommentStore(); // ✅ 변경됨 (기존: store 속성 하나하나 구조분해)
+  const { items: comments, hasMore, initialLoading } = commentStore;
 
   const fetchMyComments = async (cursor?: number) => {
     if (!token || !userId) return { list: [], totalCount: 0 };
     return await getUserComments(token, userId, 4, cursor ?? 0);
   };
 
-  const { loadMore, loading, initialLoading } = usePaginatedList({
-    store: useMyCommentStore.getState(),
+  const { loadMore, loading } = usePaginatedList({
+    store: commentStore,
     fetchFn: fetchMyComments,
   });
 
@@ -54,7 +55,7 @@ export default function MyCommentList() {
   if (!session) return <div>로그인이 필요합니다.</div>;
 
   // 초기 로딩중
-  if (comments.length === 0 && (loading || initialLoading)) {
+  if (initialLoading) {
     return <SkeletonCommentCard count={4} />;
   }
 
