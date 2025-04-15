@@ -26,7 +26,7 @@ export default function MainHeader() {
         setIsSidebar(false);
       }}
     >
-      <header className="tablet:px-18 tablet:py-[17px] pc:px-[120px] pc:py-[22px] border-b border-[var(--color-line-100)] bg-[var(--color-blue-100)] px-6 py-[13px]">
+      <header className="tablet:px-18 tablet:py-[17px] pc:px-[120px] pc:py-[22px] border-line-100 border-b bg-blue-100 px-6 py-[13px]">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-[12px]">
             <div
@@ -49,22 +49,16 @@ export default function MainHeader() {
                     className="rounded-full object-cover"
                   />
                 </div>
-                <span
-                  className="tablet:text-[var(--text-mon-xxs)] tablet:leading-[var(--text-mon-lg--line-height)] pc:text-[var(--text-mon-sm)] pc:leading-[var(--text-mon-lg--line-height)] leading-[var(--text-mon-lg--line-height)] font-black tracking-normal text-[var(--text-mon-xxs)]"
-                  style={{ fontFamily: 'var(--font-montserrat)', color: 'var(--color-black-900)', fontWeight: '900' }}
-                >
+                <span className="tablet:text-mon-xxs tablet:leading-mon-lg pc:text-mon-sm pc:leading-mon-lg leading-mon-lg text-mon-xxs font-montserrat text-black-900 font-black tracking-normal">
                   Epigram
                 </span>
               </Link>
             </div>
-            <nav
-              className="mobile:hidden tablet:flex pc:flex pc:ml-[36px] pc:text-[var(--text-pre-lg)] pc:leading-[26px] gap-4 text-center leading-[24px] font-semibold tracking-normal text-[var(--text-pre-md)]"
-              style={{ color: 'var(--color-black-600)' }}
-            >
-              <Link href="/feed" className="hover:text-[var(--color-black-900)]">
+            <nav className="mobile:hidden tablet:flex pc:flex pc:ml-36 pc:text-pre-lg pc:leading-26 text-pre-md text-black-600 gap-4 text-center leading-24 font-semibold tracking-normal">
+              <Link href="/feed" className="hover:text-black-900">
                 피드
               </Link>
-              <Link href="/search" className="hover:text-[var(--color-black-900)]">
+              <Link href="/search" className="hover:text-black-900">
                 검색
               </Link>
             </nav>
