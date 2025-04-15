@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { Modal, ModalHandle } from '@/components/Modal';
 import { notify } from '@/util/toast';
+import Spinner from '@/components/Spinner';
 
 export default function Sol() {
   const modalRef = useRef<ModalHandle | null>(null);
@@ -85,6 +86,19 @@ export default function Sol() {
           >
             알림 토스트
           </button>
+        </div>
+      </div>
+      <div className="mt-[15px] border border-gray-200 bg-gray-50 p-5">
+        <h3 className="mb-5 text-xl font-bold">3. Spinner</h3>
+        <p className="mb-5 leading-7">
+          <b>✅ Props</b>
+          <br />
+          1️⃣ size : number;
+          <br />
+          3️⃣ className? : string;
+        </p>
+        <div className="bg-white p-5">
+          <Spinner size={60} className="tablet:w-[90px]" />
         </div>
       </div>
     </>

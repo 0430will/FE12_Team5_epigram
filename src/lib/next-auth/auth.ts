@@ -98,6 +98,52 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         return null; // 우선 로그인/회원가입 실패시 null을 반환
       },
     }),
+    CredentialsProvider({
+      id: 'kakao',
+      name: 'Kakao Login',
+      credentials: {
+        code: { label: 'Authorization Code', type: 'text' }, // 인가 코드 받기
+      },
+      async authorize(credentials) {
+        if (credentials?.code) {
+          try {
+            // 카카오 액세스 토큰을 얻기 위한 백엔드 API 호출
+            const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signIn/KAKAO`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                redirectUri: redirectUri,
+                token: credentials.code,
+              }),
+            });
+
+            if (!response.ok) {
+              throw new Error('액세스 토큰 요청 실패');
+            }
+
+            const data = await response.json();
+
+            const user = {
+              id: String(data.user.id),
+              email: data.user.email ?? '',
+              nickname: data.user.nickname ?? '',
+              image: data.user.image ?? null,
+              accessToken: data.accessToken,
+              refreshToken: data.refreshToken,
+            };
+
+            return user;
+          } catch (error) {
+            console.error('카카오 로그인 오류:', error);
+            return null;
+          }
+        }
+        return null;
+      },
+    }),
   ],
   callbacks: {
     async signIn({ user, account }) {

@@ -7,9 +7,8 @@ export default function DetailPage({ params }: { params: PageParams }) {
   return (
     <>
       <EpigramDetail params={params} />
-      <section className="mb-12 pt-6">
-        <EpigramCommentSection />
-      </section>
+
+      <EpigramCommentSection />
     </>
   );
 }

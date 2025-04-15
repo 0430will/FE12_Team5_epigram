@@ -10,6 +10,7 @@ import { getEpigramsList } from '@/lib/Epigram';
 import { useFeedStore } from '@/stores/pageStores';
 import { usePaginatedList } from '@/hooks/usePaginatedList';
 import { Epigram } from '@/types/Epigram';
+import Spinner from '@/components/Spinner';
 
 export default function FeedPage() {
   const { items: epigrams, hasMore, isGridView, setState } = useFeedStore();
@@ -66,16 +67,20 @@ export default function FeedPage() {
               ))}
             </div>
 
-            {hasMore && (
+            {hasMore && !initialLoading && (
               <div className="pc:mt-[80px] mt-[56px] flex justify-center">
-                <button
-                  onClick={loadMore}
-                  className="pc:text-pre-xl pc:px-[40px] text-pre-md bg-bg-100 flex cursor-pointer gap-[4px] rounded-full border border-blue-500 px-[18px] py-[11.5px] font-medium text-blue-500 transition hover:bg-blue-900 hover:text-white"
-                  disabled={loading}
-                >
-                  <Image src={'/assets/icons/plus.svg'} width={24} height={24} alt={'플러스 아이콘'} />
-                  {loading ? '불러오는 중...' : '에피그램 더보기'}
-                </button>
+                {loading ? (
+                  <Spinner size={60} className="tablet:w-[90px]" />
+                ) : (
+                  <button
+                    onClick={loadMore}
+                    className="pc:text-pre-xl pc:px-[40px] text-pre-md bg-bg-100 flex cursor-pointer gap-[4px] rounded-full border border-blue-500 px-[18px] py-[11.5px] font-medium text-blue-500 transition hover:bg-blue-900 hover:text-white"
+                    disabled={loading}
+                  >
+                    <Image src={'/assets/icons/plus.svg'} width={24} height={24} alt={'플러스 아이콘'} />
+                    에피그램 더보기
+                  </button>
+                )}
               </div>
             )}
           </>

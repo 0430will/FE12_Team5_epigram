@@ -4,11 +4,13 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { GetMonthEmotion } from '@/lib/Emotionlog'; // 경로 맞게 수정
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import Spinner from '@/components/Spinner';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6B6B'];
 
 export default function EmotionPieChart() {
   const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
   const [chartData, setChartData] = useState<{ name: string; value: number }[]>([]);
 
   const now = new Date();
@@ -24,7 +26,7 @@ export default function EmotionPieChart() {
       if (isNaN(userId)) {
         console.error('userId가 유효하지 않습니다.');
         return;
-      }
+      } //리차트
       const response = await GetMonthEmotion(userId, currentYear, currentMonth);
       if (response.length > 0) {
         const emotionCount: Record<string, number> = {};
@@ -41,7 +43,7 @@ export default function EmotionPieChart() {
       }
     };
     fetchData();
-  }, [session]);
+  }, [session, setIsLoading]);
 
   return (
     <div className="flex h-[300px] w-full flex-col items-center">
@@ -63,6 +65,13 @@ export default function EmotionPieChart() {
           </Pie>
         </PieChart>
       </ResponsiveContainer>
+      {isLoading && (
+        <div className="bg-black-600/20 fixed inset-0 z-2 flex items-center justify-center">
+          <div className="bg-bg-100 pc:h-[100px] pc:w-[100px] flex h-[80px] w-[80px] items-center justify-center rounded-[16px]">
+            <Spinner size={60} className="pc:h-[56px] pc:w-[90px] h-[30px]" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

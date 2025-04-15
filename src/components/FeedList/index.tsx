@@ -4,20 +4,20 @@ import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import FeedCard from '@/components/FeedCard';
-import Image from 'next/image';
 import SkeletonFeedCard from '@/components/skeletons/SkeletonFeedCard';
+import Image from 'next/image';
 import EmptyState from '@/components/EmptyState';
 import { getEpigramsList } from '@/lib/Epigram';
 import { useMainFeedStore, useMyFeedStore } from '@/stores/pageStores';
 import { usePaginatedList } from '@/hooks/usePaginatedList';
 import { Epigram } from '@/types/Epigram';
+import Spinner from '@/components/Spinner';
 
 export default function FeedList() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const token = status === 'authenticated' ? session?.user.accessToken : null;
 
-  // 경로에 따라 적절한 store 선택
   const useFeedStore = pathname.startsWith('/mypage') ? useMyFeedStore : useMainFeedStore;
   const { items: epigrams, hasMore } = useFeedStore();
 
@@ -50,16 +50,20 @@ export default function FeedList() {
           epigrams.map((item) => <FeedCard key={item.id} data={item} />)
         )}
       </div>
-      {hasMore && (
+      {hasMore && !initialLoading && (
         <div className="pc:mt-[72px] mt-[40px] flex justify-center">
-          <button
-            onClick={loadMore}
-            className="pc:text-pre-xl pc:px-[40px] text-pre-md bg-bg-100 flex cursor-pointer gap-[4px] rounded-full border border-blue-500 px-[18px] py-[11.5px] font-medium text-blue-500 transition hover:bg-blue-900 hover:text-white"
-            disabled={loading}
-          >
-            <Image src={'/assets/icons/plus.svg'} width={24} height={24} alt={'플러스 아이콘'} />
-            {loading ? '불러오는 중...' : '에피그램 더보기'}
-          </button>
+          {loading ? (
+            <Spinner size={60} className="tablet:w-[90px]" />
+          ) : (
+            <button
+              onClick={loadMore}
+              className="pc:text-pre-xl pc:px-[40px] text-pre-md bg-bg-100 flex cursor-pointer gap-[4px] rounded-full border border-blue-500 px-[18px] py-[11.5px] font-medium text-blue-500 transition hover:bg-blue-900 hover:text-white"
+              disabled={loading}
+            >
+              <Image src={'/assets/icons/plus.svg'} width={24} height={24} alt={'플러스 아이콘'} />
+              에피그램 더보기
+            </button>
+          )}
         </div>
       )}
     </>

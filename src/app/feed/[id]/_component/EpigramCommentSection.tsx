@@ -10,29 +10,48 @@ import { useSession } from 'next-auth/react';
 // @ts-expect-error : 타입스크립트가 notFound를 오류로 인식합니다. 작동은 잘 됩니다.
 import { useParams } from 'next/navigation';
 import { getEpigramComments } from '@/lib/Epigram';
+import { fetchUserProfile } from '@/lib/User';
+import { SkeletonCommentCard, SkeletonCommentInput } from '@/components/skeletons/SkeletonComment';
 
 export default function EpigramCommentSection() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const { id } = useParams();
   const epigramId = Number(id);
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [userImage, setUserImage] = useState<string | null>(null);
 
   const [cursor, setCursor] = useState<number | null>(null); // 마지막 댓글 id
   const [hasMore, setHasMore] = useState(true); // 더 불러올 댓글이 있는지 여부
-  const [isLoading, setIsLoading] = useState(false); // 중복 요청 방지
+  const [isLoading, setIsLoading] = useState(true); // 중복 요청 방지
 
   const observerRef = useRef<HTMLDivElement | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
 
   const token = session?.user.accessToken;
-  const userImage = session?.user?.image;
+
+  useEffect(() => {
+    if (!epigramId || !token) return;
+
+    const fetchData = async () => {
+      try {
+        const userProfile = await fetchUserProfile(token); // API 호출 함수 사용
+        setUserImage(userProfile.image || '/assets/images/defaultUser.png'); // 사용자 이미지 설정
+      } catch (err) {
+        console.error('사용자 프로필 가져오기 실패:', err);
+        setUserImage('/assets/images/defaultUser.png');
+      }
+    };
+
+    fetchData();
+  }, [epigramId, token]); // epigramId와 token이 변경될 때마다 실행
 
   useEffect(() => {
     if (!token || !epigramId || Number.isNaN(epigramId)) return;
 
     const fetchInital = async () => {
+      setIsLoading(true);
       try {
         const res = await getEpigramComments(token, epigramId, 3);
 
@@ -47,6 +66,8 @@ export default function EpigramCommentSection() {
         }
       } catch (err) {
         console.error('댓글 초기 불러오기 실패', err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -113,26 +134,25 @@ export default function EpigramCommentSection() {
     }
   };
 
-  if (status === 'loading') {
-    return <div>로딩 중...</div>;
-  }
-
-  if (!session || !token) {
-    return <div>로그인이 필요합니다.</div>;
-  }
+  const isInputLoading = userImage === null;
+  const isInitialLoading = comments.length === 0 && !cursor && isLoading;
 
   return (
-    <div className="rounded-md bg-[#F5F7FA] px-4 py-6">
+    <div className="tablet:max-w-[384px] tablet:pt-[40px] tablet:pb-[173px] pc:max-w-[640px] pc:pt-[63px] pc:pb-[163px] mx-auto w-full rounded-md bg-[#F5F7FA] pt-[32px]">
       <CommentCount count={totalCount} />
 
-      <CommentInput userImage={userImage} onSubmit={handleCreate} />
+      {isInputLoading ? <SkeletonCommentInput /> : <CommentInput onSubmit={handleCreate} userImage={userImage} />}
 
-      <EpigramCommentList
-        epigramId={epigramId}
-        comments={comments}
-        setComments={setComments}
-        setTotalCount={setTotalCount}
-      />
+      {isInitialLoading ? (
+        <SkeletonCommentCard count={4} />
+      ) : (
+        <EpigramCommentList
+          epigramId={epigramId}
+          comments={comments}
+          setComments={setComments}
+          setTotalCount={setTotalCount}
+        />
+      )}
       <div ref={observerRef} className="h-4" />
       {isLoading && <div className="text-center text-sm text-gray-500">댓글 불러오는 중...</div>}
     </div>

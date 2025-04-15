@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 import SocialLogins from '../_component/SocialLogins';
 import { signinSchema } from '@/lib/validation/auth';
+import { notify } from '@/util/toast';
 
 type LoginFormInputs = z.infer<typeof signinSchema>;
 
@@ -41,9 +42,11 @@ export default function LoginPage() {
 
     if (res?.error) {
       setError('이메일 또는 비밀번호가 다릅니다.'); // NextAuth에서 받은 에러 메시지를 그대로 사용
+      notify({ type: 'error', message: '로그인에 실패했습니다.' });
       return;
     }
 
+    notify({ type: 'success', message: '로그인에 성공하였습니다.' });
     router.push('/');
   };
 
@@ -58,13 +61,12 @@ export default function LoginPage() {
     <>
       <div className="tablet:max-w-none mx-auto flex w-full max-w-[384px] flex-col items-center justify-center">
         <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-[10px]">
-          {/* 이메일 입력 */}
           <div className="flex flex-col items-start gap-[8px]">
             <input
               type="email"
               placeholder="이메일"
               {...register('email')}
-              className={`font-pretendard h-[44px] w-full rounded-lg border border-none bg-[#ECEFF4] px-4 text-[16px] leading-[26px] font-normal text-[#050505] placeholder-[#ABB8CE] focus:outline-[#6A82A9] ${
+              className={`font-pretendard text-black-950 h-[44px] w-full rounded-lg border border-none bg-blue-200 px-4 text-[16px] leading-[26px] font-normal placeholder-blue-400 focus:outline-blue-600 ${
                 errors.email ? 'outline-2 outline-red-500' : ''
               }`}
             />
@@ -72,14 +74,13 @@ export default function LoginPage() {
             {errorEmail && <p className="text-sm text-red-500">{errorEmail}</p>}
           </div>
 
-          {/* 비밀번호 입력 */}
           <div className="flex flex-col items-start gap-[8px]">
             <div className="relative w-full">
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="비밀번호"
                 {...register('password')}
-                className={`font-pretendard h-[44px] w-full rounded-lg border border-none bg-[#ECEFF4] px-4 pr-12 text-[16px] leading-[26px] font-normal text-[#050505] placeholder-[#ABB8CE] focus:outline-[#6A82A9] ${
+                className={`font-pretendard text-black-950 h-[44px] w-full rounded-lg border border-none bg-blue-200 px-4 pr-12 text-[16px] leading-[26px] font-normal placeholder-blue-400 focus:outline-blue-600 ${
                   errors.password ? 'outline-2 outline-red-500' : ''
                 }`}
               />
@@ -101,11 +102,10 @@ export default function LoginPage() {
             {errorPassword && <p className="text-sm text-red-500">{errorPassword}</p>}
           </div>
 
-          {/* 로그인 버튼 */}
           <button
             type="submit"
-            className={`font-pretendard mt-[10px] h-[44px] w-full rounded-[12px] text-[16px] leading-[26px] font-semibold text-white transition ${
-              isValid ? 'cursor-pointer bg-[#454545]' : 'bg-[#CBD3E1] opacity-50'
+            className={`font-pretendard mt-[10px] h-[44px] w-full rounded-[12px] text-[16px] leading-[26px] font-semibold text-blue-100 transition ${
+              isValid ? 'bg-black-500 cursor-pointer' : 'bg-blue-300 opacity-50'
             }`}
             disabled={!isValid}
           >
@@ -113,11 +113,11 @@ export default function LoginPage() {
           </button>
           {error && <p className="text-sm text-red-500">{error}</p>}
         </form>
-        <p className="pc:text-pre-xl! tablet:text-pre-lg tablet:mb-[60px] text-pre-md mt-[10px] mb-[50px] flex w-full justify-end gap-2 font-medium text-[#ABB8CE]">
+        <p className="pc:text-pre-xl tablet:text-pre-lg tablet:mb-[60px] text-pre-md mt-[10px] mb-[50px] flex w-full justify-end gap-2 font-medium text-blue-400">
           회원이 아니신가요?
           <a
             href="/auth/signup"
-            className="pc:text-pre-xl! tablet:text-pre-lg text-pre-md font-medium text-[#454545] underline"
+            className="pc:text-pre-xl tablet:text-pre-lg text-pre-md text-black-500 font-medium underline"
           >
             가입하기
           </a>

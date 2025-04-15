@@ -5,11 +5,20 @@ import { Avatar } from './Avatar';
 import { CommentCard } from './CommentCard';
 import { deleteComment, updateComment } from '@/lib/Comment';
 import type { Comment } from '@/types/Comment';
-import { formatDistanceToNow } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import ClientButton from '../Button/ClientButton';
 import ModalLayout from '../Modal/ModalLayout';
 import ModalUserProfile from '../Modal/ModalUserProfile';
+import { notify } from '@/util/toast';
+import moment from 'moment';
+import 'moment/locale/ko';
+
+moment.updateLocale('ko', {
+  relativeTime: {
+    d: '1일',
+    dd: '%d일',
+  },
+});
+moment.locale('ko');
 
 interface Props {
   comment: Comment;
@@ -18,9 +27,11 @@ interface Props {
   onDelete: (id: number) => void;
   onSave: (updated: Comment) => void;
   onClick?: () => void;
+  userImage?: string | null;
+  userNickname?: string | null;
 }
 
-export function CommentItem({ comment, token, writerId, onDelete, onSave, onClick }: Props) {
+export function CommentItem({ comment, token, writerId, onDelete, onSave, onClick, userImage, userNickname }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const [isPrivate, setIsPrivate] = useState(comment.isPrivate);
@@ -58,20 +69,19 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
       await deleteComment(token, comment.id);
       onDelete(comment.id); // 삭제 후 부모에 알림
       setIsDeleteModalOpen(false);
+
+      notify({ message: '댓글이 삭제되었습니다.', type: 'success' });
     } catch (error) {
       console.error('댓글 삭제 실패:', error);
-      alert('댓글 삭제 중 오류가 발생했습니다.');
+      notify({ message: '댓글 삭제에 실패했습니다.', type: 'error' });
     }
   };
 
-  function formatTime(createdAt: string) {
-    return formatDistanceToNow(new Date(createdAt), {
-      addSuffix: true,
-      locale: ko,
-    }).replace(/^약 /, '');
-  }
-
   const isMyComment = writerId === comment.writer.id;
+
+  function formatTime(createdAt: string) {
+    return moment(createdAt).fromNow();
+  }
 
   return (
     <>
@@ -81,7 +91,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
             onClick();
           }
         }}
-        className="border-line-200 bg-bg-100 tablet:py-6 pc:py-[35px] flex cursor-pointer items-start border-t px-6 py-4"
+        className={`border-line-200 bg-bg-100 tablet:py-6 pc:py-[35px] flex items-start border-t px-6 py-4 ${onClick && !isEditing ? 'cursor-pointer' : ''}`}
       >
         <button
           onClick={(e) => {
@@ -90,8 +100,8 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
           }}
         >
           <Avatar
-            src={comment.writer.image}
-            alt={comment.writer.nickname}
+            src={userImage ?? comment.writer.image}
+            alt={'프로필 이미지'}
             className="mr-4 h-12 w-12 cursor-pointer rounded-full transition-transform duration-200 hover:scale-105 hover:shadow-md"
           />
         </button>
@@ -105,7 +115,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
                 }}
                 className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-300 cursor-pointer hover:underline"
               >
-                {comment.writer.nickname}
+                {userNickname ?? comment.writer.nickname}
               </button>
               <span className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-300">
                 {formatTime(comment.createdAt)}
@@ -154,7 +164,6 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
               />
 
               <div className="flex items-center justify-between">
-                {/* 공개/비공개 토글 */}
                 <div className="flex items-center gap-2">
                   <span className="text-pre-xs tablet:text-pre-md pc:text-pre-lg w-12 text-center text-gray-400">
                     {isPrivate ? '비공개' : '공개'}
@@ -173,7 +182,6 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
                   </button>
                 </div>
 
-                {/* 저장/취소 버튼 */}
                 <div className="flex gap-2">
                   <ClientButton
                     isValid={true}
@@ -205,7 +213,10 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
       </CommentCard>
       {isProfileOpen && (
         <ModalLayout type="content" onClose={() => setIsProfileOpen(false)}>
-          <ModalUserProfile nickname={comment.writer.nickname} image={comment.writer.image} />
+          <ModalUserProfile
+            nickname={userNickname ?? comment.writer.nickname}
+            image={userImage ?? comment.writer.image}
+          />
         </ModalLayout>
       )}
 
