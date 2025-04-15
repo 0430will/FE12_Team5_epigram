@@ -108,7 +108,7 @@ export default function MainHeader() {
                 <Link href="/feed" className="hover:text-black" onClick={() => setIsSidebar(false)}>
                   피드
                 </Link>
-                <Link href="/search" className="hover: text-black" onClick={() => setIsSidebar(false)}>
+                <Link href="/search" className="hover:text-black" onClick={() => setIsSidebar(false)}>
                   검색
                 </Link>
               </nav>
