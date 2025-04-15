@@ -6,12 +6,14 @@ import { signOut } from 'next-auth/react';
 import { useState, useRef } from 'react';
 import Kebab from '../Kebab';
 import useFetchUser from '@/hooks/useFetchdata';
+import { useRouter } from 'next/navigation';
 
 export default function MainHeader() {
   const { user, isLoading } = useFetchUser();
   const [isSidebar, setIsSidebar] = useState(false);
   const [isKebab, setIsKebab] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null); //사이드바 & 드롭다운 감지
+  const router = useRouter();
 
   if (isLoading) return null;
   return (
@@ -26,20 +28,16 @@ export default function MainHeader() {
     >
       <header className="tablet:px-18 tablet:py-[17px] pc:px-[120px] pc:py-[22px] border-b border-[var(--color-line-100)] bg-[var(--color-blue-100)] px-6 py-[13px]">
         <div className="flex w-full items-center justify-between">
-          {/* 왼쪽: 로고 + Epigram 텍스트 + 네비게이션 메뉴 */}
           <div className="flex items-center gap-[12px]">
-            {/* 모바일에서만 보이는 메뉴 아이콘 */}
             <div
               className="mobile:flex mobile:items-center tablet:hidden h-8 w-auto cursor-pointer"
               onClick={(e) => {
-                //사이드바 열기
                 e.stopPropagation();
                 setIsSidebar(true);
               }}
             >
               <Image src="/assets/icons/gnb-menu.svg" alt="Menu Icon" width={24} height={24} className="object-cover" />
             </div>
-            {/* 로고 + Epigram 텍스트 */}
             <div>
               <Link href="/main" className="flex items-center gap-[4px]">
                 <div className="h-8 w-8">
@@ -59,7 +57,6 @@ export default function MainHeader() {
                 </span>
               </Link>
             </div>
-            {/* 네비게이션 메뉴 (피드, 검색) */}
             <nav
               className="mobile:hidden tablet:flex pc:flex pc:ml-[36px] pc:text-[var(--text-pre-lg)] pc:leading-[26px] gap-4 text-center leading-[24px] font-semibold tracking-normal text-[var(--text-pre-md)]"
               style={{ color: 'var(--color-black-600)' }}
@@ -72,12 +69,10 @@ export default function MainHeader() {
               </Link>
             </nav>
           </div>
-          {/* 유저 프로필 */}
           <div className="relative">
             <div
               className="flex cursor-pointer items-center gap-2"
               onClick={(e) => {
-                // 드롭다운버튼 열기
                 e.stopPropagation();
                 setIsKebab(!isKebab);
               }}
@@ -95,7 +90,7 @@ export default function MainHeader() {
               <Kebab
                 label1="마이 페이지"
                 onCLick1={() => {
-                  window.location.href = '/mypage';
+                  router.push('/mypage');
                 }}
                 label2="로그아웃"
                 onClick2={() => {

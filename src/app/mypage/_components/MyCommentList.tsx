@@ -17,7 +17,7 @@ export default function MyCommentList() {
   const userId = session?.user.id ? Number(session.user.id) : undefined;
   const router = useRouter();
 
-  const commentStore = useMyCommentStore(); // ✅ 변경됨 (기존: store 속성 하나하나 구조분해)
+  const commentStore = useMyCommentStore();
   const { items: comments, hasMore, initialLoading } = commentStore;
 
   const fetchMyComments = async (cursor?: number) => {
@@ -45,11 +45,28 @@ export default function MyCommentList() {
   };
 
   useEffect(() => {
-    if (status === 'authenticated' && token && userId) {
-      loadMore();
-      updateUserProfile();
-    }
+    const initialize = async () => {
+      if (status === 'authenticated' && token && userId) {
+        if (comments.length === 0) {
+          try {
+            await loadMore();
+          } catch (e) {
+            console.error('댓글 로딩 실패', e);
+          }
+        }
+        updateUserProfile();
+      }
+    };
+
+    initialize();
   }, [status, token, userId]);
+
+  useEffect(() => {
+    if (comments.length === 0 && !loading && initialLoading) {
+      loadMore(); // 비어있으면 한 번 더 로딩 시도
+    }
+  }, [comments, loading, initialLoading, loadMore]);
+
   //세션 로딩중
   if (status === 'loading') return <SkeletonCommentCard count={4} />;
   if (!session) return <div>로그인이 필요합니다.</div>;
@@ -79,14 +96,20 @@ export default function MyCommentList() {
       {/* 댓글 리스트 렌더링 중 추가 로딩 시 > 스켈레톤 노출 */}
       {loading && <SkeletonCommentCard count={4} />}
 
-      {comments.map((comment) => (
+      {Array.from(new Map(comments.map((c) => [c.id, c])).values()).map((comment) => (
         <CommentItem
           key={comment.id}
           comment={comment}
           token={token!}
           userImage={userImage}
           userNickname={userNickname}
-          onDelete={(id) => useMyCommentStore.getState().setState({ items: comments.filter((c) => c.id !== id) })}
+          onDelete={(id) => {
+            const store = useMyCommentStore.getState();
+            store.setState({
+              items: comments.filter((c) => c.id !== id),
+              totalCount: Math.max(0, store.totalCount - 1),
+            });
+          }}
           onSave={(updated) =>
             useMyCommentStore.getState().setState({ items: comments.map((c) => (c.id === updated.id ? updated : c)) })
           }
