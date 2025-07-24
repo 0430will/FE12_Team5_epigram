@@ -32,11 +32,12 @@ interface Props {
 }
 
 export function CommentItem({ comment, token, writerId, onDelete, onSave, onClick, userImage, userNickname }: Props) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedContent, setEditedContent] = useState(comment.content);
-  const [isPrivate, setIsPrivate] = useState(comment.isPrivate);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [modalState, setModalState] = useState<'none' | 'profile' | 'delete'>('none');
+  const [editState, setEditState] = useState({
+    isEditing: false,
+    content: comment.content,
+    isPrivate: comment.isPrivate
+  });
 
   const handleSave = async () => {
     if (!token) {
@@ -46,13 +47,13 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
     }
     try {
       console.log('저장 전송:', {
-        content: editedContent,
-        isPrivate,
+        content: editState.content,
+        isPrivate: editState.isPrivate,
       });
 
-      await updateComment(token, comment.id, editedContent, isPrivate);
-      onSave({ ...comment, content: editedContent, isPrivate });
-      setIsEditing(false);
+      await updateComment(token, comment.id, editState.content, editState.isPrivate);
+      onSave({ ...comment, content: editState.content, isPrivate: editState.isPrivate });
+      setEditState(prev => ({ ...prev, isEditing: false }));
     } catch (error) {
       console.error('댓글 수정 실패:', error);
       alert('댓글 수정 중 오류가 발생했습니다.');
@@ -68,7 +69,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
     try {
       await deleteComment(token, comment.id);
       onDelete(comment.id); // 삭제 후 부모에 알림
-      setIsDeleteModalOpen(false);
+      setModalState('none');
 
       notify({ message: '댓글이 삭제되었습니다.', type: 'success' });
     } catch (error) {
@@ -87,16 +88,16 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
     <>
       <CommentCard
         onClick={() => {
-          if (!isEditing && onClick) {
+          if (!editState.isEditing && onClick) {
             onClick();
           }
         }}
-        className={`border-line-200 bg-bg-100 tablet:py-6 pc:py-[35px] flex items-start border-t px-6 py-4 ${onClick && !isEditing ? 'cursor-pointer' : ''}`}
+        className={`border-line-200 bg-bg-100 tablet:py-6 pc:py-[35px] flex items-start border-t px-6 py-4 ${onClick && !editState.isEditing ? 'cursor-pointer' : ''}`}
       >
         <button
           onClick={(e) => {
             e.stopPropagation();
-            setIsProfileOpen(true);
+            setModalState('profile');
           }}
         >
           <Avatar
@@ -111,7 +112,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setIsProfileOpen(true);
+                  setModalState('profile');
                 }}
                 className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-300 cursor-pointer hover:underline"
               >
@@ -131,13 +132,13 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
               )}
             </div>
 
-            {isMyComment && !isEditing && (
+            {isMyComment && !editState.isEditing && (
               <div className="flex gap-4 text-xs">
                 <span
                   className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular text-black-600 cursor-pointer hover:underline"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setIsEditing(true);
+                    setEditState(prev => ({ ...prev, isEditing: true }));
                   }}
                 >
                   수정
@@ -146,7 +147,7 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
                   className="text-pre-xs tablet:text-pre-lg pc:text-pre-lg font-regular cursor-pointer text-[color:var(--color-state-error)] hover:underline"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setIsDeleteModalOpen(true);
+                    setModalState('delete');
                   }}
                 >
                   삭제
@@ -155,28 +156,28 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
             )}
           </div>
 
-          {isEditing ? (
+          {editState.isEditing ? (
             <>
               <textarea
                 className="custom-scrollbar border-line-200 text-pre-lg leading-text-pre-lg font-regular text-black-700 pc:text-pre-xl pc:leading-text-pre-xl w-full resize-none rounded-md border px-3 py-2 outline-none focus:border-blue-600"
-                value={editedContent}
-                onChange={(e) => setEditedContent(e.target.value)}
+                value={editState.content}
+                onChange={(e) => setEditState(prev => ({ ...prev, content: e.target.value }))}
               />
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-pre-xs tablet:text-pre-md pc:text-pre-lg w-12 text-center text-gray-400">
-                    {isPrivate ? '비공개' : '공개'}
+                    {editState.isPrivate ? '비공개' : '공개'}
                   </span>
                   <button
-                    onClick={() => setIsPrivate(!isPrivate)}
+                    onClick={() => setEditState(prev => ({ ...prev, isPrivate: !prev.isPrivate }))}
                     className={`h-5 w-10 rounded-full transition-colors duration-200 ${
-                      isPrivate ? 'bg-gray-400' : 'bg-black-600'
+                      editState.isPrivate ? 'bg-gray-400' : 'bg-black-600'
                     }`}
                   >
                     <div
                       className={`h-4 w-4 transform rounded-full bg-blue-100 shadow transition-transform duration-200 ${
-                        isPrivate ? 'translate-x-1' : 'translate-x-5'
+                        editState.isPrivate ? 'translate-x-1' : 'translate-x-5'
                       }`}
                     />
                   </button>
@@ -194,9 +195,11 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
                     isValid={true}
                     className="text-pre-xs tablet:text-pre-md pc:text-pre-lg tablet:h-[32px] pc:h-[44px] tablet:w-[53px] pc:w-[60px] flex h-[32px] w-[53px] items-center justify-center font-semibold whitespace-nowrap"
                     onClick={() => {
-                      setEditedContent(comment.content);
-                      setIsPrivate(comment.isPrivate);
-                      setIsEditing(false);
+                      setEditState({
+                        isEditing: false,
+                        content: comment.content,
+                        isPrivate: comment.isPrivate
+                      });
                     }}
                   >
                     취소
@@ -211,8 +214,8 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
           )}
         </div>
       </CommentCard>
-      {isProfileOpen && (
-        <ModalLayout type="content" onClose={() => setIsProfileOpen(false)}>
+      {modalState === 'profile' && (
+        <ModalLayout type="content" onClose={() => setModalState('none')}>
           <ModalUserProfile
             nickname={userNickname ?? comment.writer.nickname}
             image={userImage ?? comment.writer.image}
@@ -220,13 +223,13 @@ export function CommentItem({ comment, token, writerId, onDelete, onSave, onClic
         </ModalLayout>
       )}
 
-      {isDeleteModalOpen && (
+      {modalState === 'delete' && (
         <ModalLayout
           type="confirm"
           title="댓글을 삭제하시겠어요?."
           description="댓글은 삭제 후 복구할 수 없어요."
           actionLabel="삭제하기"
-          onClose={() => setIsDeleteModalOpen(false)}
+          onClose={() => setModalState('none')}
           onAction={handleDeleteConfirm}
         />
       )}
