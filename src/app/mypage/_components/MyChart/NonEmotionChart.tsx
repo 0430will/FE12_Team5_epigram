@@ -6,7 +6,7 @@ interface NonChartProps {
 
 export default function NonEmotionChart({ message }: NonChartProps) {
   return (
-    <div className="pc:py-[10px] tablet:py-[10px] h-full w-full justify-items-center py-[36px]">
+    <div className="pc:py-[10px] tablet:py-[10px] flex h-full w-full flex-col items-center justify-center py-[36px]">
       <Image
         className="tablet:w-[114px] tablet:mb-[24px] mb-[8px] inline-block"
         src="/assets/images/empty.svg"
